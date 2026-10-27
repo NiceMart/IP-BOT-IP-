@@ -4,6 +4,16 @@
 
 IP Bot is an Electron/Vue 3 workspace for digital-human video production. It combines script learning and rewriting, speech synthesis, avatar management, subtitles and video composition. A separate Express/SQLite backend manages accounts, devices, subscriptions, quotas and provider settings.
 
+## Project focus
+
+The project focuses on **engineering integration and workflow automation**: connecting existing models, media tools and publishing adapters into a coordinated desktop workflow. It is suitable for learning workflow orchestration, researching model-service integration and validating AI video prototypes.
+
+With compatible runtimes, configured services and authorized media, automatic mode can coordinate enabled steps: extract reference speech → rewrite the script → synthesize speech with a selected voice → generate an avatar video → add subtitles and music → prepare titles and tags → create a cover → hand off to platform publishing.
+
+Publishing adapters cover Douyin, WeChat Channels, Kuaishou and Xiaohongshu. Actual publishing depends on account access, current platform behavior and verification requirements; some steps require human confirmation. End-to-end publishing on every platform has not been validated in this developer preview.
+
+The desktop app, admin backend and some media processing run locally. Model generation uses cloud providers or compatible local services depending on configuration. The source package does not include complete models or media runtimes, and the project does not guarantee video quality or audience reach.
+
 This is a **developer preview**, validated on Windows x64 with Node.js 22. The maintainer authorized Apache-2.0 for the changes while preserving upstream attribution. Known dependency and TypeScript issues remain documented in [release status](docs/RELEASE_STATUS.md).
 
 ![Current desktop overview](docs/images/desktop-overview.png)
