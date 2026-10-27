@@ -1,0 +1,2146 @@
+/**
+ * 字幕生成主服务
+ * 整合所有功能，提供完整的字幕生成流程
+ */
+
+import { LevenshteinMatcher } from '@/lib/algorithms/Levenshtein';
+import { ASSGenerator } from '@/lib/subtitle/ASSGenerator';
+import { DrawtextGenerator, DrawtextEffectPresets } from '@/lib/subtitle/DrawtextGenerator';
+import { SmartLayoutManager } from '@/lib/subtitle/SmartLayoutManager';
+import type {
+  ZimuConfig,
+  CorrectedSegment,
+  KeywordMatch,
+  ArrangedSubtitle,
+  LayoutConstraints,
+  SubtitleLine,
+  SubtitleFrame,
+  FFmpegCommand,
+  GenerationResult,
+  GenerationStatistics,
+  ASSStyleConfig,
+  ASSDialogueEvent
+} from '@/service/ZimuShengcheng.types';
+import type { EffectType } from '@/types/smartSubtitle';
+
+export class ZimuShengcheng {
+  private config: ZimuConfig;
+  private correctedSegments: CorrectedSegment[] = [];
+  private keywordMatches: KeywordMatch[] = [];
+  private arrangedSubtitles: ArrangedSubtitle[] = [];
+  private statistics: GenerationStatistics;
+
+  constructor() {
+    this.statistics = {
+      totalSegments: 0,
+      correctedCount: 0,
+      keywordCount: 0,
+      normalSubtitles: 0,
+      effectSubtitles: 0,
+      renderTime: 0,
+      processingTime: 0
+    };
+  }
+
+  /**
+   * 主方法：生成字幕
+   * @param config 字幕生成配置
+   * @returns 生成结果
+   */
+  async generate(config: ZimuConfig): Promise<GenerationResult> {
+    const startTime = Date.now();
+
+    try {
+      this.config = config;
+
+      console.log('[ZimuShengcheng] 开始生成字幕...', {
+        videoPath: config.videoPath,
+        userText: config.userText.substring(0, 50) + '...',
+        segments: config.funasrSegments.length,
+        subtitleStyle: {
+          fontName: config.subtitleStyle?.fontName,
+          fontSize: config.subtitleStyle?.fontSize,
+          fontColor: config.subtitleStyle?.fontColor,
+          backgroundColor: config.subtitleStyle?.backgroundColor
+        },
+        keywordGroupsCount: config.keywordGroups?.length || 0
+      });
+
+      // 1. 文案修正
+      console.log('[ZimuShengcheng] 步骤1: 文案修正...');
+      this.correctedSegments = this.correctText(
+        config.userText,
+        config.funasrSegments
+      );
+
+      // 2. 关键词匹配
+      console.log('[ZimuShengcheng] 步骤2: 关键词匹配...');
+      console.log('[ZimuShengcheng] keywordGroups参数:', {
+        hasKeywordGroups: !!config.keywordGroups,
+        keywordGroupsLength: config.keywordGroups?.length || 0,
+        keywordGroups: config.keywordGroups?.map((g: any) => ({
+          id: g.id,
+          name: g.name,
+          keywordsCount: g.keywords?.length || 0,
+          effectId: g.effectId,
+          keywords: g.keywords?.slice(0, 3) // 只显示前3个关键词
+        }))
+      });
+      this.keywordMatches = this.matchKeywords(
+        this.correctedSegments,
+        config.keywordGroups
+      );
+      console.log('[ZimuShengcheng] 关键词匹配结果:', {
+        matchesCount: this.keywordMatches.length,
+        matches: this.keywordMatches.slice(0, 5).map(m => ({
+          keyword: m.keyword,
+          effectType: m.effectType,
+          isAnimated: m.isAnimated,
+          startTime: m.startTime,
+          endTime: m.endTime
+        }))
+      });
+
+      // 3. 智能排列
+      console.log('[ZimuShengcheng] 步骤3: 智能字幕排列...');
+      this.arrangedSubtitles = this.arrangeSubtitles(
+        this.correctedSegments,
+        this.keywordMatches,
+        config
+      );
+      console.log('[ZimuShengcheng] 字幕排列结果:', {
+        totalCount: this.arrangedSubtitles.length,
+        normalCount: this.arrangedSubtitles.filter(s => s.type === 'normal').length,
+        effectSimpleCount: this.arrangedSubtitles.filter(s => s.type === 'effect_simple').length,
+        effectComplexCount: this.arrangedSubtitles.filter(s => s.type === 'effect_complex').length,
+        sampleTexts: this.arrangedSubtitles.slice(0, 10).map(s => ({
+          type: s.type,
+          text: s.text.substring(0, 15),
+          hasAnimation: !!s.animationConfig,
+          effectType: s.animationConfig?.parameters?.effectType
+        }))
+      });
+
+      // 4. 生成ASS文件
+      console.log('[ZimuShengcheng] 步骤4: 生成ASS文件...');
+      const assFiles = await this.generateASSFiles(this.arrangedSubtitles, config);
+
+      // 5. 预解析所有字体路径（使用字体管理器API获取绝对路径）
+      console.log('[ZimuShengcheng] 步骤5: 预解析字体路径...');
+      await this.preResolveFontPaths(this.arrangedSubtitles);
+
+      // 6. 生成drawtext命令
+      console.log('[ZimuShengcheng] 步骤6: 生成drawtext命令...');
+      const drawtextCommands = this.generateDrawtextCommands(
+        this.arrangedSubtitles,
+        config.fontDir
+      );
+      console.log('[ZimuShengcheng] drawtext命令生成完成:', {
+        commandCount: drawtextCommands.length,
+        arrangedSubtitlesCount: this.arrangedSubtitles.length,
+        normalCount: this.arrangedSubtitles.filter(s => s.type === 'normal').length,
+        effectCount: this.arrangedSubtitles.filter(s => s.type !== 'normal').length
+      });
+
+      // 7. 构建FFmpeg命令（纯drawtext方案：不再使用ASS文件）
+      console.log('[ZimuShengcheng] 步骤7: 构建FFmpeg命令（纯drawtext方案）...');
+
+      // 【调试】输出 drawtextCommands 详情
+      console.log('[ZimuShengcheng] 生成的 drawtextCommands 数量:', drawtextCommands.length);
+      drawtextCommands.forEach((cmd, i) => {
+        console.log(`[ZimuShengcheng] drawtextCommand[${i}]:`, cmd.substring(0, 200) + (cmd.length > 200 ? '...' : ''));
+      });
+
+      const ffmpegCmd = this.buildFFmpegCommand(
+        config.videoPath,
+        config.outputPath,
+        [], // 【纯drawtext方案】不再传递ASS文件
+        drawtextCommands,
+        config.fontDir
+      );
+
+      // 8. 执行渲染
+      console.log('[ZimuShengcheng] 步骤8: 执行FFmpeg渲染...');
+      const renderStartTime = Date.now();
+      await this.executeFFmpeg(ffmpegCmd);
+      this.statistics.renderTime = (Date.now() - renderStartTime) / 1000;
+
+      // 9. 生成调试文件（包含所有字幕详细信息）
+      console.log('[ZimuShengcheng] 步骤9: 生成调试文件...');
+      const debugPath = await this.generateDebugFile(this.arrangedSubtitles, drawtextCommands, config);
+
+      // 10. 生成SRT文件（用于展示和下载）
+      console.log('[ZimuShengcheng] 步骤10: 生成SRT文件...');
+      const srtPath = await this.generateSRTFile(this.correctedSegments, config);
+
+      // 11. 统计信息
+      this.statistics.totalSegments = this.correctedSegments.length;
+      this.statistics.correctedCount = this.correctedSegments.filter(s => s.corrected).length;
+      this.statistics.keywordCount = this.keywordMatches.length;
+      this.statistics.normalSubtitles = this.arrangedSubtitles.filter(s => s.type === 'normal').length;
+      this.statistics.effectSubtitles = this.arrangedSubtitles.filter(s => s.type !== 'normal').length;
+      this.statistics.processingTime = (Date.now() - startTime) / 1000;
+
+      console.log('[ZimuShengcheng] 字幕生成完成！', this.statistics);
+
+      return {
+        success: true,
+        outputPath: config.outputPath,
+        srtPath: srtPath,
+        debugPath: debugPath,
+        message: '字幕生成成功',
+        statistics: this.statistics
+      };
+
+    } catch (error: any) {
+      console.error('[ZimuShengcheng] 字幕生成失败:', error);
+      return {
+        success: false,
+        message: '字幕生成失败: ' + error.message,
+        error
+      };
+    }
+  }
+
+  // ==================== 步骤1: 文案修正 ====================
+
+  /**
+   * 移除文本中的所有标点符号
+   * 包括中文标点、英文标点、特殊符号等
+   * @private
+   */
+  private removePunctuation(text: string): string {
+    if (!text) return '';
+
+    // 中文标点符号：，。！？；：、（）「」『』【】《》…—·
+    // 英文标点符号：,.!?;:()[]{}""''""''
+    // 其他符号：@#$%^&*-_+=|\<>~`
+    const punctuationRegex = /[，。！？；：、（）「」『』【】《》…—·,.\!?;:\(\)\[\]\{\}"'""''@#$%^&*\-_+=|\\<>~`]/g;
+
+    const cleaned = text.replace(punctuationRegex, ' ').replace(/s+/g, ' ').trim();
+
+    console.log(`[ZimuShengcheng.removePunctuation] 移除标点符号: "${text}" -> "${cleaned}"`);
+
+    return cleaned;
+  }
+
+  /**
+   * 修正ASR识别结果，替换为用户输入的正确文案
+   * @private
+   */
+  private correctText(
+    userText: string,
+    asrSegments: any[]
+  ): CorrectedSegment[] {
+    if (!userText || userText.trim() === '') {
+      // 如果用户没有输入文案，直接使用ASR结果
+      return asrSegments.map(seg => ({
+        text: this.removePunctuation(seg.text),
+        originalText: seg.text,
+        start: seg.start,
+        end: seg.end,
+        corrected: false,
+        confidence: 1.0
+      }));
+    }
+
+    // 使用Levenshtein算法修正
+    const correctedSegments = LevenshteinMatcher.correctText(userText, asrSegments);
+
+    // 对修正后的文本移除标点符号
+    return correctedSegments.map(seg => ({
+      ...seg,
+      text: this.removePunctuation(seg.text)
+    }));
+  }
+
+  // ==================== 步骤2: 关键词匹配 ====================
+
+  /**
+   * 匹配关键词，找出哪些文字需要应用特效
+   * @private
+   */
+  private matchKeywords(
+    segments: CorrectedSegment[],
+    keywordGroups: any[]
+  ): KeywordMatch[] {
+    const matches: KeywordMatch[] = [];
+
+    // 🔧 修复：使用 Set 追踪已匹配的关键词，防止重复
+    const matchedPositions = new Set<string>();
+
+    if (!keywordGroups || keywordGroups.length === 0) {
+      return matches;
+    }
+
+    console.log('[ZimuShengcheng.matchKeywords] 🔍 开始匹配关键词:', {
+      keywordGroupsCount: keywordGroups.length,
+      segmentsCount: segments.length
+    });
+
+    for (const segment of segments) {
+      const text = segment.text;
+      let index = 0;
+
+      for (const group of keywordGroups) {
+        if (!group.keywords || group.keywords.length === 0) continue;
+
+        for (const kwObj of group.keywords) {
+          const keyword = typeof kwObj === 'string' ? kwObj : kwObj.keyword;
+          if (!keyword) continue;
+
+          // 清理关键词中的标点符号，确保与已清理的文本相匹配
+          const cleanedKeyword = this.removePunctuation(keyword);
+          if (!cleanedKeyword) continue; // 如果清理后为空，跳过
+
+          // 查找关键词在文本中的所有位置
+          let pos = text.indexOf(cleanedKeyword, index);
+          while (pos !== -1) {
+            // 🔧 创建唯一的位置key，用于去重
+            const positionKey = `${segment.start.toFixed(3)}-${pos}`;
+
+            // 如果该位置的关键词已经被匹配过，跳过（只保留第一个分组的匹配）
+            if (matchedPositions.has(positionKey)) {
+              console.log(`[ZimuShengcheng.matchKeywords] ⚠️ 跳过重复的关键词匹配: "${keyword}" 在位置 ${pos}`);
+              pos = text.indexOf(cleanedKeyword, pos + cleanedKeyword.length);
+              continue;
+            }
+
+            matchedPositions.add(positionKey);
+
+            // 🔧 优先检查单个关键词项目的特效，如果没有则使用分组级别的特效
+            const keywordItem = typeof kwObj === 'string' ? null : kwObj;
+
+            // 优先级：单个关键词项目特效 > 分组级别特效 > 默认特效
+            let rawEffectId = keywordItem?.effectId || group.effectId || group.effectConfig?.type || 'pulse-scale';
+
+            // 【调试日志】显示哪个级别的特效被使用
+            if (keywordItem?.effectId) {
+              console.log(`[ZimuShengcheng] 使用单个关键词项目的特效:`, {
+                keyword,
+                effectId: keywordItem.effectId,
+                source: '单个词汇级别'
+              });
+            } else if (group.effectId) {
+              console.log(`[ZimuShengcheng] 使用分组级别的特效:`, {
+                keyword,
+                effectId: group.effectId,
+                source: '分组级别'
+              });
+            }
+
+            const effectType = this.normalizeEffectType(rawEffectId);
+
+            // 判断是否为带动画的特效
+            const isAnimated = this.isAnimatedEffect(effectType);
+
+            // 【调试日志】记录effectId转换和动画判断
+            if (rawEffectId || group.effectId) {
+              console.log(`[ZimuShengcheng] 关键词特效类型:`, {
+                keyword,
+                rawEffectId,
+                normalizedEffectType: effectType,
+                isAnimated,
+                groupId: group.id,
+                groupName: group.name
+              });
+            }
+
+            // 构建样式：优先使用单个关键词项目的样式，其次使用分组样式
+            const style = keywordItem?.styleOverride ?
+              this.buildKeywordStyleFromConfig(keywordItem.styleOverride) :
+              this.buildKeywordStyle(group);
+
+            // 计算时间
+            const charDuration = (segment.end - segment.start) / text.length;
+            const startTime = segment.start + pos * charDuration;
+            const endTime = startTime + keyword.length * charDuration;
+
+            // 🔧 使用单个关键词项目的特效配置，如果没有则使用分组配置
+            const itemEffectConfig = keywordItem?.effectConfig;
+            const groupEffectConfig = group.effectConfig;
+            const effectConfig = itemEffectConfig || groupEffectConfig || {
+              type: effectType,
+              duration: 600,
+              delay: 0,
+              intensity: 0.8
+            };
+
+            // 🔧 修复���正确处理 effectDuration 单位
+            // 确保 duration 以秒为单位，然后转为毫秒
+            let durationInSeconds = itemEffectConfig?.duration || groupEffectConfig?.duration || this.config.minSubtitleDuration || 2;
+
+            // 如果 duration 已经很大（超过100），假设它已经是毫秒，转换回秒
+            if (durationInSeconds > 100) {
+              durationInSeconds = durationInSeconds / 1000;
+            }
+
+            // 确保最小时长为 0.1 秒，最大为字幕实际时长的10倍
+            const minDuration = 0.1;
+            const maxDuration = (endTime - startTime) * 10;
+            const finalDuration = Math.max(minDuration, Math.min(durationInSeconds, maxDuration));
+
+            const matchData: KeywordMatch = {
+              keyword: cleanedKeyword, // 使用清理后的关键词
+              startIndex: pos,
+              endIndex: pos + cleanedKeyword.length,
+              startTime,
+              endTime,
+              groupId: group.id,
+              groupName: group.name,
+              effectType,
+              isAnimated,
+              style,
+              // 🔧 完整的特效配置（来自单个词汇或分组）
+              effectConfig,
+              effectStyle: style,
+              effectIntensity: itemEffectConfig?.intensity || groupEffectConfig?.intensity || 0.8,
+              // 转换为毫秒（确保单位一致）
+              effectDuration: finalDuration * 1000
+            };
+
+            matches.push(matchData);
+
+            console.log(`[ZimuShengcheng.matchKeywords] 添加关键词匹配:`, {
+              originalKeyword: keyword,
+              cleanedKeyword,
+              effectType,
+              hasItemEffect: !!keywordItem?.effectId,
+              hasGroupEffect: !!group.effectId,
+              startTime,
+              endTime
+            });
+
+            pos = text.indexOf(cleanedKeyword, pos + cleanedKeyword.length);
+          }
+        }
+      }
+    }
+
+    console.log(`[ZimuShengcheng] 匹配到 ${matches.length} 个关键词`);
+    return matches;
+  }
+
+  /**
+   * 将 effectId（kebab-case）转换为 SNAKE_CASE 格式
+   * 例如：'pulse-scale' -> 'PULSE_SCALE'
+   * @private
+   */
+  private normalizeEffectType(effectId: string | undefined): string {
+    if (!effectId || effectId === 'none') {
+      return 'PULSE_SCALE'; // 默认特效
+    }
+    
+    // 如果已经是 SNAKE_CASE 格式，直接返回
+    if (/^[A-Z_]+$/.test(effectId)) {
+      return effectId;
+    }
+    
+    // 转换 kebab-case 或 camelCase 到 SNAKE_CASE
+    return effectId
+      .replace(/-/g, '_')  // 将连字符替换为下划线
+      .replace(/([a-z])([A-Z])/g, '$1_$2')  // 处理驼峰命名
+      .toUpperCase();  // 转为大写
+  }
+
+  /**
+   * 判断特效是否为带动画的特效
+   * @private
+   * 【强制模式】所有关键词都使用动画特效，不受限制
+   */
+  private isAnimatedEffect(effectType: EffectType | string): boolean {
+    // 【强制返回 true】确保所有关键词都显示为动画特效
+    console.log(`[ZimuShengcheng.isAnimatedEffect] 强制返回true，特效类型: ${effectType}`);
+    return true;
+  }
+
+  /**
+   * 构建关键词样式
+   * @private
+   */
+  private buildKeywordStyle(group: any): any {
+    // 优先使用styleOverride，其次styleConfig，最后使用默认值
+    const style = group.styleOverride || group.styleConfig || {};
+
+    // ✅ 添加诊断日志：记录样式构建过程
+    console.log(`[ZimuShengcheng] 构建关键词样式:`, {
+      groupId: group.id,
+      groupName: group.name,
+      styleOverride: group.styleOverride,
+      styleConfig: group.styleConfig,
+      finalStyle: {
+        fontName: style.fontName || this.config.subtitleStyle.fontName,
+        fontSize: style.fontSize || this.config.subtitleStyle.fontSize * 1.5,
+        fontColor: style.fontColor || '#FFD700'
+      }
+    });
+
+    return {
+      fontName: style.fontName || this.config.subtitleStyle.fontName,
+      fontSize: style.fontSize || this.config.subtitleStyle.fontSize * 1.5, // 特效字幕默认大1.5倍
+      fontColor: style.fontColor || '#FFD700', // 默认金色
+      outlineColor: style.outlineColor || '#FF8C00',
+      outlineWidth: style.outlineWidth || 4,
+      shadowColor: style.shadowColor,
+      shadowBlur: style.shadowBlur,
+      shadowOffset: style.shadowOffset,
+      backgroundColor: style.backgroundColor || 'transparent',
+      backgroundOpacity: style.backgroundOpacity || 0
+    };
+  }
+
+  /**
+   * 🔧 修复：从styleConfig构建KeywordStyle
+   * @private
+   */
+  private buildKeywordStyleFromConfig(styleConfig: any): KeywordStyle {
+    if (!styleConfig) {
+      return this.buildKeywordStyle({ styleConfig: {} });
+    }
+
+    return {
+      fontName: styleConfig.fontName || this.config.subtitleStyle.fontName,
+      fontSize: styleConfig.fontSize || this.config.subtitleStyle.fontSize * 1.5,
+      fontColor: styleConfig.fontColor || '#FFD700',
+      outlineColor: styleConfig.outlineColor || '#FF8C00',
+      outlineWidth: styleConfig.outlineWidth || 4,
+      shadowColor: styleConfig.shadowColor,
+      shadowBlur: styleConfig.shadowBlur,
+      backgroundColor: styleConfig.backgroundColor || 'transparent',
+      backgroundOpacity: styleConfig.backgroundOpacity || 0
+    };
+  }
+
+  // ==================== 步骤3: 智能排列 ====================
+
+  /**
+   * 智能排列字幕，处理换行、换帧、特效字幕定位等
+   * @private
+   */
+  private arrangeSubtitles(
+    segments: CorrectedSegment[],
+    keywords: KeywordMatch[],
+    config: ZimuConfig
+  ): ArrangedSubtitle[] {
+    const arranged: ArrangedSubtitle[] = [];
+
+    // 调试日志：检查配置
+    console.log('[ZimuShengcheng.arrangeSubtitles] 🔧 配置检查:', {
+      configMinSubtitleDuration: config.minSubtitleDuration,
+      thisConfigMinSubtitleDuration: this.config?.minSubtitleDuration,
+      keywordsCount: keywords.length
+    });
+
+    // 计算布局约束
+    const constraints = this.calculateLayoutConstraints(config);
+
+    // 🔧 修复：过滤掉只包含 \n 或空白的 segments，防止生成空白字幕
+    const validSegments = segments.filter(seg => {
+      const trimmed = seg.text.trim();
+      // 只保留非空的且不只是换行符的 segments
+      const isValid = trimmed.length > 0 && !trimmed.match(/^\\*n\\*$/);
+      if (!isValid && seg.text) {
+        console.log(`[ZimuShengcheng.arrangeSubtitles] 过滤掉空白段: "${seg.text}"`, {
+          originalText: seg.text,
+          trimmed: trimmed,
+          reason: trimmed.length === 0 ? '完全空白' : '只包含换行符'
+        });
+      }
+      return isValid;
+    });
+
+    console.log(`[ZimuShengcheng.arrangeSubtitles] Segment 过滤: ${segments.length} -> ${validSegments.length}`, {
+      filtered: segments.length - validSegments.length
+    });
+
+    for (const segment of validSegments) {
+      // 检查该段是否包含关键词
+      // 改为基于时间的匹配，避免重复匹配
+      const segmentKeywords: KeywordMatch[] = [];
+      console.log(`[ZimuShengcheng] 🔍 检查segment中的关键词:`, {
+        segmentText: segment.text.substring(0, 30),
+        segmentTime: `${segment.start.toFixed(3)}-${segment.end.toFixed(3)}`,
+        totalKeywords: keywords.length
+      });
+
+      // 使用时间范围匹配，而不是文本搜索
+      for (const kw of keywords) {
+        // 检查关键词的时间是否与当前segment重叠
+        if ((kw.startTime >= segment.start && kw.startTime < segment.end) ||
+            (kw.endTime > segment.start && kw.endTime <= segment.end) ||
+            (kw.startTime <= segment.start && kw.endTime >= segment.end)) {
+          // 关键词出现在此segment中
+          segmentKeywords.push(kw);
+          console.log(`[ZimuShengcheng] ✅ 关键词匹配成功: "${kw.keyword}"`, {
+            segmentTime: `${segment.start.toFixed(3)}-${segment.end.toFixed(3)}`,
+            keywordTime: `${kw.startTime.toFixed(3)}-${kw.endTime.toFixed(3)}`,
+            segmentPreview: segment.text.substring(0, 30) + "..."
+          });
+        }
+      }
+
+      // ✅ 添加诊断日志
+      if (segmentKeywords.length > 0) {
+        console.log(`[ZimuShengcheng] 在segment中找到关键词:`, {
+          segmentText: segment.text.substring(0, 30),
+          segmentTime: `${segment.start.toFixed(3)}-${segment.end.toFixed(3)}`,
+          keywords: segmentKeywords.map(kw => ({
+            keyword: kw.keyword,
+            time: `${kw.startTime.toFixed(3)}-${kw.endTime.toFixed(3)}`,
+            isAnimated: kw.isAnimated,
+            effectType: kw.effectType
+          }))
+        });
+      }
+
+      // 【新策略】无论是否有关键词，都创建一个完整的普通字幕（包含所有原始文本）
+      // 普通字幕显示完整的原始文本，标点符号替换为空格
+      arranged.push(this.createNormalSubtitle(segment, config, constraints));
+
+      // 如果有关键词，为每个关键词创建特效字幕
+      // 特效字幕和普通字幕并行显示，互不干扰
+      if (segmentKeywords.length > 0) {
+        for (const keyword of segmentKeywords) {
+          // 为该关键词创建一个时间片段对象
+          const keywordPart = {
+            text: keyword.keyword,
+            start: keyword.startTime,
+            end: keyword.endTime,
+            isKeyword: true
+          };
+
+          if (keyword.isAnimated) {
+            // 带动画：创建动画特效字幕
+            const effectSubtitle = this.createAnimatedEffectSubtitle(keywordPart, keyword, config);
+            arranged.push(effectSubtitle);
+            console.log(`[ZimuShengcheng] ✅ 创建动画特效字幕:`, {
+              keyword: keyword.keyword,
+              effectType: keyword.effectType,
+              type: effectSubtitle.type
+            });
+          } else {
+            // 不带动画：创建静态特效字幕
+            const effectSubtitle = this.createStaticEffectSubtitle(keywordPart, keyword, config);
+            arranged.push(effectSubtitle);
+            console.log(`[ZimuShengcheng] ✅ 创建静态特效字幕:`, {
+              keyword: keyword.keyword,
+              type: effectSubtitle.type
+            });
+          }
+        }
+      }
+    }
+
+    // 🔧 改进：总是启用智能布局，但它会智能判断是否需要调整
+    // 如果没有实际的堆叠（多个字幕同时显示），它将保持用户的原始坐标
+    // 如果有堆叠，才会应用分散算法，防止字幕重叠
+
+    console.log('[ZimuShengcheng.arrangeSubtitles] 启用智能碰撞检测（智能模式 - 仅在有堆叠时调整）:', {
+      total: arranged.length,
+      normal: arranged.filter(s => s.type === 'normal').length,
+      effect_complex: arranged.filter(s => s.type === 'effect_complex').length,
+      effect_simple: arranged.filter(s => s.type === 'effect_simple').length
+    });
+
+    // 创建布局管理器实例
+    const layoutManager = new SmartLayoutManager(
+      config.videoWidth,
+      config.videoHeight,
+      config.videoWidth * 0.1,  // horizontalMargin
+      config.videoHeight * 0.1  // verticalMargin
+    );
+
+    // 计算特效字幕的Y坐标
+    const effectSubtitleY = config.effectSubtitleY
+      ? config.videoHeight * (100 - config.effectSubtitleY) / 100
+      : config.videoHeight - config.videoHeight * 0.1;
+
+    // 调用特效字幕碰撞检测和左右分散调整
+    const layoutResult = layoutManager.resolveEffectSubtitleCollisions(
+      arranged,
+      {
+        effectSubtitleY: effectSubtitleY,
+        minHorizontalGap: config.subtitleStyle.fontSize * 1.2,
+        maxHorizontalOffset: config.videoWidth * 0.35,
+        screenWidth: config.videoWidth,
+        videoHeight: config.videoHeight
+      }
+    );
+
+    console.log('[ZimuShengcheng.arrangeSubtitles] 碰撞检测完成，结果数量:', layoutResult.length);
+
+    // 🔧 启用多行换行功能：对普通字幕进行自动换行处理
+    const normalSubtitles = layoutResult.filter(s => s.type === 'normal');
+    const otherSubtitles = layoutResult.filter(s => s.type !== 'normal');
+
+    if (normalSubtitles.length > 0) {
+      console.log('[ZimuShengcheng.arrangeSubtitles] 对普通字幕启用自动换行处理...', {
+        normalSubtitleCount: normalSubtitles.length,
+        constraints: {
+          maxLines: constraints.maxLines,
+          maxCharsPerLine: constraints.maxCharsPerLine,
+          lineHeight: constraints.lineHeight
+        }
+      });
+
+      const optimizedNormalSubtitles = this.optimizeLayout(normalSubtitles, constraints);
+
+      console.log('[ZimuShengcheng.arrangeSubtitles] 自动换行处理完成:', {
+        before: normalSubtitles.length,
+        after: optimizedNormalSubtitles.length,
+        newLineCount: optimizedNormalSubtitles.length - normalSubtitles.length
+      });
+
+      // 合并优化后的普通字幕和其他字幕
+      return [...optimizedNormalSubtitles, ...otherSubtitles];
+    }
+
+    return layoutResult;
+  }
+
+  /**
+   * 计算布局约束
+   * @private
+   */
+  private calculateLayoutConstraints(config: ZimuConfig): LayoutConstraints {
+    const usableWidth = config.videoWidth * 0.8;
+    const maxCharsPerLine = Math.floor(usableWidth / config.subtitleStyle.fontSize);
+
+    return {
+      maxLines: 2,  // 🔧 限制最多2行，防止字幕过多
+      maxCharsPerLine,
+      lineHeight: config.subtitleStyle.fontSize * 1.5,
+      horizontalMargin: config.videoWidth * 0.1,
+      verticalMargin: config.videoHeight * 0.1,
+      effectSpacing: 2 // 特效字幕与普通字幕的间距（字符数）
+    };
+  }
+
+  /**
+   * 将标点符号替换为空格作为占位符
+   * 用于保留原始文本的位置和长度
+   * @private
+   */
+  private normalizeTextForDisplay(text: string): string {
+    // 替换中文标点为空格
+    return text.replace(/[，。！？；：「」『』（）、]/g, ' ');
+  }
+
+  /**
+   * 将段落按关键词拆分
+   * @private
+   */
+  private splitSegmentByKeywords(
+    segment: CorrectedSegment,
+    keywords: KeywordMatch[]
+  ): Array<{ text: string; start: number; end: number; isKeyword: boolean }> {
+    const parts: any[] = [];
+    const text = segment.text;
+    let lastIndex = 0;
+
+    // 按关键词位置排序
+    const sortedKeywords = keywords.sort((a, b) => a.startIndex - b.startIndex);
+
+    for (const kw of sortedKeywords) {
+      // 关键词之前的普通文本
+      if (kw.startIndex > lastIndex) {
+        const beforeText = text.substring(lastIndex, kw.startIndex);
+        const charDuration = (segment.end - segment.start) / text.length;
+        parts.push({
+          text: beforeText,
+          start: segment.start + lastIndex * charDuration,
+          end: segment.start + kw.startIndex * charDuration,
+          isKeyword: false
+        });
+      }
+
+      // 关键词本身
+      parts.push({
+        text: kw.keyword,
+        start: kw.startTime,
+        end: kw.endTime,
+        isKeyword: true
+      });
+
+      lastIndex = kw.endIndex;
+    }
+
+    // 剩余的普通文本
+    if (lastIndex < text.length) {
+      const afterText = text.substring(lastIndex);
+      const charDuration = (segment.end - segment.start) / text.length;
+      parts.push({
+        text: afterText,
+        start: segment.start + lastIndex * charDuration,
+        end: segment.end,
+        isKeyword: false
+      });
+    }
+
+    return parts;
+  }
+
+  /**
+   * 创建普通字幕
+   * @private
+   */
+  private createNormalSubtitle(
+    segment: any,
+    config: ZimuConfig,
+    constraints: LayoutConstraints
+  ): ArrangedSubtitle {
+    const bottomY = config.videoHeight - constraints.verticalMargin;
+
+    // 普通字幕使用原始时长，不受minSubtitleDuration影响
+    // minSubtitleDuration仅控制特效字幕
+    const start = segment.start;
+    const end = segment.end;
+
+    return {
+      type: 'normal',
+      // 🔧 保留原始文本（带标点符号），用于智能换行
+      // normalize处理（把标点符号替换成空格）将在generateDrawtextCommands时进行
+      text: segment.text,
+      start,
+      end,
+      position: {
+        x: config.normalSubtitleX ? (config.videoWidth * config.normalSubtitleX / 100) : (config.videoWidth / 2),
+        y: config.normalSubtitleY ? (config.videoHeight * (100 - config.normalSubtitleY) / 100) : bottomY,
+        alignment: 'center'
+      },
+      style: {
+        fontName: config.subtitleStyle.fontName,
+        fontSize: config.subtitleStyle.fontSize,
+        fontColor: config.subtitleStyle.fontColor,
+        outlineColor: config.subtitleStyle.outlineColor,
+        outlineWidth: config.subtitleStyle.outlineWidth,
+        backgroundColor: config.subtitleStyle.backgroundColor,
+        backgroundOpacity: config.subtitleStyle.backgroundOpacity,
+        shadowOffset: config.subtitleStyle.shadowOffset,
+        shadowColor: config.subtitleStyle.shadowColor,
+        shadowBlur: config.subtitleStyle.shadowBlur
+      },
+      layer: 'drawtext' // 【纯drawtext方案】普通字幕也用drawtext渲染
+    };
+  }
+
+  /**
+   * 创建带动画的特效字幕
+   * @private
+   */
+  private createAnimatedEffectSubtitle(
+    part: any,
+    keyword: KeywordMatch,
+    config: ZimuConfig
+  ): ArrangedSubtitle {
+    // 🔧 修复：特效字幕应该靠近普通字幕底部，而不是固定在上方30%
+    // 普通字幕位置：videoHeight - verticalMargin
+    // 特效字幕初始位置：普通字幕上方约5px（由SmartLayoutManager进一步调整）
+    const bottomY = config.videoHeight - config.videoHeight * 0.1;
+    const topY = bottomY - config.subtitleStyle.fontSize - 5; // 比普通字幕高一个字体大小加5px
+
+    // 🔧 修复：使用关键词中的样式配置覆盖默认样式
+    const effectStyle = {
+      ...keyword.style,
+      // 如果关键词有特殊样式，使用关键词的样式
+      ...(keyword.effectStyle || {})
+    };
+
+    // 🔧 新增：应用最小时长限制到特效字幕
+    let start = part.start;
+    let end = part.end;
+    const actualDuration = end - start;
+    if (config.minSubtitleDuration && actualDuration < config.minSubtitleDuration) {
+      end = start + config.minSubtitleDuration;
+      console.log('[createAnimatedEffectSubtitle] 应用最小时长限制:', {
+        keyword: part.text,
+        originalDuration: actualDuration,
+        minDuration: config.minSubtitleDuration,
+        newEnd: end
+      });
+    }
+
+    // 调试日志：输出配置的最小时长
+    console.log('[createAnimatedEffectSubtitle] 🔧 调试信息:', {
+      keyword: part.text,
+      configMinDuration: config.minSubtitleDuration,
+      thisConfigMinDuration: this.config?.minSubtitleDuration,
+      finalDuration: (config.minSubtitleDuration || 2) * 1000,
+      start,
+      end
+    });
+
+    return {
+      type: 'effect_complex',
+        text: part.text,
+        start: start,
+        end: end,
+        position: {
+          x: config.effectSubtitleX ? (config.videoWidth * config.effectSubtitleX / 100) : (config.videoWidth / 2),
+          y: config.effectSubtitleY ? (config.videoHeight * (100 - config.effectSubtitleY) / 100) : topY,
+          alignment: 'center'
+        },
+        style: effectStyle,
+        layer: 'drawtext', // 使用drawtext渲染
+        animationConfig: {
+          type: 'slide',
+          duration: (config.minSubtitleDuration || 2) * 1000,  // 🔧 使用配置的最小时长
+          delay: 0,
+          // 🔧 从关键词的特效配置中获取完整参数
+          intensity: keyword.effectIntensity || 0.8,
+          parameters: {
+            effectType: keyword.effectType || 'SLIDE_IN_UP',
+            // 🔧 传递完整的特效配置参数
+            effectConfig: keyword.effectConfig,
+            effectStyle: keyword.effectStyle,
+            // 🔧 确保duration同步：使用配置的最小时长
+            duration: (config.minSubtitleDuration || 2) * 1000
+          }
+        }
+      };
+    }
+
+  /**
+   * 创建静态特效字幕（不带动画）
+   * @private
+   */
+  private createStaticEffectSubtitle(
+    part: any,
+    keyword: KeywordMatch,
+    config: ZimuConfig
+  ): ArrangedSubtitle {
+    // 可以和普通字幕同行，位置稍高一点
+    const bottomY = config.videoHeight - config.videoHeight * 0.1;
+
+    // 🔧 新增：应用最小时长限制到静态特效字幕
+    let start = part.start;
+    let end = part.end;
+    const actualDuration = end - start;
+    if (config.minSubtitleDuration && actualDuration < config.minSubtitleDuration) {
+      end = start + config.minSubtitleDuration;
+      console.log('[createStaticEffectSubtitle] 应用最小时长限制:', {
+        keyword: part.text,
+        originalDuration: actualDuration,
+        minDuration: config.minSubtitleDuration,
+        newEnd: end
+      });
+    }
+
+    return {
+      type: 'effect_simple',
+      text: part.text,
+      start: start,
+      end: end,
+      position: {
+        x: config.effectSubtitleX ? (config.videoWidth * config.effectSubtitleX / 100) : (config.videoWidth / 2),
+        y: config.effectSubtitleY ? (config.videoHeight * (100 - config.effectSubtitleY) / 100) : bottomY,
+        alignment: 'center'
+      },
+      style: keyword.style,
+      layer: 'ass_effect' // 使用ASS渲染
+    };
+  }
+
+  /**
+   * 优化布局（处理换行和换帧逻辑）
+   * 重新设计：实现完整的智能排版逻辑
+   * @private
+   */
+  private optimizeLayout(
+    subtitles: ArrangedSubtitle[],
+    constraints: LayoutConstraints
+  ): ArrangedSubtitle[] {
+    const optimized: ArrangedSubtitle[] = [];
+    const MAX_LINES = constraints.maxLines || 2;
+
+    // 🔧 改进：更精确的宽度计算，考虑实际字体宽度比例
+    // 根据大多数等宽或比例字体的特性：
+    // - 中文字符宽度 ≈ 字体高度（正方形）
+    // - 英文字母平均宽度 ≈ 字体高度 * 0.5
+    // - 数字宽度 ≈ 字体高度 * 0.5
+    // - 标点符号宽度 ≈ 字体高度 * 0.3
+    const calculateDisplayLength = (text: string): number => {
+      let length = 0;
+      for (const char of text) {
+        if (/[\u4e00-\u9fff]/.test(char)) {
+          length += 1;  // 中文字符：占1个字体宽度
+        } else if (/[a-zA-Z0-9]/.test(char)) {
+          length += 0.6;  // 英文字母和数字：占0.6个字体宽度
+        } else if (/[\s\t\r\n]/.test(char)) {
+          length += 0.3;  // 空格等：占0.3个字体宽度
+        } else {
+          length += 0.35;  // 标点符号等：占0.35个字体宽度
+        }
+      }
+      return length;
+    };
+
+    // 智能换行：优先在标点符号处换行（使用更精确的宽度计算）
+    const smartLineBreak = (text: string, maxCharsPerLine: number): string[] => {
+      const lines: string[] = [];
+      const punctuations = ['，', '。', '！', '？', '；', '：', ',', '.', '!', '?', ';', ':'];
+
+      // 🔧 改进：添加一个安全的缩小系数，防止字幕宽度超出屏幕
+      // 实际可用宽度应该比计算值略小，留出安全边距
+      const safetyMargin = 0.95;  // 使用95%的最大宽度，留出5%的安全边距
+      const safeMaxCharsPerLine = maxCharsPerLine * safetyMargin;
+
+      let currentLine = '';
+      let currentLength = 0;
+      let i = 0;
+
+      while (i < text.length && lines.length < MAX_LINES) {
+        const char = text[i];
+        const charLength = calculateDisplayLength(char);
+
+        // 检查是否达到最大长度（使用安全值）
+        if (currentLength + charLength > safeMaxCharsPerLine && currentLine.trim()) {
+          // 尝试在标点符号处换行
+          const isPunctuation = punctuations.includes(char);
+          if (isPunctuation && currentLength > safeMaxCharsPerLine * 0.7) {
+            // 在标点符号处换行
+            currentLine += char;
+            lines.push(currentLine.trim());
+            currentLine = '';
+            currentLength = 0;
+            i++;
+            continue;
+          } else {
+            // 强制换行
+            lines.push(currentLine.trim());
+            currentLine = '';
+            currentLength = 0;
+            continue; // 不增加i，重新处理当前字符
+          }
+        }
+
+        currentLine += char;
+        currentLength += charLength;
+        i++;
+      }
+
+      // 添加最后一行
+      if (currentLine.trim() && lines.length < MAX_LINES) {
+        lines.push(currentLine.trim());
+      }
+
+      // 🔧 新增：验证返回的行是否仍然过长，如果过长则进行二次拆分
+      const finalLines: string[] = [];
+      for (const line of lines.slice(0, MAX_LINES)) {
+        if (calculateDisplayLength(line) > safeMaxCharsPerLine) {
+          console.warn('[ZimuShengcheng.optimizeLayout] ⚠️  拆分后仍然过长，进行二次拆分:', {
+            line: line.substring(0, 30),
+            length: calculateDisplayLength(line),
+            maxAllowed: safeMaxCharsPerLine
+          });
+
+          // 进行二次拆分：强制在指定位置拆分
+          let subLine = '';
+          let subLength = 0;
+          for (const subChar of line) {
+            const subCharLength = calculateDisplayLength(subChar);
+            if (subLength + subCharLength > safeMaxCharsPerLine && subLine.trim()) {
+              finalLines.push(subLine.trim());
+              subLine = '';
+              subLength = 0;
+            }
+            subLine += subChar;
+            subLength += subCharLength;
+          }
+          if (subLine.trim()) {
+            finalLines.push(subLine.trim());
+          }
+        } else {
+          finalLines.push(line);
+        }
+      }
+
+      return finalLines.slice(0, MAX_LINES);
+    };
+
+    // 处理每个字幕
+    for (const subtitle of subtitles) {
+      const displayLength = calculateDisplayLength(subtitle.text);
+      
+      // 如果字幕长度超过限制，需要换行
+      if (displayLength > constraints.maxCharsPerLine) {
+        const lines = smartLineBreak(subtitle.text, constraints.maxCharsPerLine);
+        
+        if (lines.length > 1) {
+          // 多行字幕：创建多个字幕对象，每行一个
+          const lineHeight = constraints.lineHeight;
+          const baseY = subtitle.position.y;
+          const originalDuration = subtitle.end - subtitle.start;
+
+          // 🔧 改进：每行保持相同的显示时长，所有行并行显示
+          // 这样用户看到的是第一行和第二行同时出现，然后同时消失
+          // 这比之前的"按字符比例分配"更符合字幕阅读习惯
+          const minDisplayTime = 3; // 最少显示时长（秒）
+          const displayDuration = Math.max(originalDuration, minDisplayTime);
+
+          console.log('[ZimuShengcheng.optimizeLayout] 多行字幕时间处理:', {
+            originalDuration: originalDuration.toFixed(2),
+            displayDuration: displayDuration.toFixed(2),
+            lineCount: lines.length,
+            text: subtitle.text.substring(0, 30)
+          });
+
+          for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+
+            // 计算Y坐标：第一行在底部，第二行在第一行上方
+            const lineY = baseY - (lines.length - 1 - i) * lineHeight;
+
+            // 创建新的字幕对象，确保所有属性都正确设置
+            const lineSubtitle: ArrangedSubtitle = {
+              type: subtitle.type,
+              text: line,
+              start: subtitle.start,
+              // 🔧 所有行使用相同的持续时长（如果内容较长，自动延长）
+              end: subtitle.start + displayDuration,
+              position: {
+                x: subtitle.position.x,
+                y: lineY,
+                alignment: subtitle.position.alignment || 'center'
+              },
+              style: {
+                ...subtitle.style,
+                fontSize: subtitle.style.fontSize // 保持原始字体大小，确保多行字体一致
+              },
+              layer: subtitle.layer
+            };
+
+            // 如果有动画配置，也复制过来
+            if (subtitle.animationConfig) {
+              lineSubtitle.animationConfig = subtitle.animationConfig;
+            }
+
+            optimized.push(lineSubtitle);
+          }
+        } else {
+          // 单行字幕，直接添加
+          optimized.push(subtitle);
+        }
+      } else {
+        // 字幕长度在限制内，直接添加
+        optimized.push(subtitle);
+      }
+    }
+
+    console.log(`[ZimuShengcheng.optimizeLayout] 优化完成: ${subtitles.length} -> ${optimized.length} 个字幕`);
+    return optimized;
+  }
+
+  // ==================== 步骤4-5: 生成ASS和drawtext ====================
+
+  /**
+   * 生成ASS文件（普通字幕层和简单特效层）
+   * @private
+   */
+  private async generateASSFiles(
+    subtitles: ArrangedSubtitle[],
+    config: ZimuConfig
+  ): Promise<string[]> {
+    const files: string[] = [];
+
+    // 1. 普通字幕层
+    const normalSubtitles = subtitles.filter(s => s.layer === 'ass_normal');
+    if (normalSubtitles.length > 0) {
+      const normalFile = await this.generateNormalASSFile(normalSubtitles, config);
+      files.push(normalFile);
+    }
+
+    // 2. 特效字幕层（ASS）
+    const effectSubtitles = subtitles.filter(s => s.layer === 'ass_effect');
+    if (effectSubtitles.length > 0) {
+      const effectFile = await this.generateEffectASSFile(effectSubtitles, config);
+      files.push(effectFile);
+    }
+
+    return files;
+  }
+
+  /**
+   * 生成普通字幕ASS文件
+   * @private
+   */
+  private async generateNormalASSFile(
+    subtitles: ArrangedSubtitle[],
+    config: ZimuConfig
+  ): string {
+    // 创建样式
+    const normalStyle = ASSGenerator.convertRenderStyleToASS(
+      'Normal',
+      subtitles[0].style,
+      config.videoHeight
+    );
+
+    // 创建事件
+    const events = subtitles.map(s =>
+      ASSGenerator.subtitleToDialogue(s, 'Normal')
+    );
+
+    // 生成ASS内容
+    const assContent = ASSGenerator.generate(
+      events,
+      [normalStyle],
+      { width: config.videoWidth, height: config.videoHeight, fontDir: config.fontDir }
+    );
+
+    // 保存文件
+    const tempDir = await this.getTempDir();
+    const filePath = `${tempDir}/layer1_normal_${Date.now()}.ass`;
+    await ASSGenerator.saveToFile(assContent, filePath);
+
+    return filePath;
+  }
+
+  /**
+   * 生成特效字幕ASS文件
+   * @private
+   */
+  private async generateEffectASSFile(
+    subtitles: ArrangedSubtitle[],
+    config: ZimuConfig
+  ): Promise<string> {
+    // 创建样式（金色特效）
+    const effectStyle = this.createGoldEffectStyle(config);
+
+    // 创建事件（带ASS特效标签）
+    const events: ASSDialogueEvent[] = subtitles.map(s => {
+      const event = ASSGenerator.subtitleToDialogue(s, 'GoldEffect');
+
+      // 添加缩放效果标签
+      event.text = ASSGenerator.generateScaleEffect(
+        s.text,
+        s.position.x,
+        s.position.y,
+        effectStyle.primaryColour
+      );
+
+      return event;
+    });
+
+    // 生成ASS内容
+    const assContent = ASSGenerator.generate(
+      events,
+      [effectStyle],
+      { width: config.videoWidth, height: config.videoHeight, fontDir: config.fontDir }
+    );
+
+    // 保存文件
+    const tempDir = await this.getTempDir();
+    const filePath = `${tempDir}/layer2_effects_${Date.now()}.ass`;
+    await ASSGenerator.saveToFile(assContent, filePath);
+
+    return filePath;
+  }
+
+  /**
+   * 生成drawtext命令（纯drawtext方案：所有字幕都用drawtext渲染）
+   * @private
+   */
+  private generateDrawtextCommands(
+    subtitles: ArrangedSubtitle[],
+    fontDir: string
+  ): string[] {
+    const commands: string[] = [];
+
+    console.log('[ZimuShengcheng.generateDrawtextCommands] 开始生成，字幕数量:', subtitles.length);
+
+    // 【纯drawtext方案】处理所有字幕，不区分layer
+    for (let i = 0; i < subtitles.length; i++) {
+      const subtitle = subtitles[i];
+      try {
+        // 🔍 详细日志：每个字幕的完整信息
+        console.log(`\n[ZimuShengcheng] ========== 字幕 #${i + 1}/${subtitles.length} ==========`);
+        console.log(`[ZimuShengcheng] 📝 文字: "${subtitle.text}"`);
+        console.log(`[ZimuShengcheng] 🏷️  类型: ${subtitle.type}`);
+        console.log(`[ZimuShengcheng] ⏱️  时间: ${subtitle.start.toFixed(3)}s - ${subtitle.end.toFixed(3)}s (时长: ${(subtitle.end - subtitle.start).toFixed(3)}s)`);
+        console.log(`[ZimuShengcheng] 📍 位置: x=${subtitle.position.x}, y=${subtitle.position.y}, 对齐=${subtitle.position.alignment}`);
+        console.log(`[ZimuShengcheng] 🎨 样式: 字体=${subtitle.style.fontName}, 大小=${subtitle.style.fontSize}, 颜色=${subtitle.style.fontColor}`);
+        console.log(`[ZimuShengcheng] 🎨 描边: 颜色=${subtitle.style.outlineColor}, 宽度=${subtitle.style.outlineWidth}`);
+        console.log(`[ZimuShengcheng] 🎨 背景: 颜色=${subtitle.style.backgroundColor}, 透明度=${subtitle.style.backgroundOpacity}`);
+
+        if (subtitle.animationConfig) {
+          console.log(`[ZimuShengcheng] ✨ 动画: 类型=${subtitle.animationConfig.type}, 特效=${subtitle.animationConfig.parameters?.effectType}`);
+        }
+
+        if (subtitle.type === 'normal') {
+          // 普通字幕：使用 drawtext 渲染（支持背景透明度、描边）
+          const cmd = this.generateNormalDrawtext(subtitle, fontDir);
+          commands.push(cmd);
+          console.log(`[ZimuShengcheng] ✅ 生成普通字幕命令完成`);
+        } else if (subtitle.type === 'effect_complex') {
+          // 特效字幕（带动画）：使用 drawtext 渲染（支持动画效果）
+          // 【修复】转换时间单位为秒
+          const normalizedSubtitle = {
+            ...subtitle,
+            start: this.normalizeTimeToSeconds(subtitle.start),
+            end: this.normalizeTimeToSeconds(subtitle.end)
+          };
+
+          const effectType = subtitle.animationConfig?.parameters?.effectType || 'SLIDE_IN_UP';
+          const fontfile = this.resolveFontPath(subtitle.style.fontName, fontDir);
+
+          console.log(`[ZimuShengcheng] 🎬 特效类型: ${effectType}, 字体路径: ${fontfile}`);
+
+          // 🔧 修复：传递特效参数，确保使用正确的动画时长
+          const effectDuration = subtitle.animationConfig?.duration || 2000; // 使用动画配置中的时长
+          const effectParams = {
+            duration: effectDuration,
+            intensity: subtitle.animationConfig?.intensity || 0.8,
+            delay: subtitle.animationConfig?.delay || 0
+          };
+
+          console.log('[ZimuShengcheng] 🎬 特效参数详情:', {
+            effectDurationMs: effectDuration,
+            effectDurationSec: effectDuration / 1000,
+            intensity: effectParams.intensity,
+            animationConfig: subtitle.animationConfig,
+            subtitleDurationSec: normalizedSubtitle.end - normalizedSubtitle.start,
+            subtitleDurationMs: (normalizedSubtitle.end - normalizedSubtitle.start) * 1000
+          });
+
+          const result = DrawtextGenerator.generateByEffectType(
+            normalizedSubtitle,
+            fontfile,
+            effectType,
+            effectParams
+          );
+
+          if (Array.isArray(result)) {
+            commands.push(...result);
+            console.log(`[ZimuShengcheng] ✅ 生成特效字幕命令完成（${result.length}个子命令）`);
+          } else {
+            commands.push(result);
+            console.log(`[ZimuShengcheng] ✅ 生成特效字幕命令完成`);
+          }
+        } else if (subtitle.type === 'effect_simple') {
+          // 简单特效字幕（不带动画）：也用drawtext渲染
+          const cmd = this.generateNormalDrawtext(subtitle, fontDir);
+          commands.push(cmd);
+          console.log(`[ZimuShengcheng] ✅ 生成简单特效字幕命令完成`);
+        }
+      } catch (error) {
+        console.error(`[ZimuShengcheng] ❌ 生成drawtext命令失败:`, {
+          subtitleText: subtitle.text?.substring(0, 20),
+          error: error instanceof Error ? error.message : String(error)
+        });
+      }
+    }
+
+    console.log('[ZimuShengcheng.generateDrawtextCommands] 生成完成，命令数量:', commands.length);
+    return commands;
+  }
+
+  /**
+   * 生成普通字幕的drawtext命令
+   * @private
+   */
+  private generateNormalDrawtext(
+    subtitle: ArrangedSubtitle,
+    fontDir: string
+  ): string {
+    const style = subtitle.style;
+    
+    // ✅ 添加诊断日志：记录字体解析过程
+    console.log(`[ZimuShengcheng] 生成普通字幕drawtext - 字体信息:`, {
+      text: subtitle.text.substring(0, 20),
+      requestedFontName: style.fontName,
+      fontPath: this.fontPathCache.has(style.fontName) ? this.fontPathCache.get(style.fontName) : '未缓存'
+    });
+    
+    const fontPath = this.resolveFontPath(style.fontName, fontDir);
+    
+    // 转换颜色格式
+    const fontColor = this.convertHexToDrawtext(style.fontColor);
+    const outlineColor = this.convertHexToDrawtext(style.outlineColor);
+    
+    // 背景颜色：保留原始格式（#RRGGBB），用于背景透明度
+    const backgroundColor = style.backgroundColor || undefined;
+    
+    // 背景透明度：0.85 不透明度 = 0.15 透明度
+    let bgOpacity = style.backgroundOpacity ?? 0.85;
+    
+    // 位置计算
+    const xExpr = subtitle.position.alignment === 'center' 
+      ? '(w-text_w)/2'
+      : subtitle.position.alignment === 'right'
+      ? 'w-text_w-20'
+      : '20';
+    
+    const yExpr = String(subtitle.position.y);
+    
+    // 【修复】时间单位转换：确保时间值是以秒为单位
+    // 从日志看，时间值都是毫秒（如 290, 1128.888888888889, 59180）
+    // 统一转换为秒：除以 1000
+    let startTime = subtitle.start / 1000;
+    let endTime = subtitle.end / 1000;
+    
+    // 验证转换后的时间值合理性
+    // 如果转换后仍然异常大（超过视频时长，假设最长120秒），说明可能是错误的单位
+    // 这种情况下，可能是原始值已经是秒，不需要转换
+    if (startTime > 120 || endTime > 120) {
+      console.warn(`[ZimuShengcheng] 时间值异常大: start=${subtitle.start} -> ${startTime}s, end=${subtitle.end} -> ${endTime}s`);
+      // 如果转换后异常大，尝试使用原始值（假设已经是秒）
+      if (startTime > 120) {
+        startTime = subtitle.start;
+      }
+      if (endTime > 120) {
+        endTime = subtitle.end;
+      }
+    }
+    
+    // 确保时间值不为负数
+    startTime = Math.max(0, startTime);
+    endTime = Math.max(0, endTime);
+    
+    // 生成enable表达式（使用转换后的秒数）
+    const enableExpr = `between(t,${startTime.toFixed(3)},${endTime.toFixed(3)})`;
+    
+    // 转义文本
+    // 🔧 先normalize（把标点符号替换成空格），再escape（转义特殊字符）
+    const normalizedText = this.normalizeTextForDisplay(subtitle.text);
+    const escapedText = normalizedText
+      .replace(/\\/g, '\\\\')
+      .replace(/'/g, "\\'")
+      .replace(/:/g, '\\:')
+      .replace(/\n/g, '\\n');
+    
+    // 【修复】背景颜色处理：确保不出现 "TRANSPARENT" 字符串
+    let validBackgroundColor: string | undefined = backgroundColor;
+    if (backgroundColor && (backgroundColor.toUpperCase() === 'TRANSPARENT' || backgroundColor === 'transparent')) {
+      // 如果背景是透明的，使用黑色完全透明
+      validBackgroundColor = '#000000';
+      bgOpacity = 0;  // 完全透明
+    }
+    
+    // 构建drawtext配置
+    const config: any = {
+      fontfile: fontPath,
+      text: escapedText,
+      x: xExpr,
+      y: yExpr,
+      fontsize: style.fontSize,
+      fontcolor: fontColor,
+      borderw: style.outlineWidth || 0,
+      bordercolor: outlineColor,
+      enable: enableExpr
+    };
+
+    // 添加阴影效果（如果设置了阴影颜色）
+    if (style.shadowColor && style.shadowColor !== 'transparent') {
+      config.shadowcolor = this.convertHexToDrawtext(style.shadowColor);
+      // FFmpeg shadowx/shadowy 使用 shadowOffset 作为偏移量
+      const shadowOffset = style.shadowOffset || 4;  // 默认值增大到4，更明显
+      config.shadowx = shadowOffset;
+      config.shadowy = shadowOffset;
+      console.log(`[ZimuShengcheng] 添加阴影效果: color=${config.shadowcolor}, offset=${shadowOffset}`);
+    } else {
+      console.log(`[ZimuShengcheng] 未添加阴影: shadowColor=${style.shadowColor}`);
+    }
+
+    // 生成drawtext命令（支持背景透明度）
+    return DrawtextGenerator.generateNormalSubtitle(
+      config,
+      validBackgroundColor,  // 使用修复后的背景颜色
+      bgOpacity
+    );
+  }
+
+  // 字体路径缓存（避免重复查找）
+  private fontPathCache: Map<string, string> = new Map();
+
+  /**
+   * 预先解析所有字体路径（异步，使用字体管理器API）
+   * 在生成drawtext命令之前调用，将所有字体路径缓存起来
+   * @private
+   */
+  private async preResolveFontPaths(subtitles: ArrangedSubtitle[]): Promise<void> {
+    // ✅ 添加全局超时保护：整个字体路径预解析过程最多5秒
+    return Promise.race([
+      this._preResolveFontPathsInternal(subtitles),
+      new Promise<void>((_, reject) => 
+        setTimeout(() => reject(new Error('字体路径预解析超时（5秒），将使用同步查找方案')), 5000)
+      )
+    ]).catch((error) => {
+      console.warn(`[ZimuShengcheng] 字体路径预解析失败，将使用同步查找方案:`, error?.message || error);
+      // 即使失败，也继续执行，使用同步查找方案
+    });
+  }
+
+  private async _preResolveFontPathsInternal(subtitles: ArrangedSubtitle[]): Promise<void> {
+    // 收集所有唯一的字体名称
+    const fontNames = new Set<string>();
+    for (const subtitle of subtitles) {
+      if (subtitle.style?.fontName) {
+        fontNames.add(subtitle.style.fontName);
+      }
+    }
+
+    console.log(`[ZimuShengcheng] 开始预解析字体路径，字体数量: ${fontNames.size}`);
+
+    // 并行解析所有字体路径（使用allSettled，确保即使部分失败也不影响其他）
+    const fontPathPromises = Array.from(fontNames).map(async (fontName) => {
+      // 如果已经缓存，跳过
+      if (this.fontPathCache.has(fontName)) {
+        return;
+      }
+
+      // ✅ 优化策略：优先使用字体管理器API，如果失败则回退到同步查找
+      // 保留超时机制，避免Python调用失败导致阻塞
+      try {
+        // 尝试使用字体管理器API查找字体路径（优先方案）
+        if (typeof window !== 'undefined' && window.$mapi?.fontManager?.findFontPath) {
+          try {
+            // ✅ 添加超时机制：3秒超时，快速失败，避免阻塞
+            const timeoutPromise = new Promise((_, reject) => 
+              setTimeout(() => reject(new Error('字体管理器API调用超时')), 3000)
+            );
+            
+            const result = await Promise.race([
+              window.$mapi.fontManager.findFontPath(fontName, 400),
+              timeoutPromise
+            ]) as any;
+            
+            if (result && result.success && result.data) {
+              // ✅ 检查字体路径是否包含中文字符，如果是则复制到临时目录并使用英文文件名
+              const originalFontPath = result.data;
+              const safeFontPath = await this.copyFontToSafePath(originalFontPath, fontName);
+              
+              this.fontPathCache.set(fontName, safeFontPath);
+              console.log(`[ZimuShengcheng] 通过字体管理器找到字体: ${fontName} -> ${safeFontPath}`);
+              return;
+            }
+          } catch (apiError: any) {
+            // 超时或API调用失败，快速回退到同步查找，不阻塞流程
+            console.warn(`[ZimuShengcheng] 字体管理器API调用失败（快速回退到同步查找）: ${fontName}`, apiError?.message || apiError);
+            // 不抛出错误，继续执行同步查找
+          }
+        }
+      } catch (error: any) {
+        // 任何异常都快速捕获，继续使用同步查找
+        console.warn(`[ZimuShengcheng] 字体管理器查找异常（将使用同步查找）: ${fontName}`, error?.message || error);
+      }
+
+      // 回退方案：使用同步查找逻辑
+      try {
+        const fontPath = this.resolveFontPathSync(fontName);
+        // ✅ 检查字体路径是否包含中文字符，如果是则复制到临时目录并使用英文文件名
+        const safeFontPath = await this.copyFontToSafePath(fontPath, fontName);
+        this.fontPathCache.set(fontName, safeFontPath);
+        console.log(`[ZimuShengcheng] 使用同步回退方案找到字体: ${fontName} -> ${safeFontPath}`);
+      } catch (syncError) {
+        console.error(`[ZimuShengcheng] 同步查找字体失败: ${fontName}`, syncError);
+        // 最后的回退：使用默认字体
+        const defaultFont = 'C:/Windows/Fonts/msyhbd.ttc';
+        this.fontPathCache.set(fontName, defaultFont);
+        console.warn(`[ZimuShengcheng] 使用默认字体: ${fontName} -> ${defaultFont}`);
+      }
+    });
+
+    // 使用allSettled确保所有Promise都完成（无论成功或失败）
+    const results = await Promise.allSettled(fontPathPromises);
+    
+    // 统计成功和失败的数量
+    const successful = results.filter(r => r.status === 'fulfilled').length;
+    const failed = results.filter(r => r.status === 'rejected').length;
+    
+    console.log(`[ZimuShengcheng] 字体路径预解析完成，成功: ${successful}, 失败: ${failed}, 缓存数量: ${this.fontPathCache.size}`);
+  }
+
+  /**
+   * 将字体文件复制到临时目录，如果路径包含非ASCII字符（如中文），则使用英文文件名
+   * 避免 FFmpeg 在 Windows 上无法处理中文字体路径的问题
+   * @private
+   */
+  private async copyFontToSafePath(originalFontPath: string, fontName: string): Promise<string> {
+    // 检查路径是否包含非ASCII字符
+    const hasNonAscii = /[^\x00-\x7F]/.test(originalFontPath);
+    
+    if (!hasNonAscii) {
+      // 路径只包含ASCII字符，直接返回
+      return originalFontPath;
+    }
+
+    try {
+      // 获取临时目录
+      const tempDir = await this.getTempDir();
+      
+      // 生成安全的英文文件名：使用字体名称的哈希值 + 扩展名
+      const path = await import('path');
+      const crypto = await import('crypto');
+      const ext = path.extname(originalFontPath);
+      const hash = crypto.createHash('md5').update(fontName).digest('hex').substring(0, 8);
+      const safeFileName = `font_${hash}${ext}`;
+      const safeFontPath = path.join(tempDir, safeFileName).replace(/\\/g, '/');
+
+      // 检查安全路径是否已存在
+      if (typeof window !== 'undefined' && window.$mapi?.file?.exists) {
+        const exists = await window.$mapi.file.exists(safeFontPath);
+        if (exists) {
+          console.log(`[ZimuShengcheng] 安全字体路径已存在，跳过复制: ${safeFontPath}`);
+          return safeFontPath;
+        }
+      } else {
+        const fs = await import('fs');
+        if (fs.existsSync(safeFontPath)) {
+          console.log(`[ZimuShengcheng] 安全字体路径已存在，跳过复制: ${safeFontPath}`);
+          return safeFontPath;
+        }
+      }
+
+      // 复制字体文件到临时目录
+      if (typeof window !== 'undefined' && window.$mapi?.file?.copy) {
+        await window.$mapi.file.copy(originalFontPath, safeFontPath, { isDataPath: false });
+        console.log(`[ZimuShengcheng] 字体文件已复制到安全路径（避免中文路径问题）: ${originalFontPath} -> ${safeFontPath}`);
+      } else {
+        const fs = await import('fs');
+        const util = await import('util');
+        const copyFile = util.promisify(fs.copyFile);
+        await copyFile(originalFontPath, safeFontPath);
+        console.log(`[ZimuShengcheng] 字体文件已复制到安全路径（避免中文路径问题）: ${originalFontPath} -> ${safeFontPath}`);
+      }
+
+      return safeFontPath;
+    } catch (error: any) {
+      // 复制失败，返回原始路径（可能会有问题，但总比没有字体好）
+      console.warn(`[ZimuShengcheng] 复制字体文件到安全路径失败，使用原始路径: ${originalFontPath}`, error?.message || error);
+      return originalFontPath;
+    }
+  }
+
+  /**
+   * 同步解析字体文件路径（回退方案）
+   * 当字体管理器API不可用或失败时使用
+   * @private
+   */
+  private resolveFontPathSync(fontName: string): string {
+    if (!fontName) {
+      return 'C:/Windows/Fonts/msyhbd.ttc'; // 默认字体
+    }
+    
+    // 回退方案：尝试常见的系统字体路径（Windows）
+    const systemFonts: Record<string, string> = {
+      'microsoft yahei': 'C:/Windows/Fonts/msyh.ttc',
+      '微软雅黑': 'C:/Windows/Fonts/msyh.ttc',
+      'msyh': 'C:/Windows/Fonts/msyh.ttc',
+      'simhei': 'C:/Windows/Fonts/simhei.ttf',
+      '黑体': 'C:/Windows/Fonts/simhei.ttf',
+      'simsun': 'C:/Windows/Fonts/simsun.ttc',
+      '宋体': 'C:/Windows/Fonts/simsun.ttc',
+      'msyhbd': 'C:/Windows/Fonts/msyhbd.ttc'
+    };
+    
+    const fontNameLower = fontName.toLowerCase().trim();
+    
+    // 首先检查系统字体映射
+    if (systemFonts[fontNameLower]) {
+      const fontPath = systemFonts[fontNameLower];
+      console.log(`[ZimuShengcheng] 使用系统字体映射: ${fontName} -> ${fontPath}`);
+      return fontPath;
+    }
+    
+    // 最后回退：默认字体
+    const defaultFont = 'C:/Windows/Fonts/msyhbd.ttc';
+    console.warn(`[ZimuShengcheng] 未找到字体 ${fontName}，使用默认字体: ${defaultFont}`);
+    return defaultFont;
+  }
+
+  /**
+   * 解析字体文件路径（从缓存读取）
+   * 必须在preResolveFontPaths之后调用
+   * @private
+   */
+  private resolveFontPath(fontName: string, fontDir: string): string {
+    if (!fontName) {
+      return 'C:/Windows/Fonts/msyhbd.ttc'; // 默认字体
+    }
+    
+    // 从缓存读取
+    if (this.fontPathCache.has(fontName)) {
+      return this.fontPathCache.get(fontName)!;
+    }
+    
+    // 如果没有缓存，使用同步回退方案
+    console.warn(`[ZimuShengcheng] 字体路径未缓存，使用回退方案: ${fontName}`);
+    return this.resolveFontPathSync(fontName);
+  }
+
+  /**
+   * 将十六进制颜色转换为drawtext格式（0xRRGGBB）
+   * @private
+   */
+  private convertHexToDrawtext(hexColor: string): string {
+    if (!hexColor) return '0xFFFFFF';
+    
+    // 移除 # 前缀
+    const hex = hexColor.replace('#', '').toUpperCase();
+    
+    // 确保是6位十六进制
+    if (hex.length === 6) {
+      return `0x${hex}`;
+    }
+    
+    return '0xFFFFFF'; // 默认白色
+  }
+
+  /**
+   * 标准化时间值：将毫秒转换为秒
+   * FFmpeg 的 drawtext 需要秒为单位
+   * @private
+   */
+  private normalizeTimeToSeconds(timeValue: number): number {
+    // 简化逻辑：如果时间值大于100，认为是毫秒，需要除以1000
+    // 因为正常视频字幕的时间戳（以秒为单位）很少会小于100秒
+    // 但如果是毫秒，即使是1秒也会是1000
+    if (timeValue > 100) {
+      return timeValue / 1000;
+    }
+    // 如果时间值 <= 100，假设已经是秒
+    return timeValue;
+  }
+
+  // ==================== 步骤6-7: FFmpeg执行 ====================
+
+  /**
+   * 构建FFmpeg命令
+   * @private
+   */
+  private buildFFmpegCommand(
+    inputVideo: string,
+    outputVideo: string,
+    assFiles: string[],
+    drawtextCommands: string[],
+    fontDir: string
+  ): FFmpegCommand {
+    const filterComplex = DrawtextGenerator.buildFilterComplex(
+      drawtextCommands,
+      assFiles,
+      fontDir
+    );
+
+    let fullCommand = DrawtextGenerator.buildFFmpegCommand(
+      inputVideo,
+      outputVideo,
+      filterComplex
+    );
+
+    // 【修复】处理过长的filter_complex
+    // 如果返回特殊标记，表示需要使用文件方式传递过滤器
+    if (fullCommand.startsWith('__USE_FILTER_FILE__:')) {
+      console.log('[ZimuShengcheng] 检测到filter_complex过长，将使用文件方式传递...');
+      // 提取过滤器内容
+      const actualFilterContent = fullCommand.substring('__USE_FILTER_FILE__:'.length);
+      // 【修复】使用JSON格式避免路径中的冒号导致分割错误
+      const scriptData = JSON.stringify({
+        filterContent: actualFilterContent,
+        inputVideo: inputVideo,
+        outputVideo: outputVideo
+      });
+      fullCommand = `__USE_FILTER_SCRIPT__:${scriptData}`;
+    }
+
+    return {
+      fullCommand,
+      filters: [filterComplex],
+      assFiles,
+      tempFiles: assFiles // 需要清理的临时文件
+    };
+  }
+
+  /**
+   * 执行FFmpeg渲染
+   * @private
+   */
+  private async executeFFmpeg(ffmpegCmd: FFmpegCommand): Promise<void> {
+    let actualCommand = ffmpegCmd.fullCommand;
+    let filterContent: string | null = null;
+    let inputVideo: string | null = null;
+    let outputVideo: string | null = null;
+
+    // 【修复】处理过长的filter_complex（使用execFile避免命令行限制）
+    // 注意：DrawtextGenerator.buildFFmpegCommand 返回的是 __USE_FILTER_FILE__: 标记
+    if (actualCommand.startsWith('__USE_FILTER_FILE__:') || actualCommand.startsWith('__USE_FILTER_SCRIPT__:')) {
+      console.log('[ZimuShengcheng] 检测到过长过滤器，使用execFile方式...');
+      try {
+        // 【修复】解析JSON格式的参数
+        const prefixLen = actualCommand.startsWith('__USE_FILTER_SCRIPT__:')
+          ? '__USE_FILTER_SCRIPT__:'.length
+          : '__USE_FILTER_FILE__:'.length;
+        const jsonStr = actualCommand.substring(prefixLen);
+        const scriptData = JSON.parse(jsonStr);
+        filterContent = scriptData.filterContent;
+        inputVideo = scriptData.inputVideo;
+        outputVideo = scriptData.outputVideo;
+
+        console.log('[ZimuShengcheng] 过滤器大小:', filterContent.length, '字符');
+      } catch (error) {
+        console.error('[ZimuShengcheng] 解析filter脚本参数失败:', error);
+        throw error;
+      }
+    }
+
+    try {
+      // 通过IPC调用FFmpeg
+      if (typeof window !== 'undefined' && window.$mapi?.shell?.executeFFmpeg) {
+        // 浏览器环境：使用IPC
+        console.log('[ZimuShengcheng] 通过IPC调用FFmpeg...');
+        if (filterContent && inputVideo && outputVideo) {
+          // 如果是长过滤器，传递JSON给IPC处理
+          await window.$mapi.shell.executeFFmpeg(JSON.stringify({
+            type: 'ffmpeg_long_filter',
+            filterComplex: filterContent,
+            inputVideo: inputVideo,
+            outputVideo: outputVideo
+          }));
+        } else {
+          await window.$mapi.shell.executeFFmpeg(actualCommand);
+        }
+      } else {
+        // Node.js环境：使用execFile避免命令行长度限制
+        const { execFile } = await import('child_process');
+        const util = await import('util');
+        const execFilePromise = util.promisify(execFile);
+        const fs = await import('fs');
+        const path = await import('path');
+        const os = await import('os');
+
+        let args: string[];
+        let filterScriptFile: string | null = null;
+
+        if (filterContent && inputVideo && outputVideo) {
+          // 🔧 修复：使用filter文件而不是命令行参数，避免ENAMETOOLONG错误
+          // 创建临时filter脚本文件
+          const tempDir = os.default.tmpdir();
+          filterScriptFile = path.default.join(tempDir, `ffmpeg_filter_${Date.now()}.txt`);
+
+          // 写入filter_complex到文件
+          await fs.promises.writeFile(filterScriptFile, filterContent, 'utf-8');
+          console.log('[ZimuShengcheng] 创建filter脚本文件:', filterScriptFile, '大小:', filterContent.length, '字符');
+
+          // 【修复】使用 -filter_complex_script 参数读取文件，而不是直接传递长字符串
+          args = [
+            '-y',  // 覆盖已存在的输出文件
+            '-i', inputVideo,
+            '-filter_complex_script', filterScriptFile,  // 使用文件而不是命令行参数
+            '-c:v', 'libx264',
+            '-preset', 'medium',
+            '-crf', '18',
+            '-c:a', 'copy',
+            outputVideo
+          ];
+          console.log('[ZimuShengcheng] 使用execFile执行FFmpeg（长过滤器文件模式）...');
+
+          // 确保清理filter文件
+          if (!ffmpegCmd.tempFiles) {
+            ffmpegCmd.tempFiles = [];
+          }
+          ffmpegCmd.tempFiles.push(filterScriptFile);
+        } else {
+          // 正常情况：直接执行
+          console.log('[ZimuShengcheng] 使用execFile执行FFmpeg（普通模式）...');
+          args = actualCommand.split(' ').slice(1); // 跳过'ffmpeg'
+          args = args.map(arg => arg.startsWith('"') && arg.endsWith('"') ? arg.slice(1, -1) : arg);
+        }
+
+        const result = await execFilePromise('ffmpeg', args);
+        console.log('[ZimuShengcheng] FFmpeg输出:', result.stdout?.substring(0, 200));
+
+        // FFmpeg 将正常输出（版本信息、编码统计等）输出到 stderr
+        // 这是标准行为，不是错误
+        if (result.stderr) {
+          // 检查是否包含真正的错误信息
+          const hasRealError = /error|failed|invalid|fatal/i.test(result.stderr);
+          if (hasRealError) {
+            console.error('[ZimuShengcheng] FFmpeg错误:', result.stderr);
+            throw new Error(result.stderr);
+          } else {
+            console.log('[ZimuShengcheng] FFmpeg信息输出:', result.stderr.substring(0, 500) + (result.stderr.length > 500 ? '...' : ''));
+          }
+        }
+      }
+    } catch (error) {
+      console.error('[ZimuShengcheng] FFmpeg执行失败:', error);
+      throw error;
+    } finally {
+      // 清理临时文件
+      await this.cleanupTempFiles(ffmpegCmd.tempFiles);
+    }
+  }
+
+  // ==================== 辅助方法 ====================
+
+  /**
+   * 创建金色特效样式
+   * @private
+   */
+  private createGoldEffectStyle(config: ZimuConfig): ASSStyleConfig {
+    return {
+      name: 'GoldEffect',
+      fontname: config.subtitleStyle.fontName || 'Microsoft YaHei Bold',
+      fontsize: Math.round((config.subtitleStyle.fontSize || 48) * 1.5),
+      primaryColour: '&H0000D7FF',  // 金色（BGR顺序）
+      secondaryColour: '&H000000FF',
+      outlineColour: '&H00008CFF',
+      backColour: '&H00000000',
+      bold: 1,
+      italic: 0,
+      borderStyle: 1,
+      outline: 4,
+      shadow: 0,
+      alignment: 2,
+      marginL: 10,
+      marginR: 10,
+      marginV: 200,
+      scaleX: 100,
+      scaleY: 100
+    };
+  }
+
+  /**
+   * 获取输出目录（用于保存ASS文件）
+   * 改为使用output目录而非系统Temp目录，避免Windows短路径（ADMINI~1）问题
+   * @private
+   */
+  private async getTempDir(): Promise<string> {
+    if (typeof window !== 'undefined' && window.$mapi?.file?.getOutputDir) {
+      return await window.$mapi.file.getOutputDir();
+    } else {
+      // Node.js环境 - 使用aigcpanel-v2的data/output目录
+      const path = await import('path');
+      const os = await import('os');
+      const homeDir = os.homedir();
+      const outputDir = path.join(homeDir, 'AppData', 'Roaming', 'aigcpanel-v2', 'data', 'output');
+
+      // 确保目录存在
+      const fs = await import('fs');
+      if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir, { recursive: true });
+      }
+
+      // 返回使用正斜杠的路径（FFmpeg兼容性更好）
+      return outputDir.replace(/\\/g, '/');
+    }
+  }
+
+  /**
+   * 生成SRT文件（用于展示和下载）
+   * @private
+   */
+  private async generateSRTFile(segments: CorrectedSegment[], config: ZimuConfig): Promise<string> {
+    // 生成SRT内容
+    let srtContent = '';
+    let index = 1;
+
+    // 格式化时间（输入为秒，转换为SRT格式：HH:MM:SS,mmm）
+    const formatSRTTime = (seconds: number): string => {
+      // 确保时间值是正确的单位（秒）
+      let timeInSeconds = seconds;
+      if (timeInSeconds > 1000) {
+        // 如果值大于1000，可能是毫秒，需要转换
+        timeInSeconds = seconds / 1000;
+      }
+
+      const h = Math.floor(timeInSeconds / 3600);
+      const m = Math.floor((timeInSeconds % 3600) / 60);
+      const s = Math.floor(timeInSeconds % 60);
+      const ms = Math.floor((timeInSeconds % 1) * 1000);
+      return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')},${String(ms).padStart(3, '0')}`;
+    };
+
+    // 从修正后的片段生成SRT
+    for (const segment of segments) {
+      const startTime = formatSRTTime(segment.start);
+      const endTime = formatSRTTime(segment.end);
+      
+      srtContent += `${index}\n`;
+      srtContent += `${startTime} --> ${endTime}\n`;
+      srtContent += `${segment.text}\n\n`;
+      index++;
+    }
+
+    // 保存SRT文件到输出目录
+    const outputDir = await this.getTempDir();
+    const path = await import('path');
+    const timestamp = Date.now();
+    const srtFileName = `subtitle_${timestamp}.srt`;
+    const srtPath = path.join(outputDir, srtFileName).replace(/\\/g, '/');
+
+    // 写入文件
+    if (typeof window !== 'undefined' && window.$mapi?.file?.write) {
+      await window.$mapi.file.write(srtPath, srtContent, { isDataPath: false });
+    } else {
+      // Node.js环境
+      const fs = await import('fs');
+      const util = await import('util');
+      const writeFile = util.promisify(fs.writeFile);
+      await writeFile(srtPath, srtContent, { encoding: 'utf-8' });
+    }
+
+    console.log(`[ZimuShengcheng] SRT文件已生成: ${srtPath}`);
+    return srtPath;
+  }
+
+  /**
+   * 清理临时文件
+   * @private
+   */
+  private async cleanupTempFiles(files: string[]): Promise<void> {
+    for (const file of files) {
+      try {
+        if (typeof window !== 'undefined' && window.$mapi?.file?.deleteFile) {
+          await window.$mapi.file.deleteFile(file);
+        } else {
+          const fs = await import('fs');
+          const util = await import('util');
+          const unlink = util.promisify(fs.unlink);
+          await unlink(file);
+        }
+        console.log(`[ZimuShengcheng] 已删除临时文件: ${file}`);
+      } catch (error) {
+        console.warn(`[ZimuShengcheng] 删除临时文件失败: ${file}`, error);
+      }
+    }
+  }
+
+  /**
+   * 生成调试文件（包含所有字幕详细信息）
+   * @private
+   */
+  private async generateDebugFile(
+    subtitles: ArrangedSubtitle[],
+    drawtextCommands: string[],
+    config: ZimuConfig
+  ): Promise<string> {
+    const tempDir = await this.getTempDir();
+    const debugPath = `${tempDir}/subtitle_debug_${Date.now()}.json`;
+
+    // 创建调试信息对象
+    const debugInfo = {
+      // 基础配置
+      config: {
+        videoWidth: config.videoWidth,
+        videoHeight: config.videoHeight,
+        subtitleStyle: config.subtitleStyle,
+        keywordGroupsCount: config.keywordGroups?.length || 0
+      },
+
+      // 修正后的段落
+      segments: this.correctedSegments.map(seg => ({
+        text: seg.text,
+        start: seg.start,
+        end: seg.end,
+        duration: seg.end - seg.start
+      })),
+
+      // 关键词匹配结果
+      keywordMatches: this.keywordMatches.map(match => ({
+        keyword: match.keyword,
+        effectType: match.effectType,
+        isAnimated: match.isAnimated,
+        startTime: match.startTime,
+        endTime: match.endTime,
+        duration: match.endTime - match.startTime,
+        effectDuration: match.effectDuration, // 毫秒
+        groupId: match.groupId,
+        groupName: match.groupName
+      })),
+
+      // 排列后的字幕详情
+      subtitles: subtitles.map((subtitle, index) => {
+        const detail: any = {
+          index,
+          type: subtitle.type,
+          text: subtitle.text,
+          start: subtitle.start,
+          end: subtitle.end,
+          duration: subtitle.end - subtitle.start,
+          position: subtitle.position,
+          style: subtitle.style,
+          layer: subtitle.layer
+        };
+
+        // 如果有动画配置，添加详细信息
+        if (subtitle.animationConfig) {
+          detail.animationConfig = {
+            type: subtitle.animationConfig.type,
+            duration: subtitle.animationConfig.duration, // 毫秒
+            delay: subtitle.animationConfig.delay,
+            intensity: subtitle.animationConfig.intensity,
+            parameters: subtitle.animationConfig.parameters
+          };
+        }
+
+        // 计算文本宽度（像素）
+        const charCount = this.countDisplayChars(subtitle.text);
+        detail.charCount = charCount;
+        detail.estimatedWidth = charCount * subtitle.style.fontSize * 0.5; // 估算
+
+        return detail;
+      }),
+
+      // 最终的drawtext命令
+      drawtextCommands: drawtextCommands.map((cmd, index) => ({
+        index,
+        command: cmd,
+        length: cmd.length
+      })),
+
+      // SmartLayoutManager信息
+      layoutManager: {
+        screenWidth: config.videoWidth,
+        screenHeight: config.videoHeight,
+        longAnimationThreshold: 5.0, // 修复后的值
+        positionStrategy: 'see SmartLayoutManager.ts'
+      },
+
+      // 统计信息
+      statistics: {
+        totalSubtitles: subtitles.length,
+        normalSubtitles: subtitles.filter(s => s.type === 'normal').length,
+        effectSimple: subtitles.filter(s => s.type === 'effect_simple').length,
+        effectComplex: subtitles.filter(s => s.type === 'effect_complex').length,
+        totalDrawtextCommands: drawtextCommands.length
+      }
+    };
+
+    // 保存到文件
+    try {
+      if (typeof window !== 'undefined' && window.$mapi?.file?.writeText) {
+        await window.$mapi.file.writeText(debugPath, JSON.stringify(debugInfo, null, 2));
+      } else {
+        const fs = await import('fs');
+        const util = await import('util');
+        const writeFile = util.promisify(fs.writeFile);
+        await writeFile(debugPath, JSON.stringify(debugInfo, null, 2), 'utf8');
+      }
+
+      console.log(`[ZimuShengcheng] 调试文件已生成: ${debugPath}`);
+      return debugPath;
+
+    } catch (error) {
+      console.error('[ZimuShengcheng] 生成调试文件失败:', error);
+      return '';
+    }
+  }
+
+  /**
+   * 计算显示字符数（中文算1，英文算0.5）
+   * @private
+   */
+  private countDisplayChars(text: string): number {
+    let count = 0;
+    for (const char of text) {
+      if (/[\u4e00-\u9fff]/.test(char)) {
+        count += 1; // 中文
+      } else if (/[a-zA-Z0-9\s]/.test(char)) {
+        count += 0.5; // 英文数字
+      } else {
+        count += 0.3; // 标点
+      }
+    }
+    return count;
+  }
+}

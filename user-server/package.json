@@ -1,0 +1,20 @@
+{
+    "name": "user-server",
+    "version": "1.0.1",
+    "description": "独立用户管理服务器 - 支持注册、登录、设备指纹绑定",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js",
+        "dev": "nodemon server.js"
+    },
+    "dependencies": {
+        "express": "^4.18.2",
+        "cors": "^2.8.5",
+        "sqlite3": "^5.1.6",
+        "bcryptjs": "^2.4.3",
+        "jsonwebtoken": "^9.0.0"
+    },
+    "devDependencies": {
+        "nodemon": "^3.0.1"
+    }
+}

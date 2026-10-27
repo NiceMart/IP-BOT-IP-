@@ -1,0 +1,66 @@
+{
+  "templates": [
+    {
+      "name": "简约风格",
+      "description": "简洁大方的黑色半透明背景，适合各类视频",
+      "config": {
+        "style": "default",
+        "fontSize": 80,
+        "fontColor": [255, 255, 255],
+        "fontPath": "C:\\Windows\\Fonts\\msyh.ttc",
+        "position": "top",
+        "maxWidth": 1920
+      }
+    },
+    {
+      "name": "描边风格",
+      "description": "白色文字配黑色描边，清晰醒目",
+      "config": {
+        "style": "outline",
+        "fontSize": 90,
+        "fontColor": [255, 255, 255],
+        "outlineColor": [0, 0, 0],
+        "fontPath": "C:\\Windows\\Fonts\\msyhbd.ttc",
+        "position": "top",
+        "maxWidth": 1920
+      }
+    },
+    {
+      "name": "模糊背景",
+      "description": "背景模糊效果，突出标题文字",
+      "config": {
+        "style": "blur_bg",
+        "fontSize": 85,
+        "fontColor": [255, 255, 255],
+        "fontPath": "C:\\Windows\\Fonts\\msyh.ttc",
+        "position": "center",
+        "maxWidth": 1920
+      }
+    },
+    {
+      "name": "渐变遮罩",
+      "description": "优雅的渐变半透明遮罩效果",
+      "config": {
+        "style": "gradient",
+        "fontSize": 75,
+        "fontColor": [255, 255, 255],
+        "fontPath": "C:\\Windows\\Fonts\\msyh.ttc",
+        "position": "top",
+        "maxWidth": 1920
+      }
+    },
+    {
+      "name": "分栏设计",
+      "description": "左侧标题配右侧装饰，设计感十足",
+      "config": {
+        "style": "split",
+        "fontSize": 70,
+        "fontColor": [255, 255, 255],
+        "fontPath": "C:\\Windows\\Fonts\\msyhbd.ttc",
+        "position": "top",
+        "accentText": "✨",
+        "maxWidth": 1920
+      }
+    }
+  ]
+}

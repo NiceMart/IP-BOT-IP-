@@ -1,0 +1,2267 @@
+﻿:root,
+html[data-theme="soft-light"],
+body[data-theme="soft-light"] {
+    color-scheme: light;
+    --theme-app-bg: #eef1ff;
+    --theme-app-bg-top: #f8f6ff;
+    --theme-page-shell: linear-gradient(180deg, rgba(248, 246, 255, 0.98) 0%, rgba(237, 239, 255, 0.98) 100%);
+    --theme-panel-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(244, 244, 255, 0.95) 100%);
+    --theme-panel-bg-strong: linear-gradient(180deg, rgba(255, 255, 255, 0.985) 0%, rgba(241, 241, 255, 0.99) 100%);
+    --theme-panel-bg-muted: rgba(248, 247, 255, 0.78);
+    --theme-panel-overlay: rgba(255, 255, 255, 0.84);
+    --theme-border: rgba(120, 145, 128, 0.24);
+    --theme-border-strong: rgba(102, 112, 212, 0.42);
+    --theme-text-primary: #1b2140;
+    --theme-text-secondary: #4d577e;
+    --theme-text-muted: #727ca3;
+    --theme-brand: #279d7b;
+    --theme-brand-strong: #187e63;
+    --theme-brand-soft: rgba(65, 145, 102, 0.12);
+    --theme-shadow-soft: 0 18px 45px rgba(60, 90, 70, 0.14);
+    --theme-shadow-card: 0 22px 56px rgba(60, 90, 70, 0.16);
+    --theme-switch-bg: rgba(255, 255, 255, 0.78);
+    --theme-switch-border: rgba(120, 126, 221, 0.18);
+    --theme-switch-shadow: 0 16px 36px rgba(60, 90, 70, 0.14);
+    --theme-switch-text: rgba(77, 87, 126, 0.82);
+    --theme-switch-text-hover: #172033;
+    --theme-switch-active-bg: linear-gradient(135deg, #279d7b 0%, #9aa4ff 100%);
+    --theme-switch-active-text: #ffffff;
+    --theme-switch-active-shadow: 0 14px 30px rgba(65, 145, 102, 0.28);
+}
+
+html[data-theme="dark"],
+body[data-theme="dark"] {
+    color-scheme: dark;
+    --theme-app-bg: #0f1015;
+    --theme-app-bg-top: #181a22;
+    --theme-page-shell: linear-gradient(180deg, #1a1a1f 0%, #0f0f15 100%);
+    --theme-panel-bg: linear-gradient(180deg, rgba(20, 22, 30, 0.96) 0%, rgba(11, 12, 18, 0.96) 100%);
+    --theme-panel-bg-strong: linear-gradient(180deg, rgba(20, 22, 30, 0.98) 0%, rgba(11, 12, 18, 0.98) 100%);
+    --theme-panel-bg-muted: rgba(255, 255, 255, 0.04);
+    --theme-panel-overlay: rgba(15, 23, 42, 0.78);
+    --theme-border: rgba(88, 102, 135, 0.28);
+    --theme-border-strong: rgba(65, 145, 102, 0.46);
+    --theme-text-primary: #f3f4f6;
+    --theme-text-secondary: #cbd5e1;
+    --theme-text-muted: #94a3b8;
+    --theme-brand: #39c89b;
+    --theme-brand-strong: #239c79;
+    --theme-brand-soft: rgba(65, 145, 102, 0.16);
+    --theme-shadow-soft: 0 18px 44px rgba(2, 6, 23, 0.35);
+    --theme-shadow-card: 0 24px 60px rgba(2, 6, 23, 0.45);
+    --theme-switch-bg: rgba(15, 23, 42, 0.72);
+    --theme-switch-border: rgba(148, 163, 184, 0.18);
+    --theme-switch-shadow: 0 16px 36px rgba(2, 6, 23, 0.28);
+    --theme-switch-text: rgba(226, 232, 240, 0.74);
+    --theme-switch-text-hover: #ffffff;
+    --theme-switch-active-bg: linear-gradient(135deg, #239c79 0%, #60a5fa 100%);
+    --theme-switch-active-text: #ffffff;
+    --theme-switch-active-shadow: 0 14px 30px rgba(45, 120, 80, 0.32);
+}
+
+html[data-theme],
+body[data-theme] {
+    background: var(--theme-app-bg);
+    color: var(--theme-text-primary);
+}
+
+body[data-theme] .window-container,
+body[data-theme] .window-body,
+body[data-theme] .page-container {
+    background: var(--theme-page-shell) !important;
+    color: var(--theme-text-primary) !important;
+}
+
+body[data-theme="soft-light"] {
+    background:
+        radial-gradient(circle at top left, rgba(98, 123, 255, 0.16), transparent 30%),
+        radial-gradient(circle at 100% 0%, rgba(223, 191, 255, 0.16), transparent 24%),
+        linear-gradient(180deg, var(--theme-app-bg-top) 0%, var(--theme-app-bg) 100%);
+}
+
+body[data-theme] {
+    color: var(--theme-text-primary);
+}
+
+body[data-theme] .window-header,
+body[data-theme] .page-nav-container,
+body[data-theme] .video-page-container,
+body[data-theme] .setting-container,
+body[data-theme] .setting-sidebar,
+body[data-theme] .setting-content,
+body[data-theme] .home-card,
+body[data-theme] .home-info-card,
+body[data-theme] .app-tool-card,
+body[data-theme] .video-template-page .rounded-xl.shadow.border,
+body[data-theme] .video-template-page .bg-blue-100,
+body[data-theme] .cyberpunk-dashboard,
+body[data-theme] .elegant-theme,
+body[data-theme] .custom-prompt-results,
+body[data-theme] .custom-prompt-panel,
+body[data-theme] .custom-prompt-hero,
+body[data-theme] .cover-template-manager .template-card,
+body[data-theme] .cover-template-manager .template-thumbnail,
+body[data-theme] .design-workbench,
+body[data-theme] .sound-workbench,
+body[data-theme] .video-ip-agent-shell {
+    transition: background-color 0.28s ease, border-color 0.28s ease, color 0.28s ease;
+}
+
+body[data-theme] .window-header {
+    background: var(--theme-page-shell) !important;
+    border-bottom: none !important;
+}
+
+body[data-theme] .window-header .text-gray-200,
+body[data-theme] .window-header [class~="text-gray-200"],
+body[data-theme] .window-header [class~="text-gray-400"],
+body[data-theme] .window-header [class~="text-white"] {
+    color: var(--theme-text-primary) !important;
+}
+
+body[data-theme] .window-header [class~="hover:bg-white/10"]:hover {
+    background: var(--theme-brand-soft) !important;
+}
+
+body[data-theme] .page-nav-container {
+    background: var(--theme-panel-bg) !important;
+    border-bottom: 1px solid var(--theme-border) !important;
+}
+
+body[data-theme="soft-light"] .page-nav-container {
+    border-bottom: none !important;
+}
+
+body[data-theme] .page-nav-item {
+    color: var(--theme-text-secondary) !important;
+}
+
+body[data-theme] .page-nav-item:hover {
+    color: var(--theme-text-primary) !important;
+}
+
+body[data-theme] .page-nav-item.active {
+    color: var(--theme-text-primary) !important;
+}
+
+body[data-theme] .video-page-container,
+body[data-theme] .setting-container,
+body[data-theme] .setting-content,
+body[data-theme] .home-page,
+body[data-theme] .video-template-page,
+body[data-theme] .design-workbench,
+body[data-theme] .sound-workbench,
+body[data-theme] .video-ip-agent-shell {
+    background: var(--theme-page-shell) !important;
+    color: var(--theme-text-primary);
+}
+
+body[data-theme] .setting-sidebar,
+body[data-theme] .home-card,
+body[data-theme] .home-info-card,
+body[data-theme] .app-tool-card,
+body[data-theme] .video-template-page .rounded-xl.shadow.border,
+body[data-theme] .video-template-page .bg-blue-100,
+body[data-theme] .cover-template-manager .template-card,
+body[data-theme] .cover-template-manager .template-thumbnail,
+body[data-theme] .custom-prompt-results,
+body[data-theme] .custom-prompt-panel,
+body[data-theme] .custom-prompt-hero {
+    background: var(--theme-panel-bg) !important;
+    border-color: var(--theme-border) !important;
+    box-shadow: var(--theme-shadow-card) !important;
+    color: var(--theme-text-primary) !important;
+}
+
+body[data-theme] .setting-menu-item {
+    color: var(--theme-text-secondary) !important;
+}
+
+body[data-theme] .setting-menu-item:hover,
+body[data-theme] .menu-active {
+    color: var(--theme-text-primary) !important;
+    border-color: var(--theme-border-strong) !important;
+}
+
+body[data-theme] .menu-active {
+    background: var(--theme-brand-soft) !important;
+    box-shadow: var(--theme-shadow-soft) !important;
+}
+
+body[data-theme] .setting-divider,
+body[data-theme] .home-page :is(.border, .border-t, .border-b) {
+    border-color: var(--theme-border) !important;
+}
+
+body[data-theme] [class~="text-white"],
+body[data-theme] [class~="text-gray-800"],
+body[data-theme] [class~="text-gray-900"] {
+    color: var(--theme-text-primary) !important;
+}
+
+body[data-theme] [class~="text-gray-700"],
+body[data-theme] [class~="text-gray-600"],
+body[data-theme] [class~="text-gray-500"] {
+    color: var(--theme-text-secondary) !important;
+}
+
+body[data-theme] [class~="text-gray-400"],
+body[data-theme] [class~="text-gray-300"] {
+    color: var(--theme-text-muted) !important;
+}
+
+body[data-theme="soft-light"] [class~="bg-[#0a0a0a]"],
+body[data-theme="soft-light"] [class~="bg-[#111]"],
+body[data-theme="soft-light"] [class~="bg-[#141414]"],
+body[data-theme="soft-light"] [class~="bg-[#1a1a1a]"],
+body[data-theme="soft-light"] [class~="bg-[#222]"],
+body[data-theme="soft-light"] [class~="bg-black"],
+body[data-theme="soft-light"] [class~="bg-gray-800"],
+body[data-theme="soft-light"] [class~="bg-gray-900"] {
+    background: var(--theme-panel-bg) !important;
+}
+
+body[data-theme="soft-light"] [class~="bg-gray-50"],
+body[data-theme="soft-light"] [class~="bg-gray-100"],
+body[data-theme="soft-light"] [class~="bg-gray-200"] {
+    background: rgba(95, 124, 255, 0.08) !important;
+}
+
+body[data-theme="soft-light"] [class~="bg-white/5"] {
+    background: rgba(95, 124, 255, 0.07) !important;
+}
+
+body[data-theme="soft-light"] [class~="bg-white/10"] {
+    background: rgba(95, 124, 255, 0.11) !important;
+}
+
+body[data-theme="soft-light"] [class~="hover:bg-white/10"]:hover,
+body[data-theme="soft-light"] [class~="hover:bg-white/30"]:hover,
+body[data-theme="soft-light"] [class~="hover:bg-gray-100"]:hover {
+    background: rgba(95, 124, 255, 0.12) !important;
+}
+
+body[data-theme="soft-light"] [class~="bg-black/40"] {
+    background: rgba(235, 240, 248, 0.54) !important;
+}
+
+body[data-theme="soft-light"] [class~="bg-black/80"] {
+    background: rgba(220, 228, 239, 0.72) !important;
+    backdrop-filter: blur(14px);
+}
+
+body[data-theme="soft-light"] [class~="border-white/5"],
+body[data-theme="soft-light"] [class~="border-white/10"],
+body[data-theme="soft-light"] [class~="border-white/20"],
+body[data-theme="soft-light"] [class~="border-gray-100"],
+body[data-theme="soft-light"] [class~="border-gray-200"],
+body[data-theme="soft-light"] [class~="border-gray-300"],
+body[data-theme="soft-light"] [class~="border-gray-700"],
+body[data-theme="soft-light"] [class~="border-[#333]"] {
+    border-color: var(--theme-border) !important;
+}
+
+body[data-theme="soft-light"] [class~="text-purple-400"],
+body[data-theme="soft-light"] [class~="text-purple-500"],
+body[data-theme="soft-light"] [class~="text-blue-400"],
+body[data-theme="soft-light"] [class~="text-blue-500"] {
+    color: var(--theme-brand) !important;
+}
+
+body[data-theme="soft-light"] [class~="border-purple-500"],
+body[data-theme="soft-light"] [class~="border-blue-400"],
+body[data-theme="soft-light"] [class~="border-blue-500"] {
+    border-color: var(--theme-border-strong) !important;
+}
+
+body[data-theme="soft-light"] [class~="ring-purple-500"],
+body[data-theme="soft-light"] [class~="ring-blue-400"] {
+    --tw-ring-color: rgba(95, 124, 255, 0.35);
+}
+
+body[data-theme="soft-light"] [class~="bg-purple-600"],
+body[data-theme="soft-light"] [class~="bg-blue-500"],
+body[data-theme="soft-light"] [class~="bg-blue-600"] {
+    background: linear-gradient(135deg, #5f7cff 0%, #7ca6ff 100%) !important;
+    color: #ffffff !important;
+}
+
+body[data-theme="soft-light"] [class~="from-purple-600"] {
+    --tw-gradient-from: #5f7cff var(--tw-gradient-from-position);
+    --tw-gradient-to: rgba(95, 124, 255, 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+body[data-theme="soft-light"] [class~="to-pink-600"],
+body[data-theme="soft-light"] [class~="to-cyan-600"],
+body[data-theme="soft-light"] [class~="to-blue-700"] {
+    --tw-gradient-to: #7dc3ff var(--tw-gradient-to-position);
+}
+
+body[data-theme] .arco-btn,
+body[data-theme] .arco-input-wrapper,
+body[data-theme] .arco-textarea-wrapper,
+body[data-theme] .arco-input-number,
+body[data-theme] .arco-select-view,
+body[data-theme] .arco-alert,
+body[data-theme] .arco-tag,
+body[data-theme] .arco-card,
+body[data-theme] .arco-modal,
+body[data-theme] .arco-drawer,
+body[data-theme] .arco-table-container,
+body[data-theme] .arco-pagination-item,
+body[data-theme] .arco-radio-group-button {
+    border-radius: 14px !important;
+}
+
+body[data-theme="soft-light"] .arco-btn-primary {
+    background: linear-gradient(135deg, #5f7cff 0%, #89aaff 100%) !important;
+    border: none !important;
+    box-shadow: 0 16px 30px rgba(95, 124, 255, 0.24) !important;
+}
+
+body[data-theme="soft-light"] .arco-btn-primary:hover:not(:disabled) {
+    background: linear-gradient(135deg, #5472f4 0%, #79a1ff 100%) !important;
+}
+
+body[data-theme="soft-light"] .arco-btn-primary.arco-btn-disabled,
+body[data-theme="soft-light"] .arco-btn-primary:disabled,
+body[data-theme="soft-light"] .arco-btn-primary[disabled] {
+    background: linear-gradient(135deg, rgba(150, 128, 244, 0.28) 0%, rgba(211, 189, 255, 0.34) 100%) !important;
+    border-color: rgba(150, 128, 244, 0.24) !important;
+    color: #6f63a6 !important;
+    opacity: 1 !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.52) !important;
+}
+
+body[data-theme="soft-light"] .arco-btn-secondary,
+body[data-theme="soft-light"] .arco-btn-outline {
+    background: rgba(95, 124, 255, 0.08) !important;
+    border-color: rgba(107, 127, 164, 0.28) !important;
+    color: var(--theme-text-primary) !important;
+}
+
+body[data-theme="soft-light"] .arco-input-wrapper,
+body[data-theme="soft-light"] .arco-textarea-wrapper,
+body[data-theme="soft-light"] .arco-input-number,
+body[data-theme="soft-light"] .arco-select-view,
+body[data-theme="soft-light"] .dark-input-override,
+body[data-theme="soft-light"] .dark-input-override .arco-select-view,
+body[data-theme="soft-light"] .dark-input-override .arco-input,
+body[data-theme="soft-light"] .dark-input-override .arco-textarea {
+    background: rgba(255, 255, 255, 0.82) !important;
+    border-color: rgba(137, 153, 180, 0.22) !important;
+    color: var(--theme-text-primary) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+body[data-theme="soft-light"] .arco-input-wrapper.arco-input-focus,
+body[data-theme="soft-light"] .arco-textarea-wrapper.arco-textarea-focus,
+body[data-theme="soft-light"] .arco-select-view-focus,
+body[data-theme="soft-light"] .dark-input-override:focus-within {
+    border-color: rgba(95, 124, 255, 0.4) !important;
+    box-shadow: 0 0 0 4px rgba(95, 124, 255, 0.12) !important;
+}
+
+body[data-theme="soft-light"] .arco-input,
+body[data-theme="soft-light"] .arco-textarea,
+body[data-theme="soft-light"] .arco-select-view-input,
+body[data-theme="soft-light"] .arco-form-item-label,
+body[data-theme="soft-light"] .arco-radio,
+body[data-theme="soft-light"] .arco-radio-label,
+body[data-theme="soft-light"] .arco-checkbox,
+body[data-theme="soft-light"] .arco-card-header-title,
+body[data-theme="soft-light"] .arco-statistic-value,
+body[data-theme="soft-light"] .arco-statistic-title,
+body[data-theme="soft-light"] .arco-pagination,
+body[data-theme="soft-light"] .arco-space,
+body[data-theme="soft-light"] .arco-empty-description,
+body[data-theme="soft-light"] .arco-descriptions-item-label,
+body[data-theme="soft-light"] .arco-descriptions-item-value,
+body[data-theme="soft-light"] .arco-modal-title,
+body[data-theme="soft-light"] .arco-drawer-title {
+    color: var(--theme-text-primary) !important;
+}
+
+body[data-theme="soft-light"] .arco-select-dropdown,
+body[data-theme="soft-light"] .arco-modal,
+body[data-theme="soft-light"] .arco-drawer,
+body[data-theme="soft-light"] .arco-card,
+body[data-theme="soft-light"] .arco-table-container,
+body[data-theme="soft-light"] .arco-table-th,
+body[data-theme="soft-light"] .arco-table-td,
+body[data-theme="soft-light"] .arco-pagination-item,
+body[data-theme="soft-light"] .arco-radio-group-button {
+    background: var(--theme-panel-bg-strong) !important;
+    border-color: var(--theme-border) !important;
+    color: var(--theme-text-primary) !important;
+    box-shadow: var(--theme-shadow-soft) !important;
+}
+
+@keyframes soft-light-orbit-border {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 220% 50%; }
+}
+
+@keyframes soft-light-floating-glow {
+    0%, 100% { transform: translate3d(0, 0, 0); opacity: 0.75; }
+    50% { transform: translate3d(14px, -12px, 0); opacity: 1; }
+}
+
+body[data-theme="soft-light"] {
+    --theme-app-bg: #eef1ff;
+    --theme-app-bg-top: #f8f6ff;
+    --theme-page-shell: linear-gradient(180deg, rgba(248, 246, 255, 0.95) 0%, rgba(237, 239, 255, 0.97) 100%);
+    --theme-panel-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(244, 244, 255, 0.97) 100%);
+    --theme-panel-bg-strong: linear-gradient(180deg, rgba(255, 255, 255, 0.985) 0%, rgba(241, 241, 255, 0.99) 100%);
+    --theme-panel-bg-muted: rgba(248, 247, 255, 0.78);
+    --theme-panel-overlay: rgba(255, 255, 255, 0.84);
+    --theme-border: rgba(120, 145, 128, 0.26);
+    --theme-border-strong: rgba(102, 112, 212, 0.44);
+    --theme-text-primary: #1b2140;
+    --theme-text-secondary: #4d577e;
+    --theme-text-muted: #727ca3;
+    --theme-brand: #279d7b;
+    --theme-brand-strong: #187e63;
+    --theme-brand-soft: rgba(65, 145, 102, 0.12);
+    --theme-shadow-soft: 0 18px 42px rgba(60, 90, 70, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.78);
+    --theme-shadow-card: 0 24px 58px rgba(60, 90, 70, 0.17), inset 0 1px 0 rgba(255, 255, 255, 0.74);
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell,
+body[data-theme="soft-light"] .home-page {
+    position: relative;
+    isolation: isolate;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell::before,
+body[data-theme="soft-light"] .home-page::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 420px;
+    height: 420px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(96, 123, 244, 0.16) 0%, rgba(96, 123, 244, 0.08) 34%, transparent 70%);
+    filter: blur(10px);
+    pointer-events: none;
+    z-index: 0;
+    will-change: transform, opacity;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell::after,
+body[data-theme="soft-light"] .home-page::after {
+    content: "";
+    position: absolute;
+    right: -40px;
+    top: 24px;
+    width: 320px;
+    height: 320px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(223, 191, 255, 0.18) 0%, rgba(223, 191, 255, 0.08) 38%, transparent 72%);
+    filter: blur(12px);
+    pointer-events: none;
+    z-index: 0;
+    will-change: transform, opacity;
+}
+
+body[data-theme="soft-light"] .cyberpunk-dashboard,
+body[data-theme="soft-light"] .home-page > * {
+    position: relative;
+    z-index: 1;
+}
+
+body[data-theme="soft-light"] .cyberpunk-dashboard::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(136, 153, 189, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(136, 153, 189, 0.08) 1px, transparent 1px);
+    background-size: 100% 92px, 92px 100%;
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.18) 0%, transparent 66%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+body[data-theme="soft-light"] .cyberpunk-dashboard > * {
+    position: relative;
+    z-index: 1;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .hover-glow-effect {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    contain: layout style paint;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(244, 244, 255, 0.98) 100%) !important;
+    border: 1px solid rgba(118, 135, 167, 0.24) !important;
+    box-shadow: 0 20px 48px rgba(92, 102, 124, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.82) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .hover-glow-effect::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(120deg, rgba(255, 255, 255, 0.12), rgba(110, 118, 242, 0.52), rgba(205, 166, 255, 0.46), rgba(102, 177, 255, 0.42), rgba(255, 255, 255, 0.12));
+    background-size: 220% 220%;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.9;
+    pointer-events: none;
+    z-index: 0;
+    animation: soft-light-orbit-border 8s linear infinite;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .hover-glow-effect::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at top right, rgba(88, 119, 242, 0.12), transparent 34%),
+        radial-gradient(circle at bottom left, rgba(205, 166, 255, 0.14), transparent 28%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .hover-glow-effect > * {
+    position: relative;
+    z-index: 1;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .hover-glow-effect h3,
+body[data-theme="soft-light"] .video-ip-agent-shell .hover-glow-effect .font-semibold,
+body[data-theme="soft-light"] .video-ip-agent-shell .hover-glow-effect .font-medium {
+    color: #1b2140 !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .hover-glow-effect .text-sm,
+body[data-theme="soft-light"] .video-ip-agent-shell .hover-glow-effect .text-xs,
+body[data-theme="soft-light"] .video-ip-agent-shell .hover-glow-effect [class~="text-gray-500"],
+body[data-theme="soft-light"] .video-ip-agent-shell .hover-glow-effect [class~="text-gray-400"],
+body[data-theme="soft-light"] .video-ip-agent-shell .hover-glow-effect [class~="text-gray-300"] {
+    color: #5a648b !important;
+}
+
+
+body[data-theme="soft-light"] .video-ip-agent-shell .hover-glow-effect:hover {
+    transform: translateY(-1px);
+    border-color: rgba(92, 112, 164, 0.34) !important;
+    box-shadow: 0 26px 58px rgba(92, 102, 124, 0.17), 0 0 0 1px rgba(92, 112, 164, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.86) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .section-processing {
+    border: 2px solid rgba(88, 119, 242, 0.18) !important;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.97), rgba(244, 244, 255, 0.99)),
+        conic-gradient(
+            from var(--border-angle),
+            transparent 0%,
+            transparent 54%,
+            rgba(88, 119, 242, 0.9) 72%,
+            rgba(130, 149, 255, 1) 82%,
+            rgba(205, 166, 255, 0.92) 92%,
+            transparent 100%
+        ) !important;
+    box-shadow: 0 20px 48px rgba(92, 102, 124, 0.15), 0 0 18px rgba(88, 119, 242, 0.12) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .modern-textarea {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(245, 245, 255, 0.99) 100%) !important;
+    border: 1px solid rgba(118, 135, 167, 0.26) !important;
+    color: #182235 !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82), 0 10px 24px rgba(92, 102, 124, 0.08) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .modern-textarea::placeholder {
+    color: #7a879d !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .modern-textarea:hover {
+    border-color: rgba(92, 112, 164, 0.34) !important;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.99) 0%, rgba(248, 248, 255, 0.995) 100%) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .modern-textarea:focus {
+    border-color: rgba(88, 119, 242, 0.5) !important;
+    box-shadow: 0 0 0 4px rgba(88, 119, 242, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.88) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-radio-group-button {
+    background: rgba(88, 119, 242, 0.08) !important;
+    border: 1px solid rgba(118, 135, 167, 0.22) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.76) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-radio-button {
+    color: #46527d !important;
+    font-weight: 600;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-radio-button-checked {
+    background: linear-gradient(135deg, #5b79f2 0%, #83a3ff 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 10px 22px rgba(88, 119, 242, 0.24) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell [class~="text-blue-400"],
+body[data-theme="soft-light"] .video-ip-agent-shell [class~="text-blue-500"],
+body[data-theme="soft-light"] .video-ip-agent-shell [class~="text-purple-400"],
+body[data-theme="soft-light"] .video-ip-agent-shell [class~="text-purple-500"] {
+    color: #4f6fe9 !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell [class~="text-red-500"] {
+    color: #c85b6b !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell [class~="text-green-600"] {
+    color: #2f8c67 !important;
+}
+
+
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-checkbox-label,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-radio-label {
+    color: #4a567f !important;
+    font-weight: 500;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-checkbox-checked .arco-checkbox-label,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-radio-checked .arco-radio-label {
+    color: #1b2140 !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-checkbox-icon {
+    border-color: rgba(65, 145, 102, 0.34) !important;
+    background: rgba(65, 145, 102, 0.07) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-checkbox-checked .arco-checkbox-icon {
+    background: #279d7b !important;
+    border-color: #279d7b !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select-view-value,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select-view-single,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select-view-input,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number-input,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-inner-wrapper input {
+    color: #273056 !important;
+    font-weight: 500;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select-view-placeholder,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number-input::placeholder {
+    color: #7580a8 !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select-view-suffix,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number-mode-button,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number-step-button {
+    color: #6d78a6 !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .publish-platform-row {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0%, rgba(245, 246, 255, 0.9) 100%) !important;
+    border-color: rgba(120, 145, 128, 0.22) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 8px 18px rgba(60, 90, 70, 0.08);
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .publish-platform-row:hover {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(243, 245, 255, 0.96) 100%) !important;
+    border-color: rgba(65, 145, 102, 0.24) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .elegant-tip-box {
+    background: rgba(65, 145, 102, 0.08) !important;
+    border-color: rgba(65, 145, 102, 0.18) !important;
+    color: #47527c !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .comparison-toggle-btn,
+body[data-theme="soft-light"] .video-ip-agent-shell .one-click-running-area .arco-btn,
+body[data-theme="soft-light"] .video-ip-agent-shell .hover-glow-effect .arco-btn[type="outline"] {
+    color: #44507a !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .hover-glow-effect .opacity-80,
+body[data-theme="soft-light"] .video-ip-agent-shell .hover-glow-effect .text-center.text-gray-400,
+body[data-theme="soft-light"] .video-ip-agent-shell .hover-glow-effect .text-xs.text-gray-400,
+body[data-theme="soft-light"] .video-ip-agent-shell .hover-glow-effect .text-xs.text-gray-500 {
+    opacity: 1 !important;
+    color: #5c678f !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell [class*="bg-white/5"][class*="border-white/5"],
+body[data-theme="soft-light"] .video-ip-agent-shell .topic-item {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.82) 0%, rgba(244, 246, 255, 0.95) 100%) !important;
+    border-color: rgba(120, 145, 128, 0.22) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.82), 0 8px 18px rgba(104,110,170,0.07) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell [class*="bg-white/5"][class*="border-white/5"]:hover,
+body[data-theme="soft-light"] .video-ip-agent-shell .topic-item:hover {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(241, 244, 255, 0.98) 100%) !important;
+    border-color: rgba(65, 145, 102, 0.24) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .topic-item.bg-blue-500\/20,
+body[data-theme="soft-light"] .video-ip-agent-shell .topic-item[class*="bg-blue-500/20"] {
+    background: linear-gradient(135deg, rgba(65, 145, 102, 0.16) 0%, rgba(187, 149, 255, 0.14) 100%) !important;
+    border-color: rgba(65, 145, 102, 0.28) !important;
+    box-shadow: 0 0 0 1px rgba(65, 145, 102, 0.12), 0 12px 24px rgba(104,110,170,0.10) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number-group-wrapper,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select-view,
+body[data-theme="soft-light"] .video-ip-agent-shell .sound-prompt-trigger--embedded {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(244, 245, 255, 0.99) 100%) !important;
+    border-color: rgba(126, 137, 222, 0.28) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.92), 0 12px 26px rgba(104,110,170,0.09) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number-input-wrap,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number-input,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select-view-single,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select-view-value,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select-view-input,
+body[data-theme="soft-light"] .video-ip-agent-shell .sound-prompt-trigger--embedded {
+    color: #202a52 !important;
+    font-weight: 600 !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number-group-wrapper .arco-input-group-addon,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-group-addon {
+    color: #58658f !important;
+    background: linear-gradient(180deg, rgba(236, 239, 255, 0.98) 0%, rgba(228, 232, 252, 1) 100%) !important;
+    border-color: rgba(126, 137, 222, 0.24) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number-step-button,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number-mode-button,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select-view-suffix {
+    color: #66729d !important;
+    background: rgba(240, 243, 255, 0.84) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number:hover,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number-group-wrapper:hover,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select-view:hover,
+body[data-theme="soft-light"] .video-ip-agent-shell .sound-prompt-trigger--embedded:hover {
+    border-color: rgba(65, 145, 102, 0.34);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.94), 0 14px 30px rgba(104,110,170,0.11) !important;
+}
+
+body[data-theme] .video-ip-agent-shell .section-card-header {
+    position: relative;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .section-card-header .w-5.h-5.rounded-full.text-xs.font-bold {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #4f6fe9 0%, #3758d8 100%) !important;
+    border: 1px solid rgba(56, 86, 216, 0.28);
+    box-shadow:
+        0 8px 18px rgba(79, 111, 233, 0.26),
+        inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
+    text-shadow: 0 1px 2px rgba(15, 23, 42, 0.28);
+}
+
+body[data-theme] .video-ip-agent-shell .section-processing .section-card-header::after {
+    content: "";
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    width: 15px;
+    height: 15px;
+    margin-top: -7.5px;
+    border-radius: 999px;
+    border: 2px solid rgba(99, 102, 241, 0.24);
+    border-top-color: rgba(99, 102, 241, 0.95);
+    border-right-color: rgba(147, 51, 234, 0.7);
+    animation: spin 0.9s linear infinite;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.28), 0 4px 12px rgba(99, 102, 241, 0.18);
+}
+
+body[data-theme="dark"] .video-ip-agent-shell .section-processing .section-card-header::after {
+    border-color: rgba(65, 145, 102, 0.22);
+    border-top-color: rgba(96, 165, 250, 0.95);
+    border-right-color: rgba(65, 145, 102, 0.72);
+    box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.6), 0 4px 14px rgba(65, 145, 102, 0.2);
+}
+
+body[data-theme] .video-ip-agent-shell .section-processing {
+    isolation: isolate;
+}
+
+body[data-theme] .video-ip-agent-shell .section-processing > * {
+    position: relative;
+    z-index: 1;
+}
+
+body[data-theme] .video-ip-agent-shell .section-processing::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 2;
+    animation: spinning-border-rotate 2.1s linear infinite;
+}
+
+body[data-theme] .video-ip-agent-shell .section-processing::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 0;
+    animation: spinning-border-rotate 2.1s linear infinite;
+}
+
+body[data-theme="dark"] .video-ip-agent-shell .section-processing {
+    border: 1px solid rgba(65, 145, 102, 0.2) !important;
+    box-shadow:
+        0 0 0 1px rgba(65, 145, 102, 0.14),
+        0 0 20px rgba(65, 145, 102, 0.18),
+        0 0 38px rgba(65, 145, 102, 0.12) !important;
+}
+
+body[data-theme="dark"] .video-ip-agent-shell .section-processing::before {
+    background: conic-gradient(
+        from var(--border-angle),
+        transparent 0%,
+        transparent 54%,
+        rgba(56, 189, 248, 0.94) 70%,
+        rgba(65, 145, 102, 1) 80%,
+        rgba(65, 145, 102, 1) 90%,
+        rgba(56, 189, 248, 0.92) 96%,
+        transparent 100%
+    );
+    filter: saturate(1.08);
+}
+
+body[data-theme="dark"] .video-ip-agent-shell .section-processing::after {
+    inset: -8px;
+    background: conic-gradient(
+        from var(--border-angle),
+        transparent 0%,
+        transparent 58%,
+        rgba(56, 189, 248, 0.36) 74%,
+        rgba(65, 145, 102, 0.42) 84%,
+        rgba(65, 145, 102, 0.4) 94%,
+        transparent 100%
+    );
+    filter: blur(14px);
+    opacity: 0.9;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .section-processing {
+    border: 1px solid rgba(65, 145, 102, 0.24) !important;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.97), rgba(244, 244, 255, 0.99)),
+        conic-gradient(
+            from var(--border-angle),
+            transparent 0%,
+            transparent 56%,
+            rgba(122, 132, 255, 0.98) 72%,
+            rgba(65, 145, 102, 1) 81%,
+            rgba(197, 145, 255, 0.98) 90%,
+            rgba(101, 183, 255, 0.92) 96%,
+            transparent 100%
+        ) !important;
+    box-shadow:
+        0 0 0 1px rgba(65, 145, 102, 0.12),
+        0 16px 34px rgba(60, 90, 70, 0.16),
+        0 0 24px rgba(65, 145, 102, 0.14),
+        0 0 44px rgba(197, 145, 255, 0.1) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .section-processing::before {
+    background: conic-gradient(
+        from var(--border-angle),
+        transparent 0%,
+        transparent 54%,
+        rgba(129, 139, 255, 0.98) 70%,
+        rgba(65, 145, 102, 1) 79%,
+        rgba(197, 145, 255, 0.98) 89%,
+        rgba(101, 183, 255, 0.92) 95%,
+        transparent 100%
+    );
+    filter: saturate(1.05);
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .section-processing::after {
+    inset: -8px;
+    background: conic-gradient(
+        from var(--border-angle),
+        transparent 0%,
+        transparent 58%,
+        rgba(129, 139, 255, 0.34) 74%,
+        rgba(65, 145, 102, 0.4) 84%,
+        rgba(197, 145, 255, 0.34) 93%,
+        rgba(101, 183, 255, 0.26) 98%,
+        transparent 100%
+    );
+    filter: blur(16px);
+    opacity: 0.92;
+}
+
+@keyframes section-ring-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes section-spinner-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+body[data-theme] .video-ip-agent-shell .section-processing::before,
+body[data-theme] .video-ip-agent-shell .section-processing::after {
+    transform-origin: center center;
+    will-change: transform;
+    animation: section-ring-spin 2s linear infinite !important;
+}
+
+body[data-theme] .video-ip-agent-shell .section-processing .section-card-header::after {
+    animation: section-spinner-spin 0.9s linear infinite !important;
+}
+
+body[data-theme="dark"] .video-ip-agent-shell .section-processing::before {
+    background: conic-gradient(
+        from 0deg,
+        transparent 0%,
+        transparent 54%,
+        rgba(56, 189, 248, 0.98) 70%,
+        rgba(65, 145, 102, 1) 80%,
+        rgba(65, 145, 102, 1) 90%,
+        rgba(56, 189, 248, 0.96) 96%,
+        transparent 100%
+    ) !important;
+}
+
+body[data-theme="dark"] .video-ip-agent-shell .section-processing::after {
+    background: conic-gradient(
+        from 0deg,
+        transparent 0%,
+        transparent 58%,
+        rgba(56, 189, 248, 0.38) 74%,
+        rgba(65, 145, 102, 0.45) 84%,
+        rgba(65, 145, 102, 0.44) 94%,
+        transparent 100%
+    ) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .section-processing::before {
+    background: conic-gradient(
+        from 0deg,
+        transparent 0%,
+        transparent 54%,
+        rgba(129, 139, 255, 1) 70%,
+        rgba(65, 145, 102, 1) 79%,
+        rgba(197, 145, 255, 1) 89%,
+        rgba(101, 183, 255, 0.94) 95%,
+        transparent 100%
+    ) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .section-processing::after {
+    background: conic-gradient(
+        from 0deg,
+        transparent 0%,
+        transparent 58%,
+        rgba(129, 139, 255, 0.36) 74%,
+        rgba(65, 145, 102, 0.42) 84%,
+        rgba(197, 145, 255, 0.36) 93%,
+        rgba(101, 183, 255, 0.28) 98%,
+        transparent 100%
+    ) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell [class~="text-slate-200"] {
+    color: #586388 !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .modern-textarea,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-textarea-wrapper,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number-group-wrapper,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select-view,
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override {
+    border-radius: 16px !important;
+    border: 1px solid rgba(120, 145, 128, 0.26) !important;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(244, 245, 255, 0.98) 100%) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92), 0 10px 24px rgba(60, 90, 70, 0.08) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .modern-textarea {
+    color: #1f2749 !important;
+    border-color: rgba(126, 137, 222, 0.3) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .modern-textarea:hover,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-textarea-wrapper:hover,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number:hover,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number-group-wrapper:hover,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select-view:hover,
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override:hover {
+    border-color: rgba(65, 145, 102, 0.34) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.94), 0 14px 28px rgba(60, 90, 70, 0.11) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .modern-textarea:focus,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-textarea-wrapper.arco-textarea-focus,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number-focus,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select-view-focus,
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override:focus-within {
+    border-color: rgba(65, 145, 102, 0.48) !important;
+    box-shadow: 0 0 0 4px rgba(65, 145, 102, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.96) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .modern-textarea::placeholder,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-textarea::placeholder {
+    color: #7a85ad !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-textarea,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number-input,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select-view-value,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select-view-input,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select-view-single {
+    color: #1f2749 !important;
+    font-weight: 500;
+    background: transparent !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-group-addon,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number-group-wrapper .arco-input-group-addon {
+    color: #5f6a93 !important;
+    border-color: rgba(120, 145, 128, 0.24) !important;
+    background: linear-gradient(180deg, rgba(236, 239, 255, 0.96) 0%, rgba(228, 232, 252, 0.98) 100%) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number-step-button,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number-mode-button {
+    background: rgba(236, 239, 255, 0.85) !important;
+    border-color: rgba(120, 145, 128, 0.22) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number-step-button:hover,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number-mode-button:hover {
+    background: rgba(223, 228, 255, 0.92) !important;
+}
+
+/* Final override: use the original dark-theme flowing border logic instead of pseudo-element sweep lines */
+body[data-theme] .video-ip-agent-shell .section-processing::before,
+body[data-theme] .video-ip-agent-shell .section-processing::after {
+    content: none !important;
+    display: none !important;
+    animation: none !important;
+}
+
+body[data-theme="dark"] .video-ip-agent-shell .section-processing {
+    position: relative;
+    border: 2px solid rgba(65, 145, 102, 0.15) !important;
+    background-origin: border-box !important;
+    background-clip: padding-box, border-box !important;
+    background-image:
+        linear-gradient(#141414, #141414),
+        conic-gradient(
+            from var(--border-angle),
+            transparent 0%,
+            transparent 60%,
+            rgba(65, 145, 102, 0.8) 75%,
+            rgba(65, 145, 102, 1) 85%,
+            rgba(6, 182, 212, 0.8) 92%,
+            transparent 100%
+        ) !important;
+    animation: spinning-border-rotate 3s linear infinite !important;
+    box-shadow: 0 0 8px rgba(65, 145, 102, 0.2), 0 0 20px rgba(65, 145, 102, 0.1) !important;
+}
+
+body[data-theme="dark"] .video-ip-agent-shell .section-processing:hover {
+    box-shadow: 0 0 12px rgba(65, 145, 102, 0.3), 0 0 28px rgba(65, 145, 102, 0.15) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .section-processing {
+    position: relative;
+    border: 2px solid rgba(65, 145, 102, 0.16) !important;
+    background-origin: border-box !important;
+    background-clip: padding-box, border-box !important;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.97), rgba(244, 244, 255, 0.99)),
+        conic-gradient(
+            from var(--border-angle),
+            transparent 0%,
+            transparent 60%,
+            rgba(110, 121, 255, 0.9) 75%,
+            rgba(185, 133, 255, 1) 85%,
+            rgba(101, 183, 255, 0.82) 92%,
+            transparent 100%
+        ) !important;
+    animation: spinning-border-rotate 3s linear infinite !important;
+    box-shadow: 0 0 0 1px rgba(65, 145, 102, 0.08), 0 12px 28px rgba(60, 90, 70, 0.14), 0 0 18px rgba(185, 133, 255, 0.08) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .section-processing:hover {
+    box-shadow: 0 0 0 1px rgba(65, 145, 102, 0.1), 0 16px 34px rgba(60, 90, 70, 0.16), 0 0 22px rgba(185, 133, 255, 0.11) !important;
+}
+
+/* Final final override: robust rotating ring border matching the dark-theme flow style */
+@keyframes section-ring-orbit-final {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+body[data-theme] .video-ip-agent-shell .section-processing {
+    position: relative;
+    isolation: isolate;
+    overflow: visible;
+    animation: none !important;
+}
+
+body[data-theme] .video-ip-agent-shell .section-processing > * {
+    position: relative;
+    z-index: 2;
+}
+
+body[data-theme] .video-ip-agent-shell .section-processing::before,
+body[data-theme] .video-ip-agent-shell .section-processing::after {
+    content: "" !important;
+    display: block !important;
+    position: absolute;
+    border-radius: inherit;
+    pointer-events: none;
+    transform-origin: center center;
+    will-change: transform;
+}
+
+body[data-theme] .video-ip-agent-shell .section-processing::before {
+    inset: -1px;
+    padding: 2px;
+    z-index: 0;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: section-ring-orbit-final 2.4s linear infinite !important;
+}
+
+body[data-theme] .video-ip-agent-shell .section-processing::after {
+    inset: -7px;
+    z-index: 0;
+    filter: blur(12px);
+    opacity: 0.72;
+    animation: section-ring-orbit-final 2.4s linear infinite !important;
+}
+
+body[data-theme="dark"] .video-ip-agent-shell .section-processing {
+    border: 1px solid rgba(65, 145, 102, 0.16) !important;
+    background: linear-gradient(180deg, rgba(20, 22, 30, 0.98) 0%, rgba(11, 12, 18, 0.98) 100%) !important;
+    background-image: none !important;
+    box-shadow: 0 0 0 1px rgba(65, 145, 102, 0.12), 0 0 20px rgba(65, 145, 102, 0.12), 0 0 34px rgba(65, 145, 102, 0.08) !important;
+}
+
+body[data-theme="dark"] .video-ip-agent-shell .section-processing::before {
+    background: conic-gradient(
+        from 0deg,
+        transparent 0%,
+        transparent 54%,
+        rgba(56, 189, 248, 0.98) 71%,
+        rgba(65, 145, 102, 1) 81%,
+        rgba(65, 145, 102, 1) 90%,
+        rgba(56, 189, 248, 0.96) 96%,
+        transparent 100%
+    ) !important;
+}
+
+body[data-theme="dark"] .video-ip-agent-shell .section-processing::after {
+    background: conic-gradient(
+        from 0deg,
+        transparent 0%,
+        transparent 57%,
+        rgba(56, 189, 248, 0.34) 74%,
+        rgba(65, 145, 102, 0.4) 84%,
+        rgba(65, 145, 102, 0.34) 93%,
+        transparent 100%
+    ) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .section-processing {
+    border: 1px solid rgba(65, 145, 102, 0.18) !important;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(244, 244, 255, 0.99) 100%) !important;
+    background-image: none !important;
+    box-shadow: 0 0 0 1px rgba(65, 145, 102, 0.08), 0 14px 30px rgba(60, 90, 70, 0.14), 0 0 18px rgba(185, 133, 255, 0.06) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .section-processing::before {
+    background: conic-gradient(
+        from 0deg,
+        transparent 0%,
+        transparent 54%,
+        rgba(122, 132, 255, 0.98) 71%,
+        rgba(65, 145, 102, 1) 81%,
+        rgba(197, 145, 255, 1) 90%,
+        rgba(101, 183, 255, 0.92) 96%,
+        transparent 100%
+    ) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .section-processing::after {
+    background: conic-gradient(
+        from 0deg,
+        transparent 0%,
+        transparent 57%,
+        rgba(122, 132, 255, 0.26) 74%,
+        rgba(65, 145, 102, 0.34) 84%,
+        rgba(197, 145, 255, 0.28) 93%,
+        transparent 100%
+    ) !important;
+}
+
+/* Final override for nested dark-input-override internals in soft-light theme */
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override,
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override.arco-input-number,
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override.arco-select-view,
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override .arco-select-view,
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override .arco-input-number,
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override .arco-input-number-input-wrap,
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override .arco-input-number-input,
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override .arco-textarea,
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override .arco-input {
+    background: transparent !important;
+    background-color: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override.arco-input-number,
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override.arco-select-view,
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override .arco-select-view,
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override .arco-input-number {
+    border: 1px solid rgba(120, 145, 128, 0.26) !important;
+    border-radius: 16px !important;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(244, 245, 255, 0.98) 100%) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92), 0 10px 24px rgba(60, 90, 70, 0.08) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override:hover,
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override:hover .arco-select-view,
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override:hover .arco-input-number,
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override.arco-select-view:hover,
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override.arco-input-number:hover {
+    border-color: rgba(65, 145, 102, 0.34) !important;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(247, 248, 255, 0.995) 100%) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.94), 0 14px 28px rgba(60, 90, 70, 0.11) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override:focus-within,
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override:focus-within .arco-select-view,
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override:focus-within .arco-input-number,
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override.arco-select-view-focus,
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override.arco-input-number-focus {
+    border-color: rgba(65, 145, 102, 0.48) !important;
+    box-shadow: 0 0 0 4px rgba(65, 145, 102, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.96) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override .arco-input-number-input,
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override .arco-select-view-value,
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override .arco-select-view-single,
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override .arco-select-view-input {
+    color: #1f2749 !important;
+    font-weight: 500 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override .arco-select-view-placeholder,
+body[data-theme="soft-light"] .video-ip-agent-shell .dark-input-override .arco-input-number-input::placeholder {
+    color: #7a85ad !important;
+}
+
+/* Absolute final cleanup: disable pseudo-border experiments and keep only the original in-box flowing border */
+@keyframes theme-spinner-spin-final {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+body[data-theme] .video-ip-agent-shell .section-processing::before,
+body[data-theme] .video-ip-agent-shell .section-processing::after {
+    content: none !important;
+    display: none !important;
+    animation: none !important;
+}
+
+body[data-theme] .video-ip-agent-shell .section-processing {
+    position: relative;
+    overflow: hidden !important;
+    isolation: isolate;
+    background-origin: border-box !important;
+    background-clip: padding-box, border-box !important;
+    animation: spinning-border-rotate 3s linear infinite !important;
+}
+
+body[data-theme="dark"] .video-ip-agent-shell .section-processing {
+    border: 2px solid rgba(65, 145, 102, 0.15) !important;
+    background-image:
+        linear-gradient(#141414, #141414),
+        conic-gradient(
+            from var(--border-angle),
+            transparent 0%,
+            transparent 60%,
+            rgba(65, 145, 102, 0.82) 75%,
+            rgba(65, 145, 102, 1) 85%,
+            rgba(6, 182, 212, 0.82) 92%,
+            transparent 100%
+        ) !important;
+    box-shadow: 0 0 8px rgba(65, 145, 102, 0.2), 0 0 20px rgba(65, 145, 102, 0.1) !important;
+}
+
+body[data-theme="dark"] .video-ip-agent-shell .section-processing:hover {
+    box-shadow: 0 0 12px rgba(65, 145, 102, 0.3), 0 0 28px rgba(65, 145, 102, 0.15) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .section-processing {
+    border: 2px solid rgba(65, 145, 102, 0.14) !important;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.97), rgba(244, 244, 255, 0.99)),
+        conic-gradient(
+            from var(--border-angle),
+            transparent 0%,
+            transparent 60%,
+            rgba(116, 126, 255, 0.88) 75%,
+            rgba(184, 132, 255, 0.98) 85%,
+            rgba(101, 183, 255, 0.8) 92%,
+            transparent 100%
+        ) !important;
+    box-shadow: 0 0 0 1px rgba(65, 145, 102, 0.08), 0 12px 28px rgba(60, 90, 70, 0.14), 0 0 16px rgba(184, 132, 255, 0.08) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .section-processing:hover {
+    box-shadow: 0 0 0 1px rgba(65, 145, 102, 0.1), 0 16px 34px rgba(60, 90, 70, 0.16), 0 0 20px rgba(184, 132, 255, 0.1) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .section-processing::before,
+body[data-theme="soft-light"] .video-ip-agent-shell .section-processing::after {
+    content: "" !important;
+    display: block !important;
+    position: absolute;
+    pointer-events: none;
+    z-index: 0;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .section-processing::before {
+    inset: -2px;
+    border-radius: inherit;
+    padding: 2px;
+    background: conic-gradient(
+        from var(--border-angle),
+        transparent 0%,
+        transparent 56%,
+        rgba(111, 126, 255, 0.92) 72%,
+        rgba(65, 145, 102, 1) 81%,
+        rgba(196, 148, 255, 0.96) 90%,
+        rgba(101, 183, 255, 0.86) 96%,
+        transparent 100%
+    ) !important;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: spinning-border-rotate 2.2s linear infinite !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .section-processing::after {
+    inset: -8px;
+    border-radius: inherit;
+    background: conic-gradient(
+        from var(--border-angle),
+        transparent 0%,
+        transparent 58%,
+        rgba(111, 126, 255, 0.26) 74%,
+        rgba(65, 145, 102, 0.34) 84%,
+        rgba(196, 148, 255, 0.28) 93%,
+        rgba(101, 183, 255, 0.18) 98%,
+        transparent 100%
+    ) !important;
+    filter: blur(12px);
+    opacity: 0.92;
+    animation: spinning-border-rotate 2.2s linear infinite !important;
+}
+
+body[data-theme] .video-ip-agent-shell .section-processing .section-card-header::after {
+    animation: theme-spinner-spin-final 0.9s linear infinite !important;
+}
+
+
+body[data-theme="soft-light"] .custom-prompt-dialog-head {
+    background: rgba(247, 246, 255, 0.92) !important;
+    border-radius: 14px;
+    padding: 10px 14px 12px !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.86);
+}
+
+body[data-theme="soft-light"] .custom-prompt-dialog-head::after {
+    background: linear-gradient(90deg, rgba(65, 145, 102, 0.54), rgba(185, 133, 255, 0.24), rgba(65, 145, 102, 0)) !important;
+}
+
+body[data-theme="soft-light"] .custom-prompt-dialog-title,
+body[data-theme="soft-light"] .custom-prompt-loading-title,
+body[data-theme="soft-light"] .custom-prompt-option-title {
+    color: #263058 !important;
+}
+
+body[data-theme="soft-light"] .custom-prompt-loading-desc,
+body[data-theme="soft-light"] .custom-prompt-empty-desc {
+    color: #5f6c92 !important;
+}
+
+body[data-theme="soft-light"] .custom-prompt-loading-title {
+    color: #22305b !important;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.74);
+}
+
+body[data-theme="soft-light"] .custom-prompt-loading-desc,
+body[data-theme="soft-light"] .custom-prompt-empty-desc,
+body[data-theme="soft-light"] .custom-prompt-option-content {
+    color: #5e6b95 !important;
+}
+
+body[data-theme="soft-light"] .custom-prompt-option-card {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(244, 246, 255, 0.98) 100%) !important;
+    border-color: rgba(120, 145, 128, 0.24) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.84), 0 16px 32px rgba(104,110,170,0.10) !important;
+}
+
+body[data-theme="soft-light"] .custom-prompt-option-card:hover {
+    border-color: rgba(65, 145, 102, 0.28) !important;
+    box-shadow: 0 18px 36px rgba(104,110,170,0.13), inset 0 1px 0 rgba(255,255,255,0.9) !important;
+}
+
+body[data-theme="soft-light"] .custom-prompt-option-card.is-selected {
+    background: linear-gradient(135deg, rgba(65, 145, 102, 0.14) 0%, rgba(189, 152, 255, 0.12) 100%) !important;
+    border-color: rgba(65, 145, 102, 0.30) !important;
+    box-shadow: 0 0 0 1px rgba(65, 145, 102, 0.14), 0 18px 34px rgba(104,110,170,0.14) !important;
+}
+
+body[data-theme="soft-light"] .custom-prompt-option-title,
+body[data-theme="soft-light"] .custom-prompt-empty-title {
+    color: #22305b !important;
+}
+
+body[data-theme="soft-light"] .custom-prompt-option-tag {
+    background: rgba(237, 241, 255, 0.96) !important;
+    border-color: rgba(120, 145, 128, 0.24) !important;
+    color: #53618c !important;
+}
+
+body[data-theme="soft-light"] .custom-prompt-option-card.is-selected .custom-prompt-option-tag {
+    background: rgba(255, 255, 255, 0.72) !important;
+    border-color: rgba(65, 145, 102, 0.22) !important;
+    color: #334168 !important;
+}
+
+body[data-theme="soft-light"] .custom-prompt-footer .arco-btn-primary,
+body[data-theme="soft-light"] .custom-prompt-option-header .arco-btn-primary {
+    background: linear-gradient(135deg, #279d7b 0%, #9aa4ff 100%) !important;
+    border: none !important;
+    color: #ffffff !important;
+}
+
+body[data-theme="soft-light"] .custom-prompt-footer .arco-btn-primary.arco-btn-disabled,
+body[data-theme="soft-light"] .custom-prompt-footer .arco-btn-primary:disabled {
+    background: linear-gradient(135deg, rgba(65, 145, 102, 0.36) 0%, rgba(154, 164, 255, 0.42) 100%) !important;
+    color: rgba(255, 255, 255, 0.92) !important;
+    opacity: 1 !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .compare-readable,
+body[data-theme="soft-light"] .video-ip-agent-shell [class*="bg-white/5"][class*="border-white/5"],
+body[data-theme="soft-light"] .video-ip-agent-shell .topic-item {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.78) 0%, rgba(244, 245, 255, 0.92) 100%) !important;
+    border-color: rgba(120, 145, 128, 0.22) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 8px 18px rgba(104,110,170,0.08);
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell [style*="color: #e2e8f0"],
+body[data-theme="soft-light"] .video-ip-agent-shell [style*="color:#e2e8f0"],
+body[data-theme="soft-light"] .video-ip-agent-shell [style*="color: #f3f4f6"],
+body[data-theme="soft-light"] .video-ip-agent-shell [style*="color:#f3f4f6"] {
+    color: #1f2749 !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell [style*="color: #94a3b8"],
+body[data-theme="soft-light"] .video-ip-agent-shell [style*="color:#94a3b8"],
+body[data-theme="soft-light"] .video-ip-agent-shell [style*="color: #64748b"],
+body[data-theme="soft-light"] .video-ip-agent-shell [style*="color:#64748b"] {
+    color: #67749b !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .hover-glow-effect .arco-btn-text,
+body[data-theme="soft-light"] .video-ip-agent-shell .hover-glow-effect .arco-btn[type="text"] {
+    color: #4e5b86 !important;
+}
+
+/* Final readability overrides for soft-light video IP agent */
+body[data-theme="soft-light"] .video-ip-agent-shell .section-card-header > div[class*="w-5"][class*="h-5"][class*="rounded-full"][class*="text-xs"][class*="font-bold"],
+body[data-theme="soft-light"] .video-ip-agent-shell .section-card-header div[class*="bg-gradient-to-br"][class*="text-white"][class*="rounded-full"] {
+    background: linear-gradient(135deg, #4f6fe9 0%, #3458d7 100%) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(56, 86, 216, 0.24) !important;
+    box-shadow:
+        0 8px 18px rgba(79, 111, 233, 0.24),
+        inset 0 1px 0 rgba(255, 255, 255, 0.24) !important;
+    text-shadow: 0 1px 2px rgba(15, 23, 42, 0.28) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .mt-3 > .text-base.mb-1[style*="color: #e2e8f0"],
+body[data-theme="soft-light"] .video-ip-agent-shell .mt-3 > .text-base.mb-1[style*="color:#e2e8f0"],
+body[data-theme="soft-light"] .video-ip-agent-shell .mt-3 .text-sm[style*="color: #94a3b8"],
+body[data-theme="soft-light"] .video-ip-agent-shell .mt-3 .text-sm[style*="color:#94a3b8"],
+body[data-theme="soft-light"] .video-ip-agent-shell .mt-3 .truncate.flex-1[style*="color: #e2e8f0"],
+body[data-theme="soft-light"] .video-ip-agent-shell .mt-3 .truncate.flex-1[style*="color:#e2e8f0"] {
+    color: #202a52 !important;
+    opacity: 1 !important;
+    font-weight: 600 !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .mt-3 .text-sm.mr-1[style*="color: #94a3b8"],
+body[data-theme="soft-light"] .video-ip-agent-shell .mt-3 .text-sm.mr-1[style*="color:#94a3b8"],
+body[data-theme="soft-light"] .video-ip-agent-shell .mt-3 .text-sm.ml-1[style*="color: #94a3b8"],
+body[data-theme="soft-light"] .video-ip-agent-shell .mt-3 .text-sm.ml-1[style*="color:#94a3b8"],
+body[data-theme="soft-light"] .video-ip-agent-shell .text-sm.truncate[style*="color: #94a3b8"],
+body[data-theme="soft-light"] .video-ip-agent-shell .text-sm.truncate[style*="color:#94a3b8"] {
+    color: #65729d !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 100px"],
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 70px"],
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-outer[style*="width: 100px"],
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-outer[style*="width: 70px"],
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-wrapper[style*="width: 70px"],
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-wrapper[style*="width: 100px"],
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select[style*="width: 120px"] .arco-select-view,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select-view[style*="width: 120px"],
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select-view[style*="width: 70px"],
+body[data-theme="soft-light"] .video-ip-agent-shell .sound-prompt-trigger--embedded {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(244, 246, 255, 1) 100%) !important;
+    border-color: rgba(120, 145, 128, 0.30) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.94),
+        0 14px 30px rgba(60, 90, 70, 0.10) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 100px"] .arco-input-number-input-wrap,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 70px"] .arco-input-number-input-wrap,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 100px"] .arco-input-number-input,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 70px"] .arco-input-number-input,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-outer[style*="width: 100px"] .arco-input-wrapper,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-outer[style*="width: 70px"] .arco-input-wrapper,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-outer[style*="width: 100px"] .arco-input,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-outer[style*="width: 70px"] .arco-input,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select[style*="width: 120px"] .arco-select-view-value,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select[style*="width: 120px"] .arco-select-view-single,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select[style*="width: 120px"] .arco-select-view-input,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select-view[style*="width: 120px"] .arco-select-view-value,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select-view[style*="width: 120px"] .arco-select-view-single,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select-view[style*="width: 120px"] .arco-select-view-input,
+body[data-theme="soft-light"] .video-ip-agent-shell .sound-prompt-trigger--embedded {
+    color: #202a52 !important;
+    font-weight: 600 !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 100px"] .arco-input-group-addon,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 70px"] .arco-input-group-addon,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-outer[style*="width: 100px"] .arco-input-append,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-outer[style*="width: 70px"] .arco-input-append {
+    color: #58658f !important;
+    background: linear-gradient(180deg, rgba(231, 235, 255, 0.98) 0%, rgba(224, 229, 252, 1) 100%) !important;
+    border-color: rgba(120, 145, 128, 0.24) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 100px"] .arco-input-number-step-button,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 70px"] .arco-input-number-step-button,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 100px"] .arco-input-number-mode-button,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 70px"] .arco-input-number-mode-button,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-outer[style*="width: 100px"] .arco-input-suffix,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-outer[style*="width: 70px"] .arco-input-suffix,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select[style*="width: 120px"] .arco-select-view-suffix,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-select-view[style*="width: 120px"] .arco-select-view-suffix {
+    color: #66729d !important;
+    background: rgba(239, 242, 255, 0.88) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number,
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number .arco-input-wrapper,
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number .arco-input-outer,
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number .arco-input,
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number .arco-input-number-input-wrap,
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number .arco-input-prepend,
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number .arco-input-append,
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-select,
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-select .arco-select-view {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(244, 246, 255, 1) 100%) !important;
+    border-color: rgba(120, 145, 128, 0.30) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.94),
+        0 14px 30px rgba(60, 90, 70, 0.10) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number .arco-input-number-input,
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number .arco-input,
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number input,
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-select .arco-select-view-value,
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-select .arco-select-view-input,
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-select .arco-select-view-single {
+    color: #202a52 !important;
+    font-weight: 600 !important;
+    background: transparent !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number .arco-input-append,
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number .arco-input-group-addon {
+    color: #58658f !important;
+    background: linear-gradient(180deg, rgba(231, 235, 255, 0.98) 0%, rgba(224, 229, 252, 1) 100%) !important;
+    border-color: rgba(120, 145, 128, 0.24) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number .arco-input-suffix,
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number .arco-input-number-step-button,
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number .arco-input-number-mode-button,
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-select .arco-select-view-suffix {
+    color: #66729d !important;
+    background: rgba(239, 242, 255, 0.88) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number .arco-input-number-step-button,
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number .arco-input-number-mode-button,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 100px"] .arco-input-number-step-button,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 70px"] .arco-input-number-step-button,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 100px"] .arco-input-number-mode-button,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 70px"] .arco-input-number-mode-button {
+    color: #4c5886 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    background: linear-gradient(180deg, rgba(236, 240, 255, 0.98) 0%, rgba(226, 231, 252, 1) 100%) !important;
+    box-shadow: inset 1px 0 0 rgba(120, 145, 128, 0.16) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number .arco-input-number-step-button .arco-icon,
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number .arco-input-number-mode-button .arco-icon,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 100px"] .arco-input-number-step-button .arco-icon,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 70px"] .arco-input-number-step-button .arco-icon,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 100px"] .arco-input-number-mode-button .arco-icon,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 70px"] .arco-input-number-mode-button .arco-icon,
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number .arco-input-number-step-button svg,
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number .arco-input-number-mode-button svg,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 100px"] .arco-input-number-step-button svg,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 70px"] .arco-input-number-step-button svg,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 100px"] .arco-input-number-mode-button svg,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 70px"] .arco-input-number-mode-button svg {
+    color: #4c5886 !important;
+    fill: currentColor !important;
+    stroke: currentColor !important;
+    opacity: 1 !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number .arco-input-number-step-button:hover,
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number .arco-input-number-mode-button:hover,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 100px"] .arco-input-number-step-button:hover,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 70px"] .arco-input-number-step-button:hover,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 100px"] .arco-input-number-mode-button:hover,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 70px"] .arco-input-number-mode-button:hover {
+    color: #32406f !important;
+    background: linear-gradient(180deg, rgba(228, 233, 255, 1) 0%, rgba(217, 223, 250, 1) 100%) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number.arco-input-number-mode-embed .arco-input-number-step,
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number .arco-input-number-step,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 100px"].arco-input-number-mode-embed .arco-input-number-step,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 70px"].arco-input-number-mode-embed .arco-input-number-step {
+    opacity: 1 !important;
+    width: 20px !important;
+    right: 3px !important;
+    top: 3px !important;
+    bottom: 3px !important;
+    border-radius: 6px !important;
+    overflow: hidden !important;
+    background: linear-gradient(180deg, rgba(236, 240, 255, 0.98) 0%, rgba(226, 231, 252, 1) 100%) !important;
+    box-shadow: inset 1px 0 0 rgba(120, 145, 128, 0.14) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number.arco-input-number-mode-embed .arco-input-number-suffix,
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number .arco-input-number-suffix,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 100px"] .arco-input-number-suffix,
+body[data-theme="soft-light"] .video-ip-agent-shell .arco-input-number[style*="width: 70px"] .arco-input-number-suffix {
+    opacity: 1 !important;
+    color: #4c5886 !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number input:-webkit-autofill,
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number input:-webkit-autofill:hover,
+body[data-theme="soft-light"] .video-ip-agent-shell .theme-compact-number input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #202a52 !important;
+    transition: background-color 99999s ease-in-out 0s !important;
+    box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.98) inset !important;
+}
+
+@keyframes soft-light-section-border-spin-clean {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .section-processing {
+    position: relative !important;
+    overflow: hidden !important;
+    isolation: isolate !important;
+    animation: none !important;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(244, 246, 255, 0.99) 100%) !important;
+    background-image: none !important;
+    border: 1px solid rgba(120, 145, 128, 0.28) !important;
+    box-shadow:
+        0 18px 40px rgba(60, 90, 70, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.86) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .section-processing:hover {
+    box-shadow:
+        0 22px 46px rgba(60, 90, 70, 0.14),
+        0 0 0 1px rgba(65, 145, 102, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .section-processing > * {
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .section-processing::before,
+body[data-theme="soft-light"] .video-ip-agent-shell .section-processing::after {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    pointer-events: none !important;
+    border-radius: inherit !important;
+    transform-origin: center center !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .section-processing::before {
+    inset: -1px !important;
+    padding: 2px !important;
+    z-index: 0 !important;
+    background: conic-gradient(
+        from 0deg,
+        transparent 0%,
+        transparent 72%,
+        rgba(122, 132, 255, 0.92) 80%,
+        rgba(65, 145, 102, 1) 87%,
+        rgba(101, 183, 255, 0.86) 94%,
+        transparent 100%
+    ) !important;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0) !important;
+    -webkit-mask-composite: xor !important;
+    mask-composite: exclude !important;
+    animation: soft-light-section-border-spin-clean 2.6s linear infinite !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .section-processing::after {
+    inset: -8px !important;
+    z-index: 0 !important;
+    background: conic-gradient(
+        from 0deg,
+        transparent 0%,
+        transparent 74%,
+        rgba(122, 132, 255, 0.22) 82%,
+        rgba(65, 145, 102, 0.28) 89%,
+        rgba(101, 183, 255, 0.18) 96%,
+        transparent 100%
+    ) !important;
+    filter: blur(14px) !important;
+    opacity: 0.68 !important;
+    animation: soft-light-section-border-spin-clean 2.6s linear infinite !important;
+}
+
+body[data-theme="soft-light"] .video-ip-agent-shell .section-processing .section-card-header::after {
+    background: linear-gradient(
+        90deg,
+        rgba(65, 145, 102, 0.26),
+        rgba(65, 145, 102, 0.08),
+        rgba(65, 145, 102, 0)
+    ) !important;
+    opacity: 0.9 !important;
+}
+
+/* Final soft-light readability overrides for settings, home, material and template pages */
+body[data-theme="soft-light"] .setting-container .text-2xl,
+body[data-theme="soft-light"] .setting-container .text-lg,
+body[data-theme="soft-light"] .setting-container .text-base,
+body[data-theme="soft-light"] .setting-container .font-bold,
+body[data-theme="soft-light"] .setting-container .font-medium,
+body[data-theme="soft-light"] .setting-container .arco-card-header-title,
+body[data-theme="soft-light"] .setting-container .arco-descriptions-item-value,
+body[data-theme="soft-light"] .setting-container .arco-form-item-label,
+body[data-theme="soft-light"] .setting-container .arco-form-item-label-col,
+body[data-theme="soft-light"] .setting-container .arco-radio-label,
+body[data-theme="soft-light"] .setting-container .arco-checkbox-label,
+body[data-theme="soft-light"] .setting-container .arco-statistic-value,
+body[data-theme="soft-light"] .setting-container .arco-statistic-value-int,
+body[data-theme="soft-light"] .setting-container .arco-statistic-value-decimal,
+body[data-theme="soft-light"] .setting-container .arco-space,
+body[data-theme="soft-light"] .setting-container .arco-col {
+    color: #1f2749 !important;
+}
+
+body[data-theme="soft-light"] .setting-container .text-sm,
+body[data-theme="soft-light"] .setting-container .text-xs,
+body[data-theme="soft-light"] .setting-container .text-gray-600,
+body[data-theme="soft-light"] .setting-container .text-gray-500,
+body[data-theme="soft-light"] .setting-container .text-gray-400,
+body[data-theme="soft-light"] .setting-container .arco-form-item-message,
+body[data-theme="soft-light"] .setting-container .arco-descriptions-item-label {
+    color: #617098 !important;
+}
+
+body[data-theme="soft-light"] .setting-container .arco-card,
+body[data-theme="soft-light"] .setting-container .bg-gray-50,
+body[data-theme="soft-light"] .setting-container .bg-gray-100,
+body[data-theme="soft-light"] .setting-container .bg-white,
+body[data-theme="soft-light"] .setting-container .border,
+body[data-theme="soft-light"] .setting-container .border-gray-200,
+body[data-theme="soft-light"] .setting-container .border-gray-300,
+body[data-theme="soft-light"] .setting-container .arco-descriptions-bordered .arco-descriptions-item-label,
+body[data-theme="soft-light"] .setting-container .arco-descriptions-bordered .arco-descriptions-item-value {
+    background: linear-gradient(180deg, rgba(255,255,255,0.94) 0%, rgba(244,245,255,0.97) 100%) !important;
+    border-color: rgba(120, 145, 128, 0.22) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.84), 0 10px 24px rgba(104,110,170,0.08) !important;
+}
+
+body[data-theme="soft-light"] .setting-container code {
+    color: #4966e6 !important;
+    background-color: rgba(65, 145, 102, 0.08) !important;
+}
+
+body[data-theme="soft-light"] .home-page .arco-statistic-value,
+body[data-theme="soft-light"] .home-page .arco-statistic-value-int,
+body[data-theme="soft-light"] .home-page .arco-statistic-value-decimal,
+body[data-theme="soft-light"] .home-page .arco-statistic-content {
+    color: #1f2749 !important;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.76);
+}
+
+body[data-theme="soft-light"] .home-page .arco-statistic-title,
+body[data-theme="soft-light"] .home-page .arco-statistic-prefix,
+body[data-theme="soft-light"] .home-page .arco-statistic-suffix {
+    color: #5f6b93 !important;
+}
+
+body[data-theme="soft-light"] .home-page .home-card .font-bold,
+body[data-theme="soft-light"] .home-page .home-card .font-semibold,
+body[data-theme="soft-light"] .home-page .app-tool-card .font-bold,
+body[data-theme="soft-light"] .home-page .app-tool-card .font-semibold,
+body[data-theme="soft-light"] .home-page .home-card .text-gray-700 {
+    color: #1f2749 !important;
+}
+
+body[data-theme="soft-light"] .home-page .home-card .text-sm,
+body[data-theme="soft-light"] .home-page .home-card .text-xs,
+body[data-theme="soft-light"] .home-page .home-card .text-gray-600,
+body[data-theme="soft-light"] .home-page .home-card .text-gray-500,
+body[data-theme="soft-light"] .home-page .home-card .text-gray-400,
+body[data-theme="soft-light"] .home-page .home-card ul,
+body[data-theme="soft-light"] .home-page .home-card li,
+body[data-theme="soft-light"] .home-page .app-tool-card .text-sm,
+body[data-theme="soft-light"] .home-page .app-tool-card .text-xs,
+body[data-theme="soft-light"] .home-page .app-tool-card .text-gray-600,
+body[data-theme="soft-light"] .home-page .app-tool-card .text-gray-500,
+body[data-theme="soft-light"] .home-page .app-tool-card .text-gray-400 {
+    color: #5f6b93 !important;
+}
+
+body[data-theme="soft-light"] .material-card .arco-btn.arco-btn-status-danger,
+body[data-theme="soft-light"] .material-card .arco-btn[class*="status-danger"],
+body[data-theme="soft-light"] .video-template-page .arco-btn.arco-btn-status-danger,
+body[data-theme="soft-light"] .video-template-page .arco-btn[class*="status-danger"] {
+    background: linear-gradient(180deg, rgba(255, 245, 247, 0.98) 0%, rgba(255, 236, 240, 1) 100%) !important;
+    border-color: rgba(200, 91, 107, 0.26) !important;
+    color: #b3495b !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.92), 0 8px 18px rgba(200, 91, 107, 0.08) !important;
+}
+
+body[data-theme="soft-light"] .material-card .arco-btn.arco-btn-status-danger:hover,
+body[data-theme="soft-light"] .material-card .arco-btn[class*="status-danger"]:hover,
+body[data-theme="soft-light"] .video-template-page .arco-btn.arco-btn-status-danger:hover,
+body[data-theme="soft-light"] .video-template-page .arco-btn[class*="status-danger"]:hover {
+    background: linear-gradient(180deg, rgba(255, 250, 251, 1) 0%, rgba(255, 241, 244, 1) 100%) !important;
+    border-color: rgba(200, 91, 107, 0.34) !important;
+    color: #9f2e44 !important;
+}
+
+/* Final global soft-light tuning to avoid washed-out white screens */
+body[data-theme="soft-light"] {
+    --theme-app-bg: #e6eaf3;
+    --theme-app-bg-top: #eef1f8;
+    --theme-page-shell: linear-gradient(180deg, rgba(238, 242, 248, 0.98) 0%, rgba(228, 233, 243, 0.99) 100%);
+    --theme-panel-bg: linear-gradient(180deg, rgba(247, 249, 252, 0.96) 0%, rgba(233, 237, 246, 0.98) 100%);
+    --theme-panel-bg-strong: linear-gradient(180deg, rgba(244, 247, 251, 0.98) 0%, rgba(229, 234, 244, 0.995) 100%);
+    --theme-panel-bg-muted: rgba(234, 238, 246, 0.86);
+    --theme-panel-overlay: rgba(244, 247, 252, 0.92);
+    --theme-border: rgba(120, 145, 128, 0.22);
+    --theme-border-strong: rgba(96, 108, 196, 0.34);
+    --theme-text-primary: #202846;
+    --theme-text-secondary: #556186;
+    --theme-text-muted: #7480a2;
+    --theme-shadow-soft: 0 18px 42px rgba(96, 104, 142, 0.13);
+    --theme-shadow-card: 0 22px 48px rgba(96, 104, 142, 0.15);
+}
+
+body[data-theme="soft-light"] {
+    background:
+        radial-gradient(circle at top left, rgba(103, 126, 255, 0.12), transparent 30%),
+        radial-gradient(circle at 100% 0%, rgba(197, 181, 255, 0.11), transparent 24%),
+        linear-gradient(180deg, var(--theme-app-bg-top) 0%, var(--theme-app-bg) 100%) !important;
+}
+
+/* Final soft-light overrides for synthesis workbenches */
+body[data-theme="soft-light"] .elegant-theme,
+body[data-theme="soft-light"] .sound-page,
+body[data-theme="soft-light"] .video-gen-page {
+    background: var(--theme-page-shell) !important;
+    color: var(--theme-text-primary) !important;
+}
+
+body[data-theme="soft-light"] .elegant-theme .glass-card,
+body[data-theme="soft-light"] .elegant-theme [class~="bg-[#0a0a0a]"],
+body[data-theme="soft-light"] .elegant-theme [class~="bg-[#141414]"],
+body[data-theme="soft-light"] .elegant-theme [class~="bg-[#1a1a1a]"],
+body[data-theme="soft-light"] .elegant-theme [class~="bg-[#111]"],
+body[data-theme="soft-light"] .sound-page .rounded-xl.shadow.border,
+body[data-theme="soft-light"] .video-gen-page .rounded-xl.shadow.border,
+body[data-theme="soft-light"] .video-gen-card {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(243, 246, 255, 0.99) 100%) !important;
+    border-color: rgba(120, 145, 128, 0.24) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.9),
+        0 18px 40px rgba(60, 90, 70, 0.12) !important;
+    color: var(--theme-text-primary) !important;
+}
+
+body[data-theme="soft-light"] .elegant-theme [class~="border-white/10"],
+body[data-theme="soft-light"] .elegant-theme [class~="border-white/5"],
+body[data-theme="soft-light"] .elegant-theme [class~="border-[#333]"],
+body[data-theme="soft-light"] .sound-page .border,
+body[data-theme="soft-light"] .sound-page .border-gray-700,
+body[data-theme="soft-light"] .video-gen-page .border,
+body[data-theme="soft-light"] .video-gen-page .border-gray-700,
+body[data-theme="soft-light"] .video-gen-card,
+body[data-theme="soft-light"] .video-gen-page .text-display,
+body[data-theme="soft-light"] .video-gen-page .video-preview,
+body[data-theme="soft-light"] .sound-page .text-display {
+    border-color: rgba(120, 145, 128, 0.24) !important;
+}
+
+body[data-theme="soft-light"] .elegant-theme [class~="text-white"],
+body[data-theme="soft-light"] .elegant-theme [class~="text-gray-100"],
+body[data-theme="soft-light"] .elegant-theme [class~="text-gray-200"],
+body[data-theme="soft-light"] .elegant-theme [class~="text-gray-300"],
+body[data-theme="soft-light"] .sound-page .page-title,
+body[data-theme="soft-light"] .video-gen-page .page-title,
+body[data-theme="soft-light"] .video-gen-card .section-title,
+body[data-theme="soft-light"] .video-gen-card .font-bold,
+body[data-theme="soft-light"] .video-gen-page .font-bold,
+body[data-theme="soft-light"] .video-gen-page .label-text,
+body[data-theme="soft-light"] .sound-page .font-bold {
+    color: #1f2749 !important;
+}
+
+body[data-theme="soft-light"] .elegant-theme [class~="text-gray-400"],
+body[data-theme="soft-light"] .elegant-theme [class~="text-gray-500"],
+body[data-theme="soft-light"] .elegant-theme [class~="text-gray-600"],
+body[data-theme="soft-light"] .sound-page .page-subtitle,
+body[data-theme="soft-light"] .video-gen-page .page-subtitle,
+body[data-theme="soft-light"] .video-gen-page .text-gray-400,
+body[data-theme="soft-light"] .video-gen-page .text-gray-500,
+body[data-theme="soft-light"] .video-gen-page .text-gray-600,
+body[data-theme="soft-light"] .sound-page .text-gray-400,
+body[data-theme="soft-light"] .sound-page .text-gray-500,
+body[data-theme="soft-light"] .sound-page .text-gray-600 {
+    color: #5f6b93 !important;
+}
+
+body[data-theme="soft-light"] .elegant-theme [class*="text-white/50"],
+body[data-theme="soft-light"] .elegant-theme [class*="text-white/60"],
+body[data-theme="soft-light"] .elegant-theme [class*="text-white/70"],
+body[data-theme="soft-light"] .sound-page [class*="text-white/50"],
+body[data-theme="soft-light"] .video-gen-page [class*="text-white/50"] {
+    color: #7380a7 !important;
+}
+
+body[data-theme="soft-light"] .elegant-theme .bg-clip-text.text-transparent,
+body[data-theme="soft-light"] .sound-page .bg-clip-text.text-transparent,
+body[data-theme="soft-light"] .video-gen-page .bg-clip-text.text-transparent {
+    background: linear-gradient(135deg, #1f2749 0%, #6675e8 100%) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    text-shadow: none !important;
+}
+
+body[data-theme="soft-light"] .elegant-theme .iconfont[class*="icon-sound"],
+body[data-theme="soft-light"] .elegant-theme .iconfont[class*="icon-asr"],
+body[data-theme="soft-light"] .elegant-theme .iconfont[class*="icon-user"],
+body[data-theme="soft-light"] .sound-page .iconfont[class*="icon-sound"],
+body[data-theme="soft-light"] .sound-page .iconfont[class*="icon-asr"],
+body[data-theme="soft-light"] .video-gen-page .iconfont[class*="icon-sound"] {
+    color: #6170d8 !important;
+}
+
+body[data-theme="soft-light"] .elegant-theme .text-4xl.text-gray-600,
+body[data-theme="soft-light"] .sound-page .text-4xl.text-gray-600,
+body[data-theme="soft-light"] .video-gen-page .text-4xl.text-gray-600 {
+    color: #7b86b1 !important;
+}
+
+body[data-theme="soft-light"] .elegant-theme .arco-radio-group-button {
+    background: rgba(236, 240, 255, 0.92) !important;
+    border: 1px solid rgba(120, 145, 128, 0.22) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88) !important;
+}
+
+body[data-theme="soft-light"] .elegant-theme .arco-radio-button {
+    color: #5f6b93 !important;
+}
+
+body[data-theme="soft-light"] .elegant-theme .arco-radio-button:hover {
+    color: #1f2749 !important;
+    background: rgba(65, 145, 102, 0.08) !important;
+}
+
+body[data-theme="soft-light"] .elegant-theme .arco-radio-button-checked {
+    background: linear-gradient(135deg, #279d7b 0%, #9aa4ff 100%) !important;
+    color: #fff !important;
+    box-shadow: 0 10px 24px rgba(65, 145, 102, 0.22) !important;
+}
+
+body[data-theme="soft-light"] .elegant-theme .dark-input-override,
+body[data-theme="soft-light"] .elegant-theme .dark-input-override .arco-select-view,
+body[data-theme="soft-light"] .elegant-theme .dark-input-override .arco-textarea,
+body[data-theme="soft-light"] .elegant-theme .dark-input-override .arco-input,
+body[data-theme="soft-light"] .elegant-theme .dark-input-override .arco-input-number-input,
+body[data-theme="soft-light"] .elegant-theme .arco-input,
+body[data-theme="soft-light"] .elegant-theme .arco-textarea,
+body[data-theme="soft-light"] .elegant-theme .arco-input-number,
+body[data-theme="soft-light"] .elegant-theme .arco-select-view,
+body[data-theme="soft-light"] .video-gen-page .arco-input,
+body[data-theme="soft-light"] .video-gen-page .arco-textarea,
+body[data-theme="soft-light"] .video-gen-page .arco-input-number,
+body[data-theme="soft-light"] .video-gen-page .arco-select-view,
+body[data-theme="soft-light"] .video-gen-page .custom-dark-textarea {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(244, 246, 255, 1) 100%) !important;
+    border-color: rgba(120, 145, 128, 0.28) !important;
+    color: #1f2749 !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.92),
+        0 12px 28px rgba(60, 90, 70, 0.08) !important;
+}
+
+body[data-theme="soft-light"] .elegant-theme .dark-input-override:hover,
+body[data-theme="soft-light"] .elegant-theme .dark-input-override:hover .arco-select-view,
+body[data-theme="soft-light"] .elegant-theme .dark-input-override:hover .arco-textarea,
+body[data-theme="soft-light"] .elegant-theme .dark-input-override:hover .arco-input,
+body[data-theme="soft-light"] .elegant-theme .arco-input:hover,
+body[data-theme="soft-light"] .elegant-theme .arco-textarea:hover,
+body[data-theme="soft-light"] .elegant-theme .arco-input-number:hover,
+body[data-theme="soft-light"] .elegant-theme .arco-select-view:hover,
+body[data-theme="soft-light"] .video-gen-page .arco-input:hover,
+body[data-theme="soft-light"] .video-gen-page .arco-textarea:hover,
+body[data-theme="soft-light"] .video-gen-page .arco-input-number:hover,
+body[data-theme="soft-light"] .video-gen-page .arco-select-view:hover,
+body[data-theme="soft-light"] .video-gen-page .custom-dark-textarea:hover {
+    border-color: rgba(65, 145, 102, 0.36) !important;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(241, 244, 255, 1) 100%) !important;
+}
+
+body[data-theme="soft-light"] .elegant-theme .dark-input-override:focus-within,
+body[data-theme="soft-light"] .elegant-theme .arco-select-view-focus,
+body[data-theme="soft-light"] .elegant-theme .arco-input-wrapper.arco-input-focus,
+body[data-theme="soft-light"] .elegant-theme .arco-textarea-wrapper.arco-textarea-focus,
+body[data-theme="soft-light"] .elegant-theme .arco-input-number-focus,
+body[data-theme="soft-light"] .video-gen-page .custom-dark-textarea:focus,
+body[data-theme="soft-light"] .video-gen-page .arco-select-view-focus,
+body[data-theme="soft-light"] .video-gen-page .arco-input-number-focus {
+    border-color: rgba(65, 145, 102, 0.44) !important;
+    box-shadow: 0 0 0 4px rgba(65, 145, 102, 0.08) !important;
+}
+
+body[data-theme="soft-light"] .elegant-theme .arco-select-view-value,
+body[data-theme="soft-light"] .elegant-theme .arco-select-view-single,
+body[data-theme="soft-light"] .elegant-theme .arco-select-view-input,
+body[data-theme="soft-light"] .elegant-theme .arco-input-number-input,
+body[data-theme="soft-light"] .elegant-theme .arco-textarea,
+body[data-theme="soft-light"] .video-gen-page .arco-select-view-value,
+body[data-theme="soft-light"] .video-gen-page .arco-select-view-single,
+body[data-theme="soft-light"] .video-gen-page .arco-select-view-input,
+body[data-theme="soft-light"] .video-gen-page .arco-input-number-input,
+body[data-theme="soft-light"] .video-gen-page .arco-textarea {
+    color: #1f2749 !important;
+}
+
+body[data-theme="soft-light"] .elegant-theme .text-display,
+body[data-theme="soft-light"] .sound-page .text-display,
+body[data-theme="soft-light"] .sound-page .video-preview,
+body[data-theme="soft-light"] .video-gen-page .text-display,
+body[data-theme="soft-light"] .video-gen-page .video-preview {
+    background: linear-gradient(180deg, rgba(251, 252, 255, 0.98) 0%, rgba(241, 244, 255, 1) 100%) !important;
+    color: #1f2749 !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88) !important;
+}
+
+body[data-theme="soft-light"] .elegant-theme .text-display,
+body[data-theme="soft-light"] .elegant-theme .text-display div,
+body[data-theme="soft-light"] .elegant-theme .text-display span,
+body[data-theme="soft-light"] .elegant-theme .text-display p,
+body[data-theme="soft-light"] .sound-page .text-display,
+body[data-theme="soft-light"] .sound-page .text-display div,
+body[data-theme="soft-light"] .sound-page .text-display span,
+body[data-theme="soft-light"] .sound-page .text-display p,
+body[data-theme="soft-light"] .video-gen-page .text-display,
+body[data-theme="soft-light"] .video-gen-page .text-display div,
+body[data-theme="soft-light"] .video-gen-page .text-display span,
+body[data-theme="soft-light"] .video-gen-page .text-display p {
+    color: #24305a !important;
+    text-shadow: none !important;
+}
+
+body[data-theme="soft-light"] .elegant-theme .text-display .arco-btn,
+body[data-theme="soft-light"] .sound-page .text-display .arco-btn,
+body[data-theme="soft-light"] .video-gen-page .text-display .arco-btn {
+    background: linear-gradient(180deg, rgba(236, 240, 255, 0.98) 0%, rgba(226, 231, 252, 1) 100%) !important;
+    border-color: rgba(120, 145, 128, 0.24) !important;
+    color: #51608d !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92) !important;
+}
+
+body[data-theme="soft-light"] .elegant-theme .text-display .arco-btn:hover,
+body[data-theme="soft-light"] .sound-page .text-display .arco-btn:hover,
+body[data-theme="soft-light"] .video-gen-page .text-display .arco-btn:hover {
+    color: #1f2749 !important;
+    border-color: rgba(65, 145, 102, 0.32) !important;
+}
+
+body[data-theme="soft-light"] .elegant-theme .arco-btn-text,
+body[data-theme="soft-light"] .sound-page .arco-btn:not(.arco-btn-primary):not(.arco-btn-status-danger),
+body[data-theme="soft-light"] .video-gen-page .arco-btn:not(.arco-btn-primary):not(.arco-btn-status-danger),
+body[data-theme="soft-light"] .video-gen-card .arco-btn:not(.arco-btn-primary):not(.arco-btn-status-danger) {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(239, 243, 255, 1) 100%) !important;
+    border-color: rgba(120, 145, 128, 0.24) !important;
+    color: #51608d !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92), 0 8px 20px rgba(60, 90, 70, 0.08) !important;
+}
+
+body[data-theme="soft-light"] .elegant-theme .arco-btn-text:hover,
+body[data-theme="soft-light"] .sound-page .arco-btn:not(.arco-btn-primary):not(.arco-btn-status-danger):hover,
+body[data-theme="soft-light"] .video-gen-page .arco-btn:not(.arco-btn-primary):not(.arco-btn-status-danger):hover,
+body[data-theme="soft-light"] .video-gen-card .arco-btn:not(.arco-btn-primary):not(.arco-btn-status-danger):hover {
+    color: #1f2749 !important;
+    border-color: rgba(65, 145, 102, 0.32) !important;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(243, 246, 255, 1) 100%) !important;
+}
+
+body[data-theme="soft-light"] .video-gen-page .font-bold,
+body[data-theme="soft-light"] .video-gen-card .font-bold {
+    border-color: rgba(120, 145, 128, 0.24) !important;
+}
+
+body[data-theme="soft-light"] .elegant-theme [class~="bg-black/80"] {
+    background: rgba(231, 236, 247, 0.72) !important;
+}
+
+/* ========== 深色主题下账号管理弹窗样式修复 ========== */
+body[data-theme="dark"] .arco-modal .platform-tab {
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: var(--theme-text-secondary) !important;
+}
+
+body[data-theme="dark"] .arco-modal .platform-tab:hover {
+    background: var(--theme-brand-soft) !important;
+}
+
+body[data-theme="dark"] .arco-modal .platform-tab.active {
+    background: var(--theme-brand-soft) !important;
+    border-color: var(--theme-brand) !important;
+    color: var(--theme-brand) !important;
+}
+
+body[data-theme="dark"] .arco-modal .account-card {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border-color: var(--theme-border) !important;
+}
+
+body[data-theme="dark"] .arco-modal .account-card:hover {
+    border-color: var(--theme-brand) !important;
+    box-shadow: 0 2px 8px rgba(65, 145, 102, 0.15) !important;
+}
+
+body[data-theme="dark"] .arco-modal .account-nickname {
+    color: var(--theme-text-primary) !important;
+}
+
+body[data-theme="dark"] .arco-modal .account-meta {
+    color: var(--theme-text-muted) !important;
+}
+
+body[data-theme="dark"] .arco-modal .add-account-btn {
+    border-color: var(--theme-border) !important;
+    color: var(--theme-text-muted) !important;
+}
+
+body[data-theme="dark"] .arco-modal .add-account-btn:hover {
+    border-color: var(--theme-brand) !important;
+    color: var(--theme-brand) !important;
+}
+
+body[data-theme="dark"] .arco-modal .empty-state {
+    color: var(--theme-text-muted) !important;
+}
+
+/* ========== 深色主题下视频发布区域平台选择样式修复 ========== */
+body[data-theme="dark"] .video-ip-agent-shell .publish-platform-row {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+body[data-theme="dark"] .video-ip-agent-shell .publish-platform-row:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body[data-theme="dark"] .video-ip-agent-shell .publish-platform-row .arco-checkbox-text {
+    color: var(--theme-text-secondary) !important;
+}
+
+body[data-theme="dark"] .video-ip-agent-shell .publish-platform-row .arco-checkbox-checked .arco-checkbox-text {
+    color: var(--theme-text-primary) !important;
+}
+
+/* ========== 清风雅韵主题下页面标题颜色修复（白色→黑色） ========== */
+body[data-theme="soft-light"] .video-template-page .template-page-title,
+body[data-theme="soft-light"] .video-template-page .text-3xl.font-bold,
+body[data-theme="soft-light"] .video-material-page .material-page-title,
+body[data-theme="soft-light"] .video-material-page .text-3xl.font-bold,
+body[data-theme="soft-light"] .video-template-page .template-page-subtitle,
+body[data-theme="soft-light"] .video-material-page .material-page-subtitle {
+    color: #1e274c !important;
+    text-shadow: none !important;
+}
+
+/* 清风雅韵下 SoundWorkbench 侧边栏标题 */
+body[data-theme="soft-light"] .sound-workbench .text-xl.font-bold,
+body[data-theme="soft-light"] .sound-workbench .text-lg.font-bold {
+    color: #1e274c !important;
+}

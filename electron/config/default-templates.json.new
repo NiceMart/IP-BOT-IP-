@@ -1,0 +1,1305 @@
+{
+  "version": "1.0.0",
+  "description": "系统默认模板配置 - 应用启动时自动初始化",
+  "coverTemplates": [
+    {
+      "id": "8f17c467-c69c-45b2-8011-94a6c3071d16",
+      "name": "斜黄白",
+      "description": "系统模板 - 斜黄白",
+      "is_system": 1,
+      "config": {
+        "backgroundEnabled": false,
+        "backgroundImagePath": null,
+        "backgroundBlurEnabled": false,
+        "backgroundBlurIntensity": 10,
+        "backgroundSize": 100,
+        "backgroundPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "personImagePath": null,
+        "personSize": 80,
+        "personPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "personRotation": 0,
+        "personBorderEnabled": false,
+        "personBorderStyle": "solid",
+        "personBorderColor": "#FFFFFF",
+        "personBorderWidth": 8,
+        "personBorderDashLength": null,
+        "personBorderGapLength": null,
+        "autoSplitText": true,
+        "titleMaxLength": 4,
+        "subtitleMaxLength": 10,
+        "titleText": "礼貌回归",
+        "titleFontFamily": "斗鱼追光体2.0",
+        "titleFontSize": 120,
+        "titleFontWeight": 700,
+        "titleColor": "#f5d400",
+        "titleStrokeColor": "#000000",
+        "titleStrokeWidth": 3,
+        "titleShadowColor": "#000000",
+        "titleShadowOffsetX": 0,
+        "titleShadowOffsetY": 0,
+        "titleShadowBlur": 0,
+        "titleShadowEnabled": false,
+        "titleShadowLayers": [],
+        "titlePosition": {
+          "x": 42.59259259259258,
+          "y": 56.909722222222214
+        },
+        "titleRotation": 338,
+        "titleDirection": "horizontal",
+        "titleCharSpacing": 24,
+        "titleLineSpacing": 144,
+        "titleMaxCharsPerLine": 10,
+        "titleBackgroundEnabled": true,
+        "titleBackgroundColor": "#f5f5f5",
+        "titleBackgroundOpacity": 25,
+        "titleBackgroundShape": "polygon",
+        "titleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "titleBackgroundPosition": {
+          "x": 44.21296296296296,
+          "y": 32.951388888888886
+        },
+        "titleBackgroundPoints": [
+          {
+            "x": 226.08024691358025,
+            "y": -79.67664930555557
+          },
+          {
+            "x": 250.7716049382716,
+            "y": 218.93446180555554
+          },
+          {
+            "x": -260.8024691358025,
+            "y": 691.1566840277777
+          },
+          {
+            "x": -290.12345679012344,
+            "y": 366.50390624999994
+          }
+        ],
+        "titleBackgroundRadius": 10,
+        "titleBackgroundRotation": 0,
+        "subtitleText": "行动亲爱的观众朋友们",
+        "subtitleFontFamily": "斗鱼追光体2.0",
+        "subtitleFontSize": 82,
+        "subtitleFontWeight": 500,
+        "subtitleColor": "#FFFFFF",
+        "subtitleStrokeColor": "#000000",
+        "subtitleStrokeWidth": 1,
+        "subtitleShadowColor": "#000000",
+        "subtitleShadowOffsetX": 0,
+        "subtitleShadowOffsetY": 0,
+        "subtitleShadowBlur": 0,
+        "subtitleShadowEnabled": false,
+        "subtitleShadowLayers": [],
+        "subtitlePosition": {
+          "x": 45.37037037037037,
+          "y": 66.5625
+        },
+        "subtitleRotation": 338,
+        "subtitleDirection": "horizontal",
+        "subtitleCharSpacing": 23,
+        "subtitleLineSpacing": 72,
+        "subtitleMaxCharsPerLine": 17,
+        "subtitleBackgroundEnabled": false,
+        "subtitleBackgroundColor": "#000000",
+        "subtitleBackgroundOpacity": 70,
+        "subtitleBackgroundShape": "rectangle",
+        "subtitleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "subtitleBackgroundPosition": {
+          "x": 50,
+          "y": 60
+        },
+        "subtitleBackgroundPoints": [],
+        "subtitleBackgroundRadius": 10,
+        "subtitleBackgroundRotation": 0,
+        "maskEnabled": false,
+        "maskImagePath": null,
+        "maskSize": 100,
+        "maskPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "maskColor": null,
+        "maskOpacity": 100,
+        "maskShape": "rectangle"
+      }
+    },
+    {
+      "id": "705fa010-5bf3-4041-b624-0fd364bea5ad",
+      "name": "大四字报",
+      "description": "系统模板 - 大四字报",
+      "is_system": 1,
+      "config": {
+        "backgroundEnabled": true,
+        "backgroundImagePath": null,
+        "backgroundBlurEnabled": false,
+        "backgroundBlurIntensity": 30,
+        "backgroundSize": 100,
+        "backgroundPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "personImagePath": null,
+        "personSize": 33.125,
+        "personPosition": {
+          "x": 22.68518518518519,
+          "y": 78.125
+        },
+        "personRotation": 0,
+        "personBorderEnabled": false,
+        "personBorderStyle": "solid",
+        "personBorderColor": "#FFFFFF",
+        "personBorderWidth": 8,
+        "personBorderDashLength": null,
+        "personBorderGapLength": null,
+        "autoSplitText": true,
+        "titleMaxLength": 4,
+        "subtitleMaxLength": 30,
+        "titleText": "礼貌回归",
+        "titleFontFamily": "USMCCyuanjiantecu",
+        "titleFontSize": 375,
+        "titleFontWeight": 400,
+        "titleColor": "#e6ca19",
+        "titleStrokeColor": "#000000",
+        "titleStrokeWidth": 0,
+        "titleShadowColor": "#000000",
+        "titleShadowOffsetX": 0,
+        "titleShadowOffsetY": 0,
+        "titleShadowBlur": 0,
+        "titleShadowEnabled": false,
+        "titleShadowLayers": [
+          {
+            "id": 1765355385133.3418,
+            "offsetX": 20,
+            "offsetY": 20,
+            "blur": 30,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          },
+          {
+            "id": 1765355385133.7036,
+            "offsetX": -20,
+            "offsetY": -20,
+            "blur": 30,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          }
+        ],
+        "titlePosition": {
+          "x": 52.54629629629629,
+          "y": 48.40277777777778
+        },
+        "titleRotation": 0,
+        "titleDirection": "horizontal",
+        "titleCharSpacing": 58,
+        "titleLineSpacing": 150,
+        "titleMaxCharsPerLine": 2,
+        "titleBackgroundEnabled": false,
+        "titleBackgroundColor": "#000000",
+        "titleBackgroundOpacity": 70,
+        "titleBackgroundShape": "polygon",
+        "titleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "titleBackgroundPosition": {
+          "x": 95.83333333333333,
+          "y": 68.88888888888889
+        },
+        "titleBackgroundPoints": [
+          {
+            "x": -330.24691358024694,
+            "y": -15.440538194444414
+          },
+          {
+            "x": 40,
+            "y": -40
+          },
+          {
+            "x": 40,
+            "y": 40
+          },
+          {
+            "x": -40,
+            "y": 40
+          },
+          {
+            "x": -114.9691358024691,
+            "y": 36.642795138888864
+          },
+          {
+            "x": -96.45061728395058,
+            "y": -3.2877604166666865
+          }
+        ],
+        "titleBackgroundRadius": 10,
+        "titleBackgroundRotation": 0,
+        "subtitleText": "行动亲爱的观众朋友们",
+        "subtitleFontFamily": "USMCCyuanjiantecu",
+        "subtitleFontSize": 122,
+        "subtitleFontWeight": 500,
+        "subtitleColor": "#e37a16",
+        "subtitleStrokeColor": "#000000",
+        "subtitleStrokeWidth": 5,
+        "subtitleShadowColor": "#ff0000",
+        "subtitleShadowOffsetX": 41,
+        "subtitleShadowOffsetY": 50,
+        "subtitleShadowBlur": 13,
+        "subtitleShadowEnabled": false,
+        "subtitleShadowLayers": [],
+        "subtitlePosition": {
+          "x": 51.15740740740741,
+          "y": 83.75
+        },
+        "subtitleRotation": 0,
+        "subtitleDirection": "horizontal",
+        "subtitleCharSpacing": 0,
+        "subtitleLineSpacing": 72,
+        "subtitleMaxCharsPerLine": 8,
+        "subtitleBackgroundEnabled": false,
+        "subtitleBackgroundColor": "#000000",
+        "subtitleBackgroundOpacity": 70,
+        "subtitleBackgroundShape": "rectangle",
+        "subtitleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "subtitleBackgroundPosition": {
+          "x": 50,
+          "y": 60
+        },
+        "subtitleBackgroundPoints": [],
+        "subtitleBackgroundRadius": 10,
+        "subtitleBackgroundRotation": 0,
+        "maskEnabled": false,
+        "maskImagePath": null,
+        "maskSize": 100,
+        "maskPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "maskColor": null,
+        "maskOpacity": 100,
+        "maskShape": "rectangle"
+      }
+    },
+    {
+      "id": "6404718a-1b1c-4148-9807-ad3c57a53e0c",
+      "name": "蓝底白字",
+      "description": "系统模板 - 蓝底白字",
+      "is_system": 1,
+      "config": {
+        "backgroundEnabled": false,
+        "backgroundImagePath": null,
+        "backgroundBlurEnabled": false,
+        "backgroundBlurIntensity": 10,
+        "backgroundSize": 100,
+        "backgroundPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "personImagePath": null,
+        "personSize": 80,
+        "personPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "personRotation": 0,
+        "personBorderEnabled": false,
+        "personBorderStyle": "solid",
+        "personBorderColor": "#FFFFFF",
+        "personBorderWidth": 8,
+        "personBorderDashLength": null,
+        "personBorderGapLength": null,
+        "autoSplitText": true,
+        "titleMaxLength": 4,
+        "subtitleMaxLength": 5,
+        "titleText": "礼貌回归",
+        "titleFontFamily": "USMCCyuanjiantecu",
+        "titleFontSize": 120,
+        "titleFontWeight": 700,
+        "titleColor": "#cbcdb1",
+        "titleStrokeColor": "#000000",
+        "titleStrokeWidth": 0,
+        "titleShadowColor": "#000000",
+        "titleShadowOffsetX": 0,
+        "titleShadowOffsetY": 0,
+        "titleShadowBlur": 0,
+        "titleShadowEnabled": false,
+        "titleShadowLayers": [
+          {
+            "id": 1765449844664.8303,
+            "offsetX": 0,
+            "offsetY": 0,
+            "blur": 8,
+            "color": "#000000",
+            "opacity": 80,
+            "enabled": true
+          },
+          {
+            "id": 1765449844664.415,
+            "offsetX": 0,
+            "offsetY": 0,
+            "blur": 16,
+            "color": "#000000",
+            "opacity": 40,
+            "enabled": true
+          }
+        ],
+        "titlePosition": {
+          "x": 50.694444444444436,
+          "y": 63.506944444444436
+        },
+        "titleRotation": 0,
+        "titleDirection": "horizontal",
+        "titleCharSpacing": 24,
+        "titleLineSpacing": 144,
+        "titleMaxCharsPerLine": 10,
+        "titleBackgroundEnabled": false,
+        "titleBackgroundColor": "#000000",
+        "titleBackgroundOpacity": 70,
+        "titleBackgroundShape": "rectangle",
+        "titleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "titleBackgroundPosition": {
+          "x": 50,
+          "y": 30
+        },
+        "titleBackgroundPoints": [],
+        "titleBackgroundRadius": 10,
+        "titleBackgroundRotation": 0,
+        "subtitleText": "行动亲爱的",
+        "subtitleFontFamily": "千图厚黑体",
+        "subtitleFontSize": 187,
+        "subtitleFontWeight": 100,
+        "subtitleColor": "#FFFFFF",
+        "subtitleStrokeColor": "#000000",
+        "subtitleStrokeWidth": 10,
+        "subtitleShadowColor": "#000000",
+        "subtitleShadowOffsetX": 0,
+        "subtitleShadowOffsetY": 0,
+        "subtitleShadowBlur": 0,
+        "subtitleShadowEnabled": false,
+        "subtitleShadowLayers": [],
+        "subtitlePosition": {
+          "x": 49.53703703703704,
+          "y": 74.20138888888889
+        },
+        "subtitleRotation": 0,
+        "subtitleDirection": "horizontal",
+        "subtitleCharSpacing": -23,
+        "subtitleLineSpacing": 72,
+        "subtitleMaxCharsPerLine": 15,
+        "subtitleBackgroundEnabled": true,
+        "subtitleBackgroundColor": "#599dd9",
+        "subtitleBackgroundOpacity": 25,
+        "subtitleBackgroundShape": "rectangle",
+        "subtitleBackgroundSize": {
+          "width": 161.0185185185185,
+          "height": 30.48611111111111
+        },
+        "subtitleBackgroundPosition": {
+          "x": 50.23148148148148,
+          "y": 67.11805555555556
+        },
+        "subtitleBackgroundPoints": [],
+        "subtitleBackgroundRadius": 10,
+        "subtitleBackgroundRotation": 0,
+        "maskEnabled": false,
+        "maskImagePath": null,
+        "maskSize": 100,
+        "maskPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "maskColor": null,
+        "maskOpacity": 100,
+        "maskShape": "rectangle"
+      }
+    },
+    {
+      "id": "485183be-6eed-4eae-b74a-8591f08b69fa",
+      "name": "黄白实描",
+      "description": "系统模板 - 黄白实描",
+      "is_system": 1,
+      "config": {
+        "backgroundEnabled": false,
+        "backgroundImagePath": null,
+        "backgroundBlurEnabled": true,
+        "backgroundBlurIntensity": 30,
+        "backgroundSize": 100,
+        "backgroundPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "personImagePath": null,
+        "personSize": 70.27777777777777,
+        "personPosition": {
+          "x": 35.87962962962963,
+          "y": 64.75694444444444
+        },
+        "personRotation": 0,
+        "personBorderEnabled": true,
+        "personBorderStyle": "solid",
+        "personBorderColor": "#FFFFFF",
+        "personBorderWidth": 32,
+        "personBorderDashLength": null,
+        "personBorderGapLength": null,
+        "autoSplitText": true,
+        "titleMaxLength": 4,
+        "subtitleMaxLength": 6,
+        "titleText": "置顶96",
+        "titleFontFamily": "1.程荣光刻楷",
+        "titleFontSize": 300,
+        "titleFontWeight": 1000,
+        "titleColor": "#ffde05",
+        "titleStrokeColor": "#000000",
+        "titleStrokeWidth": 0,
+        "titleShadowColor": "#000000",
+        "titleShadowOffsetX": 0,
+        "titleShadowOffsetY": 0,
+        "titleShadowBlur": 0,
+        "titleShadowEnabled": false,
+        "titleShadowLayers": [
+          {
+            "id": 1765435502861.9124,
+            "offsetX": -2,
+            "offsetY": -2,
+            "blur": 12,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          },
+          {
+            "id": 1765435502861.0488,
+            "offsetX": 2,
+            "offsetY": 2,
+            "blur": 16,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          },
+          {
+            "id": 1765435502861.4207,
+            "offsetX": 0,
+            "offsetY": 0,
+            "blur": 14,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          }
+        ],
+        "titlePosition": {
+          "x": 91.89814814814812,
+          "y": 66.45833333333334
+        },
+        "titleRotation": 0,
+        "titleDirection": "vertical",
+        "titleCharSpacing": -20,
+        "titleLineSpacing": 118,
+        "titleMaxCharsPerLine": 10,
+        "titleBackgroundEnabled": false,
+        "titleBackgroundColor": "#000000",
+        "titleBackgroundOpacity": 70,
+        "titleBackgroundShape": "rectangle",
+        "titleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "titleBackgroundPosition": {
+          "x": 50,
+          "y": 30
+        },
+        "titleBackgroundPoints": [],
+        "titleBackgroundRadius": 10,
+        "titleBackgroundRotation": 0,
+        "subtitleText": "4高丹草新品",
+        "subtitleFontFamily": "USMCCyuanjiantecu",
+        "subtitleFontSize": 117,
+        "subtitleFontWeight": 500,
+        "subtitleColor": "#FFFFFF",
+        "subtitleStrokeColor": "#000000",
+        "subtitleStrokeWidth": 0,
+        "subtitleShadowColor": "#000000",
+        "subtitleShadowOffsetX": 0,
+        "subtitleShadowOffsetY": 0,
+        "subtitleShadowBlur": 0,
+        "subtitleShadowEnabled": false,
+        "subtitleShadowLayers": [
+          {
+            "id": 1765435591571.2886,
+            "offsetX": -2,
+            "offsetY": -2,
+            "blur": 2,
+            "color": "#FFFFFF",
+            "opacity": 60,
+            "enabled": true
+          },
+          {
+            "id": 1765435591571.856,
+            "offsetX": 2,
+            "offsetY": 2,
+            "blur": 0,
+            "color": "#000000",
+            "opacity": 65,
+            "enabled": true
+          },
+          {
+            "id": 1765435591571.3809,
+            "offsetX": 0,
+            "offsetY": 0,
+            "blur": 4,
+            "color": "#000000",
+            "opacity": 50,
+            "enabled": true
+          }
+        ],
+        "subtitlePosition": {
+          "x": 47.45370370370371,
+          "y": 12.743055555555557
+        },
+        "subtitleRotation": 0,
+        "subtitleDirection": "horizontal",
+        "subtitleCharSpacing": 12,
+        "subtitleLineSpacing": 72,
+        "subtitleMaxCharsPerLine": 15,
+        "subtitleBackgroundEnabled": false,
+        "subtitleBackgroundColor": "#000000",
+        "subtitleBackgroundOpacity": 70,
+        "subtitleBackgroundShape": "rectangle",
+        "subtitleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "subtitleBackgroundPosition": {
+          "x": 50,
+          "y": 60
+        },
+        "subtitleBackgroundPoints": [],
+        "subtitleBackgroundRadius": 10,
+        "subtitleBackgroundRotation": 0,
+        "maskEnabled": false,
+        "maskImagePath": null,
+        "maskSize": 100,
+        "maskPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "maskColor": null,
+        "maskOpacity": 100,
+        "maskShape": "rectangle"
+      }
+    },
+    {
+      "id": "v08ezr6v3x-mkdite6i",
+      "name": "人像居中",
+      "description": "系统模板 - 人像居中",
+      "is_system": 1,
+      "config": {
+        "backgroundEnabled": false,
+        "backgroundImagePath": null,
+        "backgroundBlurEnabled": true,
+        "backgroundBlurIntensity": 30,
+        "backgroundSize": 100,
+        "backgroundPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "personImagePath": null,
+        "personSize": 54.99999999999999,
+        "personPosition": {
+          "x": 53.935185185185205,
+          "y": 34.375
+        },
+        "personRotation": 0,
+        "personBorderEnabled": true,
+        "personBorderStyle": "solid",
+        "personBorderColor": "#FFFFFF",
+        "personBorderWidth": 8,
+        "personBorderDashLength": null,
+        "personBorderGapLength": null,
+        "autoSplitText": true,
+        "titleMaxLength": 6,
+        "subtitleMaxLength": 12,
+        "titleText": "托德揭秘芒格",
+        "titleFontFamily": "墨趣古风体",
+        "titleFontSize": 110,
+        "titleFontWeight": 100,
+        "titleColor": "#ffffff",
+        "titleStrokeColor": "#000000",
+        "titleStrokeWidth": 0,
+        "titleShadowColor": "#000000",
+        "titleShadowOffsetX": 0,
+        "titleShadowOffsetY": 0,
+        "titleShadowBlur": 0,
+        "titleShadowEnabled": false,
+        "titleShadowLayers": [
+          {
+            "id": 1765435502861.9124,
+            "offsetX": -2,
+            "offsetY": -2,
+            "blur": 12,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          },
+          {
+            "id": 1765435502861.0488,
+            "offsetX": 2,
+            "offsetY": 2,
+            "blur": 16,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          },
+          {
+            "id": 1765435502861.4207,
+            "offsetX": 0,
+            "offsetY": 0,
+            "blur": 14,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          }
+        ],
+        "titlePosition": {
+          "x": 39.814814814814795,
+          "y": 69.40972222222223
+        },
+        "titleRotation": 0,
+        "titleDirection": "horizontal",
+        "titleCharSpacing": 12,
+        "titleLineSpacing": 118,
+        "titleMaxCharsPerLine": 10,
+        "titleBackgroundEnabled": false,
+        "titleBackgroundColor": "#000000",
+        "titleBackgroundOpacity": 70,
+        "titleBackgroundShape": "rectangle",
+        "titleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "titleBackgroundPosition": {
+          "x": 50,
+          "y": 30
+        },
+        "titleBackgroundPoints": [],
+        "titleBackgroundRadius": 10,
+        "titleBackgroundRotation": 0,
+        "subtitleText": "投资稳的原因",
+        "subtitleFontFamily": "庞门正道标题体免费版",
+        "subtitleFontSize": 117,
+        "subtitleFontWeight": 500,
+        "subtitleColor": "#eaf273",
+        "subtitleStrokeColor": "#000000",
+        "subtitleStrokeWidth": 0,
+        "subtitleShadowColor": "#000000",
+        "subtitleShadowOffsetX": 0,
+        "subtitleShadowOffsetY": 0,
+        "subtitleShadowBlur": 0,
+        "subtitleShadowEnabled": false,
+        "subtitleShadowLayers": [
+          {
+            "id": 1765435591571.2886,
+            "offsetX": -2,
+            "offsetY": -2,
+            "blur": 2,
+            "color": "#FFFFFF",
+            "opacity": 60,
+            "enabled": true
+          },
+          {
+            "id": 1765435591571.856,
+            "offsetX": 2,
+            "offsetY": 2,
+            "blur": 0,
+            "color": "#000000",
+            "opacity": 65,
+            "enabled": true
+          },
+          {
+            "id": 1765435591571.3809,
+            "offsetX": 0,
+            "offsetY": 0,
+            "blur": 4,
+            "color": "#000000",
+            "opacity": 50,
+            "enabled": true
+          }
+        ],
+        "subtitlePosition": {
+          "x": 58.796296296296305,
+          "y": 77.84722222222221
+        },
+        "subtitleRotation": 0,
+        "subtitleDirection": "horizontal",
+        "subtitleCharSpacing": 12,
+        "subtitleLineSpacing": 72,
+        "subtitleMaxCharsPerLine": 15,
+        "subtitleBackgroundEnabled": false,
+        "subtitleBackgroundColor": "#000000",
+        "subtitleBackgroundOpacity": 70,
+        "subtitleBackgroundShape": "rectangle",
+        "subtitleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "subtitleBackgroundPosition": {
+          "x": 50,
+          "y": 60
+        },
+        "subtitleBackgroundPoints": [],
+        "subtitleBackgroundRadius": 10,
+        "subtitleBackgroundRotation": 0,
+        "maskEnabled": false,
+        "maskImagePath": null,
+        "maskSize": 100,
+        "maskPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "maskColor": null,
+        "maskOpacity": 100,
+        "maskShape": "rectangle"
+      }
+    },
+    {
+      "id": "1xwrrcvf7a5-mkdite6i",
+      "name": "青蓝虚描",
+      "description": "系统模板 - 青蓝虚描",
+      "is_system": 1,
+      "config": {
+        "backgroundEnabled": false,
+        "backgroundImagePath": null,
+        "backgroundBlurEnabled": true,
+        "backgroundBlurIntensity": 100,
+        "backgroundSize": 100,
+        "backgroundPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "personImagePath": null,
+        "personSize": 56.73611111111111,
+        "personPosition": {
+          "x": 35.87962962962963,
+          "y": 71.52777777777777
+        },
+        "personRotation": 0,
+        "personBorderEnabled": true,
+        "personBorderStyle": "dashed",
+        "personBorderColor": "#149fc2",
+        "personBorderWidth": 14,
+        "personBorderDashLength": null,
+        "personBorderGapLength": null,
+        "autoSplitText": true,
+        "titleMaxLength": 4,
+        "subtitleMaxLength": 11,
+        "titleText": "托德揭秘",
+        "titleFontFamily": "泼墨体",
+        "titleFontSize": 115,
+        "titleFontWeight": 350,
+        "titleColor": "#149fc2",
+        "titleStrokeColor": "#000000",
+        "titleStrokeWidth": 7,
+        "titleShadowColor": "#000000",
+        "titleShadowOffsetX": 0,
+        "titleShadowOffsetY": 0,
+        "titleShadowBlur": 0,
+        "titleShadowEnabled": false,
+        "titleShadowLayers": [
+          {
+            "id": 1765435502861.9124,
+            "offsetX": -2,
+            "offsetY": -2,
+            "blur": 12,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          },
+          {
+            "id": 1765435502861.0488,
+            "offsetX": 2,
+            "offsetY": 2,
+            "blur": 16,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          },
+          {
+            "id": 1765435502861.4207,
+            "offsetX": 0,
+            "offsetY": 0,
+            "blur": 14,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          }
+        ],
+        "titlePosition": {
+          "x": 90.9722222222222,
+          "y": 34.16666666666667
+        },
+        "titleRotation": 0,
+        "titleDirection": "vertical",
+        "titleCharSpacing": 50,
+        "titleLineSpacing": 118,
+        "titleMaxCharsPerLine": 10,
+        "titleBackgroundEnabled": false,
+        "titleBackgroundColor": "#000000",
+        "titleBackgroundOpacity": 70,
+        "titleBackgroundShape": "rectangle",
+        "titleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "titleBackgroundPosition": {
+          "x": 50,
+          "y": 30
+        },
+        "titleBackgroundPoints": [],
+        "titleBackgroundRadius": 10,
+        "titleBackgroundRotation": 0,
+        "subtitleText": "芒格投资稳的原因",
+        "subtitleFontFamily": "杨任东竹石体",
+        "subtitleFontSize": 87,
+        "subtitleFontWeight": 500,
+        "subtitleColor": "#149fc2",
+        "subtitleStrokeColor": "#000000",
+        "subtitleStrokeWidth": 0,
+        "subtitleShadowColor": "#000000",
+        "subtitleShadowOffsetX": 0,
+        "subtitleShadowOffsetY": 0,
+        "subtitleShadowBlur": 0,
+        "subtitleShadowEnabled": false,
+        "subtitleShadowLayers": [
+          {
+            "id": 1768540523070.3923,
+            "offsetX": 0,
+            "offsetY": 0,
+            "blur": 2,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          },
+          {
+            "id": 1768540523070.0796,
+            "offsetX": 0,
+            "offsetY": 0,
+            "blur": 2,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          }
+        ],
+        "subtitlePosition": {
+          "x": 76.85185185185186,
+          "y": 58.40277777777778
+        },
+        "subtitleRotation": 0,
+        "subtitleDirection": "vertical",
+        "subtitleCharSpacing": 12,
+        "subtitleLineSpacing": 72,
+        "subtitleMaxCharsPerLine": 15,
+        "subtitleBackgroundEnabled": false,
+        "subtitleBackgroundColor": "#000000",
+        "subtitleBackgroundOpacity": 70,
+        "subtitleBackgroundShape": "rectangle",
+        "subtitleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "subtitleBackgroundPosition": {
+          "x": 50,
+          "y": 60
+        },
+        "subtitleBackgroundPoints": [],
+        "subtitleBackgroundRadius": 10,
+        "subtitleBackgroundRotation": 0,
+        "maskEnabled": false,
+        "maskImagePath": null,
+        "maskSize": 100,
+        "maskPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "maskColor": null,
+        "maskOpacity": 100,
+        "maskShape": "rectangle"
+      }
+    },
+    {
+      "id": "43t1uykj8zg-mkdite6i",
+      "name": "粉红虚白",
+      "description": "系统模板 - 粉红虚白",
+      "is_system": 1,
+      "config": {
+        "backgroundEnabled": false,
+        "backgroundImagePath": null,
+        "backgroundBlurEnabled": true,
+        "backgroundBlurIntensity": 50,
+        "backgroundSize": 100,
+        "backgroundPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "personImagePath": null,
+        "personSize": 81.7361111111111,
+        "personPosition": {
+          "x": 49.768518518518526,
+          "y": 60.41666666666666
+        },
+        "personRotation": 0,
+        "personBorderEnabled": true,
+        "personBorderStyle": "dashed",
+        "personBorderColor": "#ffffff",
+        "personBorderWidth": 8,
+        "personBorderDashLength": null,
+        "personBorderGapLength": null,
+        "autoSplitText": true,
+        "titleMaxLength": 4,
+        "subtitleMaxLength": 11,
+        "titleText": "长期持有",
+        "titleFontFamily": "庞门正道标题体免费版",
+        "titleFontSize": 165,
+        "titleFontWeight": 100,
+        "titleColor": "#e8c4df",
+        "titleStrokeColor": "#e147c0",
+        "titleStrokeWidth": 6,
+        "titleShadowColor": "#000000",
+        "titleShadowOffsetX": 0,
+        "titleShadowOffsetY": 0,
+        "titleShadowBlur": 0,
+        "titleShadowEnabled": false,
+        "titleShadowLayers": [],
+        "titlePosition": {
+          "x": 36.80555555555553,
+          "y": 11.944444444444452
+        },
+        "titleRotation": 0,
+        "titleDirection": "horizontal",
+        "titleCharSpacing": 11,
+        "titleLineSpacing": 118,
+        "titleMaxCharsPerLine": 10,
+        "titleBackgroundEnabled": false,
+        "titleBackgroundColor": "#000000",
+        "titleBackgroundOpacity": 70,
+        "titleBackgroundShape": "rectangle",
+        "titleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "titleBackgroundPosition": {
+          "x": 50,
+          "y": 30
+        },
+        "titleBackgroundPoints": [],
+        "titleBackgroundRadius": 10,
+        "titleBackgroundRotation": 0,
+        "subtitleText": "才是真省心又赚钱",
+        "subtitleFontFamily": "方正粗黑宋简体",
+        "subtitleFontSize": 117,
+        "subtitleFontWeight": 500,
+        "subtitleColor": "#FFFFFF",
+        "subtitleStrokeColor": "#ef62e3",
+        "subtitleStrokeWidth": 5,
+        "subtitleShadowColor": "#000000",
+        "subtitleShadowOffsetX": 0,
+        "subtitleShadowOffsetY": 0,
+        "subtitleShadowBlur": 0,
+        "subtitleShadowEnabled": false,
+        "subtitleShadowLayers": [
+          {
+            "id": 1765435591571.2886,
+            "offsetX": -2,
+            "offsetY": -2,
+            "blur": 2,
+            "color": "#FFFFFF",
+            "opacity": 60,
+            "enabled": true
+          },
+          {
+            "id": 1765435591571.856,
+            "offsetX": 2,
+            "offsetY": 2,
+            "blur": 0,
+            "color": "#000000",
+            "opacity": 65,
+            "enabled": true
+          },
+          {
+            "id": 1765435591571.3809,
+            "offsetX": 0,
+            "offsetY": 0,
+            "blur": 4,
+            "color": "#000000",
+            "opacity": 50,
+            "enabled": true
+          }
+        ],
+        "subtitlePosition": {
+          "x": 51.3888888888889,
+          "y": 23.333333333333304
+        },
+        "subtitleRotation": 0,
+        "subtitleDirection": "horizontal",
+        "subtitleCharSpacing": 12,
+        "subtitleLineSpacing": 72,
+        "subtitleMaxCharsPerLine": 15,
+        "subtitleBackgroundEnabled": false,
+        "subtitleBackgroundColor": "#000000",
+        "subtitleBackgroundOpacity": 70,
+        "subtitleBackgroundShape": "rectangle",
+        "subtitleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "subtitleBackgroundPosition": {
+          "x": 50,
+          "y": 60
+        },
+        "subtitleBackgroundPoints": [],
+        "subtitleBackgroundRadius": 10,
+        "subtitleBackgroundRotation": 0,
+        "maskEnabled": false,
+        "maskImagePath": null,
+        "maskSize": 100,
+        "maskPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "maskColor": null,
+        "maskOpacity": 100,
+        "maskShape": "rectangle"
+      }
+    },
+    {
+      "id": "sb8mm7l4bjf-mkdite6i",
+      "name": "红黄虚描",
+      "description": "系统模板 - 红黄虚描",
+      "is_system": 1,
+      "config": {
+        "backgroundEnabled": false,
+        "backgroundImagePath": null,
+        "backgroundBlurEnabled": true,
+        "backgroundBlurIntensity": 60,
+        "backgroundSize": 100,
+        "backgroundPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "personImagePath": null,
+        "personSize": 65.06944444444444,
+        "personPosition": {
+          "x": 62.73148148148148,
+          "y": 67.0138888888889
+        },
+        "personRotation": 0,
+        "personBorderEnabled": true,
+        "personBorderStyle": "dashed",
+        "personBorderColor": "#FFFFFF",
+        "personBorderWidth": 12,
+        "personBorderDashLength": null,
+        "personBorderGapLength": null,
+        "autoSplitText": true,
+        "titleMaxLength": 4,
+        "subtitleMaxLength": 10,
+        "titleText": "托德揭秘",
+        "titleFontFamily": "泼墨体",
+        "titleFontSize": 165,
+        "titleFontWeight": 100,
+        "titleColor": "#d4ec74",
+        "titleStrokeColor": "#000000",
+        "titleStrokeWidth": 0,
+        "titleShadowColor": "#000000",
+        "titleShadowOffsetX": 0,
+        "titleShadowOffsetY": 0,
+        "titleShadowBlur": 0,
+        "titleShadowEnabled": false,
+        "titleShadowLayers": [
+          {
+            "id": 1765435502861.9124,
+            "offsetX": -2,
+            "offsetY": -2,
+            "blur": 12,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          },
+          {
+            "id": 1765435502861.0488,
+            "offsetX": 2,
+            "offsetY": 2,
+            "blur": 16,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          },
+          {
+            "id": 1765435502861.4207,
+            "offsetX": 0,
+            "offsetY": 0,
+            "blur": 14,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          }
+        ],
+        "titlePosition": {
+          "x": 55.09259259259257,
+          "y": 15.59027777777779
+        },
+        "titleRotation": 0,
+        "titleDirection": "horizontal",
+        "titleCharSpacing": 19,
+        "titleLineSpacing": 118,
+        "titleMaxCharsPerLine": 9,
+        "titleBackgroundEnabled": false,
+        "titleBackgroundColor": "#000000",
+        "titleBackgroundOpacity": 70,
+        "titleBackgroundShape": "rectangle",
+        "titleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "titleBackgroundPosition": {
+          "x": 50,
+          "y": 30
+        },
+        "titleBackgroundPoints": [],
+        "titleBackgroundRadius": 10,
+        "titleBackgroundRotation": 0,
+        "subtitleText": "芒格投资稳的原因",
+        "subtitleFontFamily": "MaokenAssortedSans-Lite",
+        "subtitleFontSize": 117,
+        "subtitleFontWeight": 500,
+        "subtitleColor": "#7e1010",
+        "subtitleStrokeColor": "#ffffff",
+        "subtitleStrokeWidth": 6,
+        "subtitleShadowColor": "#000000",
+        "subtitleShadowOffsetX": 0,
+        "subtitleShadowOffsetY": 0,
+        "subtitleShadowBlur": 0,
+        "subtitleShadowEnabled": false,
+        "subtitleShadowLayers": [
+          {
+            "id": 1765435591571.2886,
+            "offsetX": -2,
+            "offsetY": -2,
+            "blur": 2,
+            "color": "#FFFFFF",
+            "opacity": 60,
+            "enabled": true
+          },
+          {
+            "id": 1765435591571.856,
+            "offsetX": 2,
+            "offsetY": 2,
+            "blur": 0,
+            "color": "#000000",
+            "opacity": 65,
+            "enabled": true
+          },
+          {
+            "id": 1765435591571.3809,
+            "offsetX": 0,
+            "offsetY": 0,
+            "blur": 4,
+            "color": "#000000",
+            "opacity": 50,
+            "enabled": true
+          }
+        ],
+        "subtitlePosition": {
+          "x": 18.98148148148148,
+          "y": 64.47916666666667
+        },
+        "subtitleRotation": 0,
+        "subtitleDirection": "vertical",
+        "subtitleCharSpacing": 12,
+        "subtitleLineSpacing": 72,
+        "subtitleMaxCharsPerLine": 15,
+        "subtitleBackgroundEnabled": false,
+        "subtitleBackgroundColor": "#000000",
+        "subtitleBackgroundOpacity": 70,
+        "subtitleBackgroundShape": "rectangle",
+        "subtitleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "subtitleBackgroundPosition": {
+          "x": 50,
+          "y": 60
+        },
+        "subtitleBackgroundPoints": [],
+        "subtitleBackgroundRadius": 10,
+        "subtitleBackgroundRotation": 0,
+        "maskEnabled": false,
+        "maskImagePath": null,
+        "maskSize": 100,
+        "maskPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "maskColor": null,
+        "maskOpacity": 100,
+        "maskShape": "rectangle"
+      }
+    }
+  ],
+  "subtitleStyles": [
+    {
+      "id": "system-subtitle-01",
+      "name": "标准样式",
+      "description": "清晰易读的字幕样式，适合大多数视频",
+      "preview": "示例文字",
+      "is_system": 1,
+      "fontName": "Microsoft YaHei Bold",
+      "fontSize": 48,
+      "fontColor": "#FFFFFF",
+      "outlineColor": "#000000",
+      "outlineWidth": 3,
+      "shadowOffset": 2,
+      "shadowColor": "#000000",
+      "shadowBlur": 4,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0,
+      "position": "bottom",
+      "alignment": "center"
+    },
+    {
+      "id": "system-subtitle-11",
+      "name": "11",
+      "description": "自定义字幕样式 - 黑底白字，精致描边",
+      "preview": "示例文字",
+      "is_system": 1,
+      "fontName": "1.程荣光刻楷",
+      "fontSize": 48,
+      "fontColor": "#FFFFFF",
+      "outlineColor": "#000000",
+      "outlineWidth": 1,
+      "shadowOffset": 0,
+      "shadowColor": "#000000",
+      "shadowBlur": 4,
+      "backgroundColor": "#000000",
+      "backgroundOpacity": 0.3,
+      "position": "bottom",
+      "alignment": "center"
+    }
+  ]
+}

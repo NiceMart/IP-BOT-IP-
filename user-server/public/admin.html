@@ -1,0 +1,2536 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP Bot · 管理控制台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        header h1 {
+            font-size: 24px;
+            background: linear-gradient(90deg, #6ad6a7, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .admin-info {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-card .number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #6ad6a7;
+        }
+
+        .stat-card .label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* 表格通用 */
+        .table-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th, td {
+            padding: 12px 8px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            white-space: nowrap;
+        }
+
+        th {
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* 移动端卡片式列表 */
+        .user-cards, .cdkey-cards {
+            display: none;
+        }
+
+        .user-card-item, .cdkey-card-item {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .card-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+            font-size: 13px;
+        }
+
+        .card-row .card-label {
+            color: rgba(255, 255, 255, 0.5);
+            flex-shrink: 0;
+            width: 80px;
+        }
+
+        .card-row .card-value {
+            text-align: right;
+            flex: 1;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .card-actions .btn {
+            font-size: 11px;
+            padding: 4px 8px;
+        }
+
+        /* 分页 */
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .pagination button {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 6px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .pagination button:not(:disabled):hover {
+            background: rgba(102, 126, 234, 0.3);
+        }
+
+        .page-info {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
+        }
+
+        /* 搜索框 */
+        .search-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .search-bar button {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge-admin { background: #6ad6a7; }
+        .badge-user { background: #4a5568; }
+        .badge-active { background: #48bb78; }
+        .badge-inactive { background: #f56565; }
+        .badge-suspended { background: #f56565; }
+        .badge-expired { background: #ed8936; }
+        .badge-valid { background: #38b2ac; }
+
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-right: 5px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary { background: #6ad6a7; color: #fff; }
+        .btn-danger { background: #f56565; color: #fff; }
+        .btn-warning { background: #ed8936; color: #fff; }
+        .btn-success { background: #48bb78; color: #fff; }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #1a1a2e;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .modal-content h3 {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        select option {
+            background: #1a1a2e;
+            color: #fff;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-actions .btn {
+            flex: 1;
+        }
+
+        .refresh-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .refresh-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-box h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            background: linear-gradient(90deg, #6ad6a7, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-box .form-group { margin-bottom: 20px; }
+        .login-box .form-group input { padding: 14px; font-size: 16px; }
+        .login-box .btn-login { width: 100%; padding: 14px; font-size: 16px; margin-top: 10px; }
+
+        .login-error {
+            color: #f56565;
+            text-align: center;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .hidden { display: none !important; }
+
+        .tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            padding: 10px 24px;
+            border: none;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 15px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover { color: rgba(255, 255, 255, 0.8); }
+
+        .tab-btn.active {
+            color: #6ad6a7;
+            border-bottom-color: #6ad6a7;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .config-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .config-section h4 {
+            color: #6ad6a7;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .config-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .config-grid .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .btn-cloud-on { background: #48bb78; color: #fff; }
+        .btn-cloud-off { background: #f56565; color: #fff; }
+
+        /* ============ 移动端响应式 ============ */
+        @media (max-width: 768px) {
+            .container { padding: 12px; }
+
+            header {
+                padding: 14px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            header h1 { font-size: 20px; }
+
+            .header-actions {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .header-actions .btn,
+            .header-actions .refresh-btn {
+                font-size: 11px;
+                padding: 5px 10px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .stat-card { padding: 14px 10px; }
+            .stat-card .number { font-size: 24px; }
+            .stat-card .label { font-size: 12px; }
+
+            .card { padding: 14px; }
+
+            .tabs { gap: 0; }
+            .tab-btn { padding: 8px 16px; font-size: 13px; }
+
+            /* 移动端隐藏表格，显示卡片 */
+            .table-wrap { display: none; }
+            .user-cards, .cdkey-cards { display: block; }
+
+            .pagination button { padding: 6px 12px; font-size: 12px; }
+
+            .search-bar input { font-size: 16px; }
+
+            .config-grid { grid-template-columns: 1fr; }
+
+            .modal-content { padding: 20px; width: 95%; }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .stat-card { padding: 10px; }
+            .stat-card .number { font-size: 20px; }
+            .header-actions .btn { font-size: 10px; padding: 4px 8px; }
+        }
+    </style>
+    <link rel="stylesheet" href="./studio-admin.css">
+<link rel="icon" type="image/svg+xml" href="./logo.svg">
+<link rel="stylesheet" href="./apple-admin.css"/>
+</head>
+
+<body>
+<a class="skip-admin" href="#admin-main">跳转到主要内容</a>
+    <!-- 登录页面 -->
+    <div id="loginPage" class="login-container">
+        <div class="login-box">
+            <div class="admin-login-lockup"><img src="./logo.svg" alt="IP Bot 标志"/><strong>IP Bot</strong></div><div class="admin-eyebrow">管理控制台</div><h1>欢迎回到管理控制台</h1><p class="login-description">登录管理员账户，开始管理你的创作空间。</p>
+            <div id="loginError" class="login-error"></div>
+            <div class="form-group">
+                <label for="loginEmail">手机号</label>
+                <input type="text" id="loginEmail" required autocomplete="username" inputmode="tel" placeholder="请输入管理员手机号">
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">密码</label>
+                <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="请输入密码">
+            </div>
+            <button class="btn btn-primary btn-login" onclick="adminLogin()">登录控制台 <span>↗</span></button><div class="login-bottom-note">使用管理员账户安全登录</div>
+        </div>
+    </div>
+
+    <!-- 管理后台主页面 -->
+    <div id="adminPage" class="container hidden"><aside class="admin-sidebar" id="admin-sidebar" aria-label="后台主导航"><div class="admin-brand"><img class="admin-brand-logo" src="./logo.svg" alt="IP Bot 标志"/><div><strong>IP Bot</strong><small>管理控制台</small></div></div><div class="admin-nav-label">工作空间</div>        <div class="tabs" aria-label="后台导航">
+            <button class="tab-btn active" onclick="switchTab('users')"><span class="nav-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M16 3a4 4 0 0 1 0 8M22 21v-2a4 4 0 0 0-3-3.9M13 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0"/></svg></span> 用户管理</button>
+            <button class="tab-btn" onclick="switchTab('cdkeys')"><span class="nav-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4V8zM15 6v3m0 3v2m0 2v2"/></svg></span> 卡密管理</button>
+            <button class="tab-btn" onclick="switchTab('modelMgmt')"><span class="nav-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v6H4zM4 14h16v6H4zM8 7h1M8 17h1"/></svg></span> 模型管理</button>
+            <button class="tab-btn" onclick="switchTab('sysSettings')"><span class="nav-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM12 2v3m0 14v3M2 12h3m14 0h3M5 5l2 2m10 10 2 2M5 19l2-2M17 7l2-2"/></svg></span> 系统设置</button>
+        </div><div class="admin-sidebar-footer"><span class="sidebar-status-dot"></span> 支持每一次创作 <small>外观跟随系统</small></div></aside>
+        <header><button type="button" class="admin-sidebar-toggle" aria-label="隐藏侧栏" aria-expanded="true" aria-controls="admin-sidebar" title="显示或隐藏侧栏">☷</button><div class="admin-breadcrumb">管理控制台 <span>/</span> <b id="activeSectionLabel">用户管理</b></div>
+            <div class="header-actions">
+                <span class="admin-info" id="adminInfo"></span>
+                <button class="btn btn-success" onclick="showCreateAdmin()">+ 子管理员</button>
+                <button class="btn btn-primary" onclick="showAdminLogs()">操作日志</button>
+                <button class="btn btn-warning" onclick="showGenerationStats()">生成统计</button>
+                <a class="btn" style="background:#6c5ce7;color:#fff;text-decoration:none" id="apiCallRecordLink" href="#" target="_blank">API 记录</a>
+                <button class="refresh-btn" onclick="loadAll()">刷新数据</button>
+                <button class="btn btn-danger" onclick="adminLogout()">退出</button>
+            </div>
+        </header>
+
+
+
+        <main id="admin-main" tabindex="-1"><div class="admin-page-intro"><div><div class="admin-eyebrow">STUDIO OVERVIEW</div><h2 id="sectionTitle">用户管理</h2><p id="sectionDescription">掌握用户状态，管理订阅与设备，让每一位创作者顺畅开始。</p></div><div class="admin-date" id="adminDate"></div></div>
+        <div id="tab-users" class="tab-content active">
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card">
+                    <div class="number" id="totalUsers">-</div>
+                    <div class="label">总用户数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="activeUsers">-</div>
+                    <div class="label">活跃用户</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="validSubs">-</div>
+                    <div class="label">有效订阅</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="expiredSubs">-</div>
+                    <div class="label">已过期</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="totalDevices">-</div>
+                    <div class="label">绑定设备</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="cdkeyUnused">-</div>
+                    <div class="label">可用卡密</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="cdkeyUsed">-</div>
+                    <div class="label">已用卡密</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">用户列表</div>
+                <div class="search-bar">
+                    <input type="text" id="userSearchInput" placeholder="搜索用户名/手机号..." onkeydown="if(event.key==='Enter'){event.preventDefault();searchUsers()}">
+                    <button class="btn btn-primary" onclick="searchUsers()">搜索</button>
+                    <button class="btn" style="background:rgba(255,255,255,0.1);color:#fff" onclick="document.getElementById('userSearchInput').value='';searchUsers()">重置</button>
+                    <button class="btn btn-warning" onclick="exportUsers()">导出用户</button>
+                </div>
+                <!-- 桌面端表格 -->
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>用户名</th>
+                                <th>手机号</th>
+                                <th>角色</th>
+                                <th>状态</th>
+                                <th>时长剩余</th>
+                                <th>配额剩余</th>
+                                <th>到期时间</th>
+                                <th>云端数字人</th>
+                                <th>最后登录</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTable">
+                            <tr><td colspan="11" style="text-align:center">加载中...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- 移动端卡片 -->
+                <div class="user-cards" id="userCards">
+                    <p style="text-align:center;color:rgba(255,255,255,0.5)">加载中...</p>
+                </div>
+                <div class="pagination" id="usersPagination">
+                    <button onclick="changeUsersPage(-1)" id="usersPrevBtn">上一页</button>
+                    <div class="page-info" id="usersPageNumbers"></div>
+                    <button onclick="changeUsersPage(1)" id="usersNextBtn">下一页</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-cdkeys" class="tab-content">
+            <div class="card">
+                <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+                    <span>卡密管理</span>
+                    <div style="display:flex;gap:8px">
+                        <button class="btn btn-success" onclick="showCreateCdkey()">生成卡密</button>
+                        <button class="btn btn-warning" onclick="showExportCdkeysModal()">导出卡密</button>
+                    </div>
+                </div>
+                <div style="margin-bottom:12px;display:flex;gap:8px;align-items:center">
+                    <select id="cdkeyStatusFilter" onchange="cdkeysCurrentPage=1;loadCdkeys()" style="padding:6px 12px;border-radius:6px;background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2)">
+                        <option value="">全部</option>
+                        <option value="unused">未使用</option>
+                        <option value="used">已使用</option>
+                    </select>
+                </div>
+                <!-- 桌面端表格 -->
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>卡密</th>
+                                <th>类型</th>
+                                <th>天数</th>
+                                <th>配额</th>
+                                <th>设备限制</th>
+                                <th>状态</th>
+                                <th>使用者</th>
+                                <th>创建时间</th>
+                                <th>使用时间</th>
+                                <th>备注</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cdkeysTable">
+                            <tr><td colspan="12" style="text-align:center">加载中...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- 移动端卡片 -->
+                <div class="cdkey-cards" id="cdkeyCards">
+                    <p style="text-align:center;color:rgba(255,255,255,0.5)">加载中...</p>
+                </div>
+                <div class="pagination" id="cdkeysPagination">
+                    <button onclick="changeCdkeysPage(-1)" id="cdkeysPrevBtn">上一页</button>
+                    <div class="page-info" id="cdkeysPageNumbers"></div>
+                    <button onclick="changeCdkeysPage(1)" id="cdkeysNextBtn">下一页</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 模型管理 Tab -->
+        <div id="tab-modelMgmt" class="tab-content">
+            <div class="card">
+                <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+                    <span>模型管理</span>
+                    <div style="display:flex;gap:8px">
+                        <button class="btn" style="background:#6ad6a7" onclick="syncBuiltInModels()">同步内置模型</button>
+                        <button class="btn btn-success" onclick="showAddModelProvider()">添加供应商</button>
+                    </div>
+                </div>
+
+                <!-- 💬 文本模型 -->
+                <div class="config-section" style="border-left:3px solid #6ad6a7">
+                    <h4 style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="toggleSection('textSection')">
+                        <span id="textSection_arrow">▼</span> 💬 文本模型
+                        <span style="font-size:12px;color:rgba(255,255,255,0.4);font-weight:normal">（AI对话、文案生成）</span>
+                    </h4>
+                    <div id="textSection">
+                        <div style="background:rgba(59,130,246,0.08);border-radius:8px;padding:14px;margin-bottom:12px;border:1px solid rgba(59,130,246,0.2)">
+                            <div style="font-size:13px;color:#60a5fa;margin-bottom:8px;font-weight:600">🌋 火山引擎（豆包）</div>
+                            <div class="config-grid">
+                                <div class="form-group"><label>API Key</label><input type="text" id="cfg_volcengine_api_key" placeholder="输入火山引擎API Key"></div>
+                                <div class="form-group"><label>默认模型</label><input type="text" id="cfg_volcengine_model" placeholder="doubao-seed-2-0-lite-260215"></div>
+                            </div>
+                        </div>
+                        <div id="textModelProviders"></div>
+                    </div>
+                </div>
+
+                <!-- 🎵 语音模型 -->
+                <div class="config-section" style="border-left:3px solid #9bcab4">
+                    <h4 style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="toggleSection('voiceSection')">
+                        <span id="voiceSection_arrow">▼</span> 🎵 语音模型
+                        <span style="font-size:12px;color:rgba(255,255,255,0.4);font-weight:normal">（语音识别、语音合成）</span>
+                    </h4>
+                    <div id="voiceSection">
+                        <div style="background:rgba(159,122,234,0.08);border-radius:8px;padding:14px;margin-bottom:12px;border:1px solid rgba(159,122,234,0.2)">
+                            <div style="font-size:13px;color:#a78bfa;margin-bottom:8px;font-weight:600">☁️ 阿里云百炼 DashScope</div>
+                            <div class="config-grid">
+                                <div class="form-group"><label>API Key</label><input type="text" id="cfg_aliyun_bailian_api_key" placeholder="sk-xxx"></div>
+                                <div class="form-group"><label>API Base URL</label><input type="text" id="cfg_aliyun_bailian_base_url" placeholder="https://dashscope.aliyuncs.com/compatible-mode/v1"></div>
+                            </div>
+                        </div>
+                        <div style="background:rgba(159,122,234,0.05);border-radius:8px;padding:14px;margin-bottom:12px;border:1px solid rgba(159,122,234,0.15)">
+                            <div style="font-size:13px;color:#a78bfa;margin-bottom:8px;font-weight:600">📦 阿里云 OSS（语音识别加速）</div>
+                            <div class="config-grid">
+                                <div class="form-group"><label>AccessKey ID</label><input type="text" id="cfg_aliyun_oss_access_key_id" placeholder="LTAI5xxx"></div>
+                                <div class="form-group"><label>AccessKey Secret</label><input type="password" id="cfg_aliyun_oss_access_key_secret" placeholder="输入AccessKey Secret"></div>
+                                <div class="form-group"><label>Bucket</label><input type="text" id="cfg_aliyun_oss_bucket" placeholder="your-bucket"></div>
+                                <div class="form-group"><label>Region</label><input type="text" id="cfg_aliyun_oss_region" placeholder="oss-cn-beijing"></div>
+                            </div>
+                        </div>
+                        <!-- RunningHub 语音模型 -->
+                        <div style="background:rgba(6,182,212,0.06);border-radius:8px;padding:14px;margin-bottom:12px;border:1px solid rgba(6,182,212,0.2)">
+                            <div style="font-size:13px;color:#22d3ee;margin-bottom:8px;font-weight:600">🎙️ RunningHub 语音模型</div>
+                            <div id="rhTtsNodesContainer"></div>
+                        </div>
+                        <div id="voiceModelProviders"></div>
+                    </div>
+                </div>
+
+                <!-- 🧑 数字人模型 -->
+                <div class="config-section" style="border-left:3px solid #f59e0b">
+                    <h4 style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="toggleSection('digitalSection')">
+                        <span id="digitalSection_arrow">▼</span> 🧑 数字人模型
+                        <span style="font-size:12px;color:rgba(255,255,255,0.4);font-weight:normal">（客户端重启后自动同步）</span>
+                    </h4>
+                    <div id="digitalSection">
+                        <!-- RunningHub 公共配置 -->
+                        <div style="background:rgba(245,158,11,0.08);border-radius:8px;padding:14px;margin-bottom:12px;border:1px solid rgba(245,158,11,0.2)">
+                            <div style="font-size:13px;color:#fbbf24;margin-bottom:8px;font-weight:600">🎬 RunningHub 公共配置</div>
+                            <div class="form-group full-width"><label>API Key</label><input type="text" id="cfg_runninghub_api_key" placeholder="输入RunningHub API Key"></div>
+                        </div>
+
+                        <!-- 网络节点 - JS动态生成 -->
+                        <div style="font-size:13px;color:#fbbf24;margin-bottom:8px;font-weight:600">📡 网络节点配置</div>
+                        <div id="rhDigitalNodesContainer"></div>
+
+                        <div id="digitalModelProviders"></div>
+                        <textarea id="runninghub_doc_import" style="display:none;"></textarea>
+                        <div id="runninghub_import_result" style="display:none;"></div>
+                    </div>
+                </div>
+
+                <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
+                    <button class="btn btn-primary" onclick="saveSystemConfig()" style="padding:10px 30px;font-size:14px">保存 API 配置</button>
+                    <button class="btn btn-success" onclick="saveModelProviders()" style="padding:10px 30px;font-size:14px">保存推送配置</button>
+                    <button class="btn" onclick="loadSystemConfig();loadModelProviders()" style="padding:10px 20px;font-size:14px">重新加载</button>
+                </div>
+                <div id="configSaveMsg" style="margin-top:10px;display:none"></div>
+                <div id="modelPushSaveMsg" style="margin-top:10px;display:none"></div>
+            </div>
+        </div>
+
+        <!-- 系统设置 Tab -->
+        <div id="tab-sysSettings" class="tab-content">
+            <div class="card">
+                <div class="card-title">系统设置</div>
+                <p style="color:rgba(255,255,255,0.6);margin-bottom:20px;font-size:13px">软件全局配置，与模型无关的设置项。</p>
+
+                <div class="config-section">
+                    <h4>⏱️ 试用时长</h4>
+                    <p style="color:rgba(255,255,255,0.5);font-size:12px;margin-bottom:12px">新用户注册后的默认试用时长</p>
+                    <div class="config-grid">
+                        <div class="form-group full-width">
+                            <label>试用时长（小时）</label>
+                            <input type="number" id="cfg_trial_duration_hours" value="24" min="1" placeholder="24">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="config-section">
+                    <h4>🔄 软件更新</h4>
+                    <p style="color:rgba(255,255,255,0.5);font-size:12px;margin-bottom:12px">配置自动更新地址，客户端将从此地址检测并下载更新</p>
+                    <div class="config-grid">
+                        <div class="form-group full-width">
+                            <label>更新地址（update_url）</label>
+                            <input type="text" id="cfg_update_url" value="" placeholder="https://your-bucket.oss-cn-beijing.aliyuncs.com/updates/">
+                            <small style="color:rgba(255,255,255,0.4);font-size:11px;margin-top:5px;display:block">填写阿里云OSS或其他HTTP文件服务器地址，末尾需有 /</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top:20px;display:flex;gap:10px">
+                    <button class="btn btn-primary" onclick="saveSystemConfig()" style="padding:10px 30px;font-size:14px">保存设置</button>
+                    <button class="btn btn-success" onclick="loadSystemConfig()" style="padding:10px 20px;font-size:14px">重新加载</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+    <div class="modal" id="createAdminModal">
+        <div class="modal-content">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <h3 style="margin:0">👑 创建子管理员</h3>
+                <button onclick="closeModal('createAdminModal')" style="background:none;border:none;color:rgba(255,255,255,0.6);font-size:24px;cursor:pointer;padding:0 4px;line-height:1;">✕</button>
+            </div>
+            <div class="form-group">
+                <label>用户名</label>
+                <input type="text" id="newAdminUsername" placeholder="请输入用户名">
+            </div>
+            <div class="form-group">
+                <label>手机号</label>
+                <input type="text" id="newAdminEmail" placeholder="请输入手机号">
+            </div>
+            <div class="form-group">
+                <label>密码</label>
+                <input type="password" id="newAdminPassword" placeholder="至少6位">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-success" onclick="confirmCreateAdmin()">创建</button>
+                <button class="btn" onclick="closeModal('createAdminModal')">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 调额弹窗 -->
+    <div class="modal" id="adjustQuotaModal">
+        <div class="modal-content">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <h3 style="margin:0">⚙️ 调整时长与配额</h3>
+                <button onclick="closeModal('adjustQuotaModal')" style="background:none;border:none;color:rgba(255,255,255,0.6);font-size:24px;cursor:pointer;padding:0 4px;line-height:1;">✕</button>
+            </div>
+            <input type="hidden" id="adjustUserId">
+            <div class="form-group">
+                <label>用户</label>
+                <input type="text" id="adjustUsername" readonly>
+            </div>
+            <div class="form-group">
+                <label>时长变动（天，正数增加，负数扣减）</label>
+                <input type="number" id="adjustDays" value="0" placeholder="如 30 或 -10">
+                <span style="color:rgba(255,255,255,0.4);font-size:12px;margin-top:4px;display:block">0 表示不调整时长，30 = 增加30天，-10 = 扣减10天</span>
+            </div>
+            <div class="form-group">
+                <label>配额变动（正数增加，负数扣减）</label>
+                <input type="number" id="adjustQuota" value="0" placeholder="如 50 或 -10">
+                <span style="color:rgba(255,255,255,0.4);font-size:12px;margin-top:4px;display:block">0 表示不调整配额</span>
+            </div>
+            <div class="form-group">
+                <label>原因/备注</label>
+                <input type="text" id="adjustReason" placeholder="可选">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="confirmAdjustQuota()">确认调整</button>
+                <button class="btn" onclick="closeModal('adjustQuotaModal')">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 重置密码弹窗 -->
+    <div class="modal" id="resetPasswordModal">
+        <div class="modal-content">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <h3 style="margin:0">🔑 重置密码</h3>
+                <button onclick="closeModal('resetPasswordModal')" style="background:none;border:none;color:rgba(255,255,255,0.6);font-size:24px;cursor:pointer;padding:0 4px;line-height:1;">✕</button>
+            </div>
+            <input type="hidden" id="resetPasswordUserId">
+            <div class="form-group">
+                <label>用户</label>
+                <input type="text" id="resetPasswordUsername" readonly>
+            </div>
+            <div class="form-group">
+                <label>新密码</label>
+                <input type="password" id="newPassword" placeholder="至少6位">
+            </div>
+            <div class="form-group">
+                <label>确认密码</label>
+                <input type="password" id="confirmPassword" placeholder="再次输入">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="confirmResetPassword()">确认重置</button>
+                <button class="btn" onclick="closeModal('resetPasswordModal')">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 修改用户名弹窗 -->
+    <div class="modal" id="renameUserModal">
+        <div class="modal-content">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <h3 style="margin:0">✏️ 修改用户名</h3>
+                <button onclick="closeModal('renameUserModal')" style="background:none;border:none;color:rgba(255,255,255,0.6);font-size:24px;cursor:pointer;padding:0 4px;line-height:1;">✕</button>
+            </div>
+            <input type="hidden" id="renameUserId">
+            <div class="form-group">
+                <label>当前用户名</label>
+                <input type="text" id="renameOldUsername" readonly>
+            </div>
+            <div class="form-group">
+                <label>新用户名</label>
+                <input type="text" id="renameNewUsername" placeholder="2-30位字符" maxlength="30">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="confirmRenameUser()">确认修改</button>
+                <button class="btn" onclick="closeModal('renameUserModal')">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 用户日志弹窗 -->
+    <div class="modal" id="userLogsModal">
+        <div class="modal-content" style="max-width:800px;max-height:80vh;overflow-y:auto">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <h3 style="margin:0">📋 用户日志 - <span id="userLogsUsername"></span></h3>
+                <button onclick="closeModal('userLogsModal')" style="background:none;border:none;color:rgba(255,255,255,0.6);font-size:24px;cursor:pointer;padding:0 4px;line-height:1;">✕</button>
+            </div>
+            <div id="userLogsContent" style="margin-top:15px">
+                <p style="text-align:center">加载中...</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal('userLogsModal')">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 管理员操作日志弹窗 -->
+    <div class="modal" id="adminLogsModal">
+        <div class="modal-content" style="max-width:900px;max-height:80vh;overflow-y:auto">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <h3 style="margin:0">📝 管理员操作日志</h3>
+                <button onclick="closeModal('adminLogsModal')" style="background:none;border:none;color:rgba(255,255,255,0.6);font-size:24px;cursor:pointer;padding:0 4px;line-height:1;">✕</button>
+            </div>
+            <div id="adminLogsContent" style="margin-top:15px">
+                <p style="text-align:center">加载中...</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal('adminLogsModal')">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 生成统计弹窗 -->
+    <div class="modal" id="generationStatsModal">
+        <div class="modal-content" style="max-width:950px;max-height:85vh;overflow-y:auto">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <h3 style="margin:0">📊 生成记录统计</h3>
+                <button onclick="closeModal('generationStatsModal')" style="background:none;border:none;color:rgba(255,255,255,0.6);font-size:24px;cursor:pointer;padding:0 4px;line-height:1;">✕</button>
+            </div>
+            <div id="generationStatsContent" style="margin-top:15px">
+                <p style="text-align:center">加载中...</p>
+            </div>
+            <div id="generationLogsContent" style="margin-top:20px"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = ''
+        let adminToken = localStorage.getItem('adminToken')
+        let adminUser = JSON.parse(localStorage.getItem('adminUser') || 'null')
+        let usersCurrentPage = 1
+        let usersSearchQuery = ''
+        let cdkeysCurrentPage = 1
+
+        // 页面加载时检查登录状态
+        document.addEventListener('DOMContentLoaded', () => {
+            if (adminToken && adminUser) {
+                verifyAdminToken()
+            } else {
+                showLoginPage()
+            }
+            document.getElementById('loginPassword').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') adminLogin()
+            })
+            document.getElementById('loginEmail').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') document.getElementById('loginPassword').focus()
+            })
+        })
+
+        function showLoginPage() {
+            document.getElementById('loginPage').classList.remove('hidden')
+            document.getElementById('adminPage').classList.add('hidden')
+        }
+
+        function showAdminPage() {
+            document.getElementById('loginPage').classList.add('hidden')
+            document.getElementById('adminPage').classList.remove('hidden')
+            document.getElementById('adminInfo').textContent = `管理员: ${adminUser.username}`
+            loadAll()
+        }
+
+        async function adminLogin() {
+            const email = document.getElementById('loginEmail').value.trim()
+            const password = document.getElementById('loginPassword').value
+            const errorDiv = document.getElementById('loginError')
+            if (!email || !password) { errorDiv.textContent = '请输入手机号和密码'; errorDiv.style.display = 'block'; return }
+            try {
+                const res = await fetch(`${API_BASE}/api/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) })
+                const data = await res.json()
+                if (data.success) {
+                    if (data.user.role !== 'admin') { errorDiv.textContent = '您不是管理员，无权访问后台'; errorDiv.style.display = 'block'; return }
+                    adminToken = data.token; adminUser = data.user
+                    localStorage.setItem('adminToken', adminToken); localStorage.setItem('adminUser', JSON.stringify(adminUser))
+                    errorDiv.style.display = 'none'; showAdminPage()
+                } else { errorDiv.textContent = data.message || '登录失败'; errorDiv.style.display = 'block' }
+            } catch (err) { errorDiv.textContent = '网络错误，请检查连接'; errorDiv.style.display = 'block' }
+        }
+
+        async function verifyAdminToken() {
+            try {
+                const res = await fetch(`${API_BASE}/api/verify`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token: adminToken }) })
+                const data = await res.json()
+                if (data.valid && data.user.role === 'admin') { adminUser = data.user; localStorage.setItem('adminUser', JSON.stringify(adminUser)); showAdminPage() }
+                else { adminLogout() }
+            } catch (err) { adminLogout() }
+        }
+
+        function adminLogout() {
+            adminToken = null; adminUser = null
+            localStorage.removeItem('adminToken'); localStorage.removeItem('adminUser')
+            showLoginPage()
+        }
+
+        async function authFetch(url, options = {}) {
+            if (!adminToken) { adminLogout(); throw new Error('未登录') }
+            const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${adminToken}`, ...options.headers }
+            const res = await fetch(url, { ...options, headers })
+            if (!res.ok) {
+                const text = await res.text()
+                let errorMsg = `HTTP ${res.status}`
+                try {
+                    const errorData = JSON.parse(text)
+                    errorMsg = errorData.message || errorData.error || errorMsg
+                } catch {}
+                if (res.status === 401 || res.status === 403) { adminLogout() }
+                throw new Error(errorMsg)
+            }
+            const data = await res.json()
+            if (res.status === 401 || res.status === 403) { adminLogout(); throw new Error('认证失败') }
+            return data
+        }
+
+        async function loadStats() {
+            try {
+                const data = await authFetch(`${API_BASE}/api/admin/stats`)
+                if (data.success) {
+                    document.getElementById('totalUsers').textContent = data.stats.total_users || 0
+                    document.getElementById('activeUsers').textContent = data.stats.active_users || 0
+                    document.getElementById('validSubs').textContent = data.stats.valid_subscriptions || 0
+                    document.getElementById('expiredSubs').textContent = data.stats.expired_subscriptions || 0
+                    document.getElementById('totalDevices').textContent = data.stats.total_devices || 0
+                }
+            } catch (err) { console.error('加载统计失败:', err) }
+        }
+
+        // ==================== 用户列表 ====================
+        function searchUsers() {
+            usersSearchQuery = document.getElementById('userSearchInput').value.trim()
+            usersCurrentPage = 1
+            loadUsers()
+        }
+
+        function getUserRowHtml(u) {
+            const now = new Date()
+            const expiresAt = u.expires_at ? new Date(u.expires_at) : null
+            const isExpired = expiresAt ? now > expiresAt : true
+            const remainingMs = expiresAt ? expiresAt - now : 0
+            const remainingHours = expiresAt ? Math.ceil(remainingMs / (1000 * 60 * 60)) : 0
+            const remainingDays = Math.floor(remainingHours / 24)
+            const remainingDisplay = remainingDays > 0 ? `${remainingDays}天` : `${remainingHours}小时`
+            const quotaRemaining = (u.video_quota || 0) - (u.video_used || 0)
+            const timeColor = isExpired || remainingDays < 7 ? '#f56565' : '#48bb78'
+            const quotaColor = quotaRemaining < 50 ? '#f56565' : '#48bb78'
+            return { u, expiresAt, isExpired, remainingDisplay, remainingDays, quotaRemaining, timeColor, quotaColor }
+        }
+
+        async function loadUsers() {
+            try {
+                const data = await authFetch(`${API_BASE}/api/admin/users?page=${usersCurrentPage}&limit=20&search=${encodeURIComponent(usersSearchQuery)}`)
+                if (data.success) {
+                    const tbody = document.getElementById('usersTable')
+                    const cardsEl = document.getElementById('userCards')
+                    if (data.users.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:40px">'+(usersSearchQuery?'没有匹配的用户，请修改关键词或重置搜索。':'还没有用户。创作者注册后将在这里显示。')+'</td></tr>'
+                        cardsEl.innerHTML = '<p style="text-align:center;color:rgba(255,255,255,0.5)">暂无用户</p>'
+                    } else {
+                        // 桌面端表格
+                        tbody.innerHTML = data.users.map(u => {
+                            const { isExpired, remainingDisplay, quotaRemaining, expiresAt, timeColor, quotaColor } = getUserRowHtml(u)
+                            return `<tr>
+                                <td>${u.id}</td>
+                                <td>${u.username}</td>
+                                <td>${u.email}</td>
+                                <td><span class="badge badge-${u.role}">${u.role}</span></td>
+                                <td><span class="badge badge-${u.status}">${u.status}</span></td>
+                                <td><span class="badge" style="background:${timeColor}">${isExpired ? '已过期' : remainingDisplay}</span></td>
+                                <td><span class="badge" style="background:${quotaColor}">${quotaRemaining}</span></td>
+                                <td>${expiresAt ? expiresAt.toLocaleString() : '-'}</td>
+                                <td>
+                                    ${u.cloud_digital_human_disabled
+                                        ? '<span class="badge" style="background:#f56565">已关闭</span>'
+                                        : '<span class="badge" style="background:#48bb78">已开启</span>'
+                                    }
+                                    <button class="btn ${u.cloud_digital_human_disabled ? 'btn-cloud-on' : 'btn-cloud-off'}"
+                                        onclick="toggleCloudDigitalHuman(${u.id}, ${u.cloud_digital_human_disabled || 0})"
+                                        style="margin-top:4px;font-size:11px">
+                                        ${u.cloud_digital_human_disabled ? '开启' : '关闭'}
+                                    </button>
+                                </td>
+                                <td>${u.last_login_at ? new Date(u.last_login_at).toLocaleString() : '-'}</td>
+                                <td>
+                                    <button class="btn btn-primary" onclick="showAdjustQuota(${u.id}, '${u.username}')">调额</button>
+                                    <button class="btn btn-primary" onclick="showUserLogs(${u.id}, '${u.username}')">日志</button>
+                                    <button class="btn btn-warning" onclick="showGenerationStats(${u.id})">📊</button>
+                                    <button class="btn btn-warning" onclick="showRenameUser(${u.id}, '${u.username}')">改名</button>
+                                    <button class="btn btn-warning" onclick="showResetPassword(${u.id}, '${u.username}')">改密</button>
+                                    ${u.status === 'active'
+                                    ? `<button class="btn btn-danger" onclick="setStatus(${u.id}, 'suspended')">禁用</button>`
+                                    : `<button class="btn btn-success" onclick="setStatus(${u.id}, 'active')">启用</button>`
+                                    }
+                                    ${u.role !== 'admin' ? `<button class="btn btn-danger" onclick="deleteUser(${u.id}, '${u.username}')">删除</button>` : ''}
+                                </td>
+                            </tr>`
+                        }).join('')
+
+                        // 移动端卡片
+                        cardsEl.innerHTML = data.users.map(u => {
+                            const { isExpired, remainingDisplay, quotaRemaining, expiresAt, timeColor, quotaColor } = getUserRowHtml(u)
+                            return `<div class="user-card-item">
+                                <div class="card-row"><span class="card-label">用户</span><span class="card-value"><strong>${u.username}</strong> <span class="badge badge-${u.role}" style="font-size:11px">${u.role}</span> <span class="badge badge-${u.status}" style="font-size:11px">${u.status}</span></span></div>
+                                <div class="card-row"><span class="card-label">手机号</span><span class="card-value">${u.email}</span></div>
+                                <div class="card-row"><span class="card-label">时长</span><span class="card-value"><span class="badge" style="background:${timeColor};font-size:11px">${isExpired ? '已过期' : remainingDisplay}</span></span></div>
+                                <div class="card-row"><span class="card-label">配额</span><span class="card-value"><span class="badge" style="background:${quotaColor};font-size:11px">${quotaRemaining}</span></span></div>
+                                <div class="card-row"><span class="card-label">到期</span><span class="card-value" style="font-size:12px">${expiresAt ? expiresAt.toLocaleString() : '-'}</span></div>
+                                <div class="card-actions">
+                                    <button class="btn btn-primary" onclick="showAdjustQuota(${u.id}, '${u.username}')">调额</button>
+                                    <button class="btn btn-primary" onclick="showUserLogs(${u.id}, '${u.username}')">日志</button>
+                                    <button class="btn btn-warning" onclick="showRenameUser(${u.id}, '${u.username}')">改名</button>
+                                    <button class="btn btn-warning" onclick="showResetPassword(${u.id}, '${u.username}')">改密</button>
+                                    ${u.status === 'active'
+                                    ? `<button class="btn btn-danger" onclick="setStatus(${u.id}, 'suspended')">禁用</button>`
+                                    : `<button class="btn btn-success" onclick="setStatus(${u.id}, 'active')">启用</button>`}
+                                    ${u.role !== 'admin' ? `<button class="btn btn-danger" onclick="deleteUser(${u.id}, '${u.username}')">删除</button>` : ''}
+                                </div>
+                            </div>`
+                        }).join('')
+                    }
+                    renderUsersPagination(data.pagination)
+                }
+             } catch (err) {
+ const table=document.getElementById('usersTable'),cards=document.getElementById('userCards');
+ table.innerHTML='<tr><td colspan="11"><div class="admin-error" role="alert">用户列表加载失败，请检查网络连接后使用顶部「刷新数据」重试。</div></td></tr>';
+ cards.innerHTML='<p class="admin-error" role="alert">用户列表加载失败，请刷新重试。</p>';
+ }
+        }
+
+        function renderUsersPagination(pagination) {
+            const totalPages = Math.ceil(pagination.total / pagination.limit)
+            document.getElementById('usersPrevBtn').disabled = pagination.page <= 1
+            document.getElementById('usersNextBtn').disabled = pagination.page >= totalPages
+            document.getElementById('usersPageNumbers').innerHTML = `第 ${pagination.page} / ${totalPages || 1} 页 (共 ${pagination.total} 条)`
+        }
+
+        function changeUsersPage(delta) {
+            usersCurrentPage += delta
+            if (usersCurrentPage < 1) usersCurrentPage = 1
+            loadUsers()
+        }
+
+        // ==================== 调额 ====================
+        function showAdjustQuota(userId, username) {
+            document.getElementById('adjustUserId').value = userId
+            document.getElementById('adjustUsername').value = username
+            document.getElementById('adjustDays').value = 0
+            document.getElementById('adjustQuota').value = 0
+            document.getElementById('adjustReason').value = ''
+            document.getElementById('adjustQuotaModal').style.display = 'flex'
+        }
+
+        // 静态弹窗（HTML中定义）仅隐藏以便复用；动态弹窗（JS创建）直接移除，避免重复叠加导致遮罩卡死
+        const STATIC_MODAL_IDS = ['createAdminModal', 'adjustQuotaModal', 'resetPasswordModal', 'renameUserModal', 'userLogsModal', 'adminLogsModal', 'generationStatsModal']
+        function closeModal(id) {
+            document.querySelectorAll(`[id="${id}"]`).forEach(el => {
+                if (STATIC_MODAL_IDS.includes(id)) { el.style.display = 'none' } else { el.remove() }
+            })
+        }
+
+        async function confirmAdjustQuota() {
+            const userId = document.getElementById('adjustUserId').value
+            const days = parseInt(document.getElementById('adjustDays').value) || 0
+            const quotaChange = parseInt(document.getElementById('adjustQuota').value) || 0
+            const reason = document.getElementById('adjustReason').value
+            if (days === 0 && quotaChange === 0) { alert('时长和配额变动不能同时为0'); return }
+            try {
+                const data = await authFetch(`${API_BASE}/api/admin/add-time`, { method: 'POST', body: JSON.stringify({ user_id: userId, days, quota_change: quotaChange, reason }) })
+                if (data.success) { alert(data.message); closeModal('adjustQuotaModal'); loadAll() }
+                else { alert('调整失败: ' + data.error) }
+            } catch (err) { alert('操作失败: ' + err.message) }
+        }
+
+        async function setStatus(userId, status) {
+            if (!confirm(`确定要${status === 'active' ? '启用' : '禁用'}该用户吗？`)) return
+            try {
+                const data = await authFetch(`${API_BASE}/api/admin/user/status`, { method: 'POST', body: JSON.stringify({ user_id: userId, status }) })
+                if (data.success) { loadAll() } else { alert('操作失败: ' + data.error) }
+            } catch (err) { alert('操作失败: ' + err.message) }
+        }
+
+        async function deleteUser(userId, username) {
+            if (!confirm(`⚠️ 确定要删除用户「${username}」吗？\n\n此操作不可恢复，该用户的所有数据（订阅、设备、日志等）将被永久删除！`)) return
+            try {
+                const data = await authFetch(`${API_BASE}/api/admin/user/delete`, { method: 'POST', body: JSON.stringify({ user_id: userId }) })
+                if (data.success) { alert('用户已删除'); loadAll() } else { alert('删除失败: ' + data.error) }
+            } catch (err) { alert('操作失败: ' + err.message) }
+        }
+
+        function copyCode(code, el) {
+            try {
+                const ta = document.createElement('textarea')
+                ta.value = code
+                ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px'
+                document.body.appendChild(ta)
+                ta.focus()
+                ta.select()
+                document.execCommand('copy')
+                document.body.removeChild(ta)
+                const orig = el.innerHTML
+                el.innerHTML = '✅ 已复制'
+                setTimeout(() => { el.innerHTML = orig }, 1500)
+            } catch (e) {
+                prompt('请手动复制卡密:', code)
+            }
+        }
+
+        function exportUsers() {
+            const search = document.getElementById('userSearchInput').value.trim()
+            const token = localStorage.getItem('adminToken')
+            window.open(`${API_BASE}/api/admin/users/export?search=${encodeURIComponent(search)}&token=${token}`, '_blank')
+        }
+
+        function showResetPassword(userId, username) {
+            document.getElementById('resetPasswordUserId').value = userId
+            document.getElementById('resetPasswordUsername').value = username
+            document.getElementById('newPassword').value = ''
+            document.getElementById('confirmPassword').value = ''
+            document.getElementById('resetPasswordModal').style.display = 'flex'
+        }
+
+        async function confirmResetPassword() {
+            const userId = document.getElementById('resetPasswordUserId').value
+            const newPassword = document.getElementById('newPassword').value
+            const confirmPassword = document.getElementById('confirmPassword').value
+            if (!newPassword || newPassword.length < 6) { alert('密码长度至少6位'); return }
+            if (newPassword !== confirmPassword) { alert('两次输入的密码不一致'); return }
+            try {
+                const data = await authFetch(`${API_BASE}/api/admin/user/reset-password`, { method: 'POST', body: JSON.stringify({ user_id: userId, new_password: newPassword }) })
+                if (data.success) { alert('密码重置成功！'); closeModal('resetPasswordModal') } else { alert('重置失败: ' + (data.message || data.error)) }
+            } catch (err) { alert('操作失败: ' + err.message) }
+        }
+
+        // ==================== 修改用户名 ====================
+        function showRenameUser(userId, username) {
+            document.getElementById('renameUserId').value = userId
+            document.getElementById('renameOldUsername').value = username
+            document.getElementById('renameNewUsername').value = ''
+            document.getElementById('renameUserModal').style.display = 'flex'
+        }
+
+        async function confirmRenameUser() {
+            const userId = document.getElementById('renameUserId').value
+            const newUsername = document.getElementById('renameNewUsername').value.trim()
+            if (!newUsername || newUsername.length < 2) { alert('用户名长度至少2位'); return }
+            if (newUsername.length > 30) { alert('用户名长度不能超过30位'); return }
+            try {
+                const data = await authFetch(`${API_BASE}/api/admin/user/rename`, { method: 'POST', body: JSON.stringify({ user_id: userId, new_username: newUsername }) })
+                if (data.success) { alert('用户名修改成功！'); closeModal('renameUserModal'); loadUsers() } else { alert('修改失败: ' + (data.message || data.error)) }
+            } catch (err) { alert('操作失败: ' + err.message) }
+        }
+
+        // ==================== 创建子管理员 ====================
+        function showCreateAdmin() {
+            document.getElementById('newAdminUsername').value = ''
+            document.getElementById('newAdminEmail').value = ''
+            document.getElementById('newAdminPassword').value = ''
+            document.getElementById('createAdminModal').style.display = 'flex'
+        }
+
+        async function confirmCreateAdmin() {
+            const username = document.getElementById('newAdminUsername').value.trim()
+            const email = document.getElementById('newAdminEmail').value.trim()
+            const password = document.getElementById('newAdminPassword').value
+            if (!username || !email || !password) { alert('请填写所有字段'); return }
+            if (password.length < 6) { alert('密码长度至少6位'); return }
+            try {
+                const data = await authFetch(`${API_BASE}/api/admin/create-admin`, { method: 'POST', body: JSON.stringify({ username, email, password }) })
+                if (data.success) { alert(`子管理员 ${username} 创建成功！`); closeModal('createAdminModal'); loadAll() }
+                else { alert('创建失败: ' + data.message) }
+            } catch (err) { alert('操作失败: ' + err.message) }
+        }
+
+        // ==================== 日志查看 ====================
+        async function showUserLogs(userId, username) {
+            document.getElementById('userLogsUsername').textContent = username
+            document.getElementById('userLogsContent').innerHTML = '<p style="text-align:center">加载中...</p>'
+            document.getElementById('userLogsModal').style.display = 'flex'
+            try {
+                const data = await authFetch(`${API_BASE}/api/admin/logs/user/${userId}`)
+                if (data.success && data.logs.length > 0) {
+                    document.getElementById('userLogsContent').innerHTML = `
+                        <div class="table-wrap"><table style="width:100%;font-size:13px">
+                            <thead><tr><th>时间</th><th>操作</th><th>详情</th><th>IP</th></tr></thead>
+                            <tbody>${data.logs.map(log => `<tr>
+                                <td>${new Date(log.created_at).toLocaleString()}</td>
+                                <td><span class="badge" style="background:#6ad6a7">${log.action}</span></td>
+                                <td>${log.message || '-'}</td>
+                                <td style="font-size:11px;color:#888">${log.ip_address || '-'}</td>
+                            </tr>`).join('')}</tbody>
+                        </table></div>`
+                } else { document.getElementById('userLogsContent').innerHTML = '<p style="text-align:center;color:#888">暂无日志记录</p>' }
+            } catch (err) { document.getElementById('userLogsContent').innerHTML = '<p style="text-align:center;color:#f56565">加载失败</p>' }
+        }
+
+        async function showAdminLogs() {
+            document.getElementById('adminLogsContent').innerHTML = '<p style="text-align:center">加载中...</p>'
+            document.getElementById('adminLogsModal').style.display = 'flex'
+            try {
+                const data = await authFetch(`${API_BASE}/api/admin/logs/all?limit=100`)
+                if (data.success && data.logs.length > 0) {
+                    document.getElementById('adminLogsContent').innerHTML = `
+                        <div class="table-wrap"><table style="width:100%;font-size:13px">
+                            <thead><tr><th>时间</th><th>用户</th><th>操作</th><th>详情</th></tr></thead>
+                            <tbody>${data.logs.map(log => `<tr>
+                                <td>${new Date(log.created_at).toLocaleString()}</td>
+                                <td>${log.username || 'ID:' + log.user_id}</td>
+                                <td><span class="badge" style="background:${getActionColor(log.action)}">${formatAction(log.action)}</span></td>
+                                <td>${log.message || '-'}</td>
+                            </tr>`).join('')}</tbody>
+                        </table></div>`
+                } else { document.getElementById('adminLogsContent').innerHTML = '<p style="text-align:center;color:#888">暂无日志记录</p>' }
+            } catch (err) { document.getElementById('adminLogsContent').innerHTML = '<p style="text-align:center;color:#f56565">加载失败</p>' }
+        }
+
+        function getActionColor(action) {
+            const c = { 'login_success': '#48bb78', 'login_failed': '#f56565', 'register': '#6ad6a7', 'create_admin': '#9bcab4', 'status_change': '#ed8936', 'password_reset': '#f6ad55', 'points_change': '#f6ad55', 'device_unbind': '#4a5568', 'role_change': '#9bcab4' }
+            return c[action] || '#4a5568'
+        }
+
+        function formatAction(action) {
+            const l = { 'login_success': '登录成功', 'login_failed': '登录失败', 'login_blocked': '登录拦截', 'register': '注册', 'create_admin': '创建管理员', 'status_change': '状态变更', 'password_reset': '密码重置', 'points_change': '积分变动', 'device_unbind': '解绑设备', 'device_unbind_all': '解绑全部', 'role_change': '角色变更' }
+            return l[action] || action
+        }
+
+        async function loadAll() {
+            initRhNodeCards()
+            const jobs=[loadStats(),loadUsers(),loadCdkeyStats(),loadSystemConfig()]
+            if(document.getElementById('tab-cdkeys').classList.contains('active'))jobs.push(loadCdkeys())
+            if(document.getElementById('tab-modelMgmt').classList.contains('active'))jobs.push(loadModelProviders())
+            await Promise.allSettled(jobs)
+        }
+
+        async function showGenerationStats(userId) {
+            document.getElementById('generationStatsModal').style.display = 'flex'
+            document.getElementById('generationStatsContent').innerHTML = '<p style="text-align:center">加载中...</p>'
+            document.getElementById('generationLogsContent').innerHTML = ''
+            try {
+                const url = userId ? `${API_BASE}/api/admin/generation-stats?userId=${userId}` : `${API_BASE}/api/admin/generation-stats`
+                const data = await authFetch(url)
+                if (data.success) {
+                    const s = data.stats
+                    document.getElementById('generationStatsContent').innerHTML = `
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;">
+                            <div style="background:#2d3748;padding:16px;border-radius:10px;text-align:center;">
+                                <div style="font-size:28px;font-weight:bold;color:#6ad6a7">${s.script || 0}</div>
+                                <div style="color:#a0aec0;margin-top:4px;font-size:12px">📝 文案</div>
+                            </div>
+                            <div style="background:#2d3748;padding:16px;border-radius:10px;text-align:center;">
+                                <div style="font-size:28px;font-weight:bold;color:#48bb78">${s.voice || 0}</div>
+                                <div style="color:#a0aec0;margin-top:4px;font-size:12px">🎙️ 语音</div>
+                            </div>
+                            <div style="background:#2d3748;padding:16px;border-radius:10px;text-align:center;">
+                                <div style="font-size:28px;font-weight:bold;color:#ed8936">${s.video || 0}</div>
+                                <div style="color:#a0aec0;margin-top:4px;font-size:12px">🎬 视频</div>
+                            </div>
+                            <div style="background:#2d3748;padding:16px;border-radius:10px;text-align:center;">
+                                <div style="font-size:28px;font-weight:bold;color:#e53e3e">${s.subtitle || 0}</div>
+                                <div style="color:#a0aec0;margin-top:4px;font-size:12px">📄 字幕</div>
+                            </div>
+                            <div style="background:#2d3748;padding:16px;border-radius:10px;text-align:center;">
+                                <div style="font-size:28px;font-weight:bold;color:#fff">${s.total || 0}</div>
+                                <div style="color:#a0aec0;margin-top:4px;font-size:12px">📊 总计</div>
+                            </div>
+                        </div>`
+                    loadGenerationLogs(userId)
+                } else { document.getElementById('generationStatsContent').innerHTML = '<p style="text-align:center;color:#f56565">加载失败</p>' }
+            } catch (e) { document.getElementById('generationStatsContent').innerHTML = '<p style="text-align:center;color:#f56565">加载失败</p>' }
+        }
+
+        async function loadGenerationLogs(userId) {
+            try {
+                const url = userId ? `${API_BASE}/api/admin/generation-logs?userId=${userId}&limit=100` : `${API_BASE}/api/admin/generation-logs?limit=100`
+                const data = await authFetch(url)
+                if (data.success && data.logs.length > 0) {
+                    const typeLabels = { script: '📝 文案', voice: '🎙️ 语音', video: '🎬 视频', subtitle: '📄 字幕' }
+                    const typeColors = { script: '#6ad6a7', voice: '#48bb78', video: '#ed8936', subtitle: '#e53e3e' }
+                    document.getElementById('generationLogsContent').innerHTML = `
+                        <h4 style="margin:0 0 10px 0">最近生成记录 (共${data.total}条)</h4>
+                        <div class="table-wrap"><table style="width:100%;font-size:13px">
+                            <thead><tr><th>时间</th><th>用户</th><th>类型</th><th>详情</th></tr></thead>
+                            <tbody>${data.logs.map(l => `<tr>
+                                <td>${new Date(l.created_at).toLocaleString()}</td>
+                                <td>${l.username || 'ID:' + l.user_id}</td>
+                                <td><span class="badge" style="background:${typeColors[l.type] || '#667'}">${typeLabels[l.type] || l.type}</span></td>
+                                <td style="font-size:12px;color:#a0aec0;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${l.detail || '-'}</td>
+                            </tr>`).join('')}</tbody>
+                        </table></div>`
+                } else { document.getElementById('generationLogsContent').innerHTML = '<p style="text-align:center;color:#888">暂无生成记录</p>' }
+            } catch (e) {}
+        }
+
+        function switchTab(tab) {
+            const studioSections={users:['用户管理','用户管理','掌握用户状态，管理订阅与设备，让每一位创作者顺畅开始。'],cdkeys:['卡密管理','卡密管理','生成、查询与导出卡密，清晰管理每一份订阅权益。'],modelMgmt:['模型管理','模型管理','统一配置模型供应商、API 与客户端推送能力。'],sysSettings:['系统设置','系统设置','管理平台参数与系统设置，保存后应用最新配置。']};
+            const section=studioSections[tab];if(section){document.getElementById('activeSectionLabel').textContent=section[0];document.getElementById('sectionTitle').textContent=section[1];document.getElementById('sectionDescription').textContent=section[2];}
+
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'))
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'))
+            if (tab === 'users') {
+                document.querySelectorAll('.tab-btn')[0].classList.add('active')
+                document.getElementById('tab-users').classList.add('active')
+            } else if (tab === 'cdkeys') {
+                document.querySelectorAll('.tab-btn')[1].classList.add('active')
+                document.getElementById('tab-cdkeys').classList.add('active')
+                loadCdkeys()
+            } else if (tab === 'modelMgmt') {
+                document.querySelectorAll('.tab-btn')[2].classList.add('active')
+                document.getElementById('tab-modelMgmt').classList.add('active')
+                loadSystemConfig()
+                loadModelProviders()
+            } else if (tab === 'sysSettings') {
+                document.querySelectorAll('.tab-btn')[3].classList.add('active')
+                document.getElementById('tab-sysSettings').classList.add('active')
+                loadSystemConfig()
+            }
+        }
+
+        function toggleSection(sectionId) {
+            const el = document.getElementById(sectionId)
+            const arrow = document.getElementById(sectionId + '_arrow')
+            if (el.style.display === 'none') {
+                el.style.display = 'block'
+                arrow.textContent = '▼'
+            } else {
+                el.style.display = 'none'
+                arrow.textContent = '▶'
+            }
+        }
+
+        // 网络节点配置数据（动态生成卡片）
+        const RH_DIGITAL_NODES = [
+            { num: 1, emoji: '🔵', color: '#60a5fa', bg: '59,130,246', label: '云端模型1', wfKey: 'cfg_runninghub_workflow_id_1', nodesKey: 'cfg_runninghub_mode1_nodes', modeId: 'mode1', wfPlaceholder: '2009491298805354497' },
+            { num: 2, emoji: '🟣', color: '#a78bfa', bg: '139,92,246', label: '云端模型2', wfKey: 'cfg_runninghub_workflow_id_2', nodesKey: 'cfg_runninghub_mode2_nodes', modeId: 'mode2', wfPlaceholder: '1945645768491585538' },
+            { num: 3, emoji: '🟢', color: '#22d3ee', bg: '6,182,212', label: '云端模型3', wfKey: 'cfg_runninghub_workflow_id_3', nodesKey: 'cfg_runninghub_mode3_nodes', modeId: 'mode3', wfPlaceholder: '1984199202748186626' },
+            { num: 4, emoji: '🟡', color: '#fbbf24', bg: '245,158,11', label: '云端模型4', wfKey: 'cfg_runninghub_workflow_id_4', nodesKey: 'cfg_runninghub_mode4_nodes', modeId: 'mode4', wfPlaceholder: '2022323003056459778' },
+            { num: 5, emoji: '🟩', color: '#4ade80', bg: '34,197,94', label: '云端模型5', wfKey: 'cfg_runninghub_workflow_id_5', nodesKey: 'cfg_runninghub_mode5_nodes', modeId: 'mode5', wfPlaceholder: '1928389791241650178' },
+            { num: 6, emoji: '🔴', color: '#fb7185', bg: '244,63,94', label: '云端模型6', wfKey: 'cfg_runninghub_workflow_id_6', nodesKey: 'cfg_runninghub_mode6_nodes', modeId: 'mode6', wfPlaceholder: '1976590859607085058' },
+            { num: 7, emoji: '🟣', color: '#a855f7', bg: '168,85,247', label: '音频+视频', wfKey: 'cfg_runninghub_workflow_id_7', nodesKey: 'cfg_runninghub_mode7_nodes', modeId: 'mode7', wfPlaceholder: '1930534351568556033' },
+            { num: 8, emoji: '🟠', color: '#f97316', bg: '249,115,22', label: 'AI应用', wfKey: 'cfg_runninghub_workflow_id_8', nodesKey: 'cfg_runninghub_mode8_nodes', modeId: 'mode8', wfPlaceholder: '1925626855154749442' },
+        ]
+
+        const RH_TTS_NODES = [
+            { id: 't2', label: 'T2 语音', color: '#06b6d4', bg: '6,182,212', wfKey: 'cfg_runninghub_tts_workflow_id_t2', nodesKey: 'cfg_runninghub_tts_nodes_t2', wfPlaceholder: '2034189412338241537' },
+            { id: 't3', label: 'T3 语音', color: '#f59e0b', bg: '245,158,11', wfKey: 'cfg_runninghub_tts_workflow_id_t3', nodesKey: 'cfg_runninghub_tts_nodes_t3', wfPlaceholder: '2033381422974640130' },
+            { id: 't4', label: 'T4 语音', color: '#a78bfa', bg: '139,92,246', wfKey: 'cfg_runninghub_tts_workflow_id_t4', nodesKey: 'cfg_runninghub_tts_nodes_t4', wfPlaceholder: '' },
+        ]
+
+        function renderRhNodeCard(node) {
+            return `
+            <div style="background:rgba(${node.bg},0.06);padding:12px;border-radius:8px;border:1px solid rgba(${node.bg},0.25);">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                    <span style="color:${node.color};font-weight:600;font-size:12px;">${node.emoji} 节点${String(node.num).padStart(2,'0')} <span style="color:rgba(255,255,255,0.5);font-weight:normal">（${node.label}）</span></span>
+                </div>
+                <div class="form-group" style="margin-bottom:4px;"><label style="font-size:11px;">工作流ID</label><input type="text" id="${node.wfKey}" placeholder="${node.wfPlaceholder}" style="font-size:11px;"></div>
+                <div class="form-group" style="margin-bottom:4px;"><label style="font-size:11px;">节点配置 <span style="color:rgba(255,255,255,0.35);font-size:10px">JSON</span></label><input type="text" id="${node.nodesKey}" placeholder="粘贴文档自动填入..." style="font-size:11px;"></div>
+                <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:6px;margin-top:4px;display:flex;gap:6px;align-items:center;">
+                    <button onclick="pasteToTextarea('rh_import_${node.modeId}')" style="padding:2px 8px;background:#475569;color:#e2e8f0;border:none;border-radius:3px;cursor:pointer;font-size:10px;">📋粘贴</button>
+                    <textarea id="rh_import_${node.modeId}" rows="1" placeholder="粘贴API文档后点导入..." style="flex:1;padding:3px 6px;background:#0f1724;color:#e2e8f0;border:1px solid #2d3748;border-radius:4px;font-size:10px;resize:none;font-family:monospace;"></textarea>
+                    <button onclick="importRunningHubDocInline('${node.modeId}')" style="padding:2px 10px;background:${node.color};color:#fff;border:none;border-radius:3px;cursor:pointer;font-size:10px;">📥导入</button>
+                </div>
+                <div id="rh_import_result_${node.modeId}" style="margin-top:3px;font-size:10px;display:none;"></div>
+            </div>`
+        }
+
+        function renderRhTtsCard(node) {
+            return `
+            <div style="background:rgba(${node.bg},0.06);padding:12px;border-radius:8px;border:1px solid rgba(${node.bg},0.2);">
+                <div style="color:${node.color};font-weight:600;font-size:12px;margin-bottom:8px;">🎙️ ${node.label}</div>
+                <div class="form-group" style="margin-bottom:4px;"><label style="font-size:11px;">工作流ID</label><input type="text" id="${node.wfKey}" placeholder="${node.wfPlaceholder}" style="font-size:11px;"></div>
+                <div class="form-group" style="margin-bottom:4px;"><label style="font-size:11px;">节点配置 <span style="color:rgba(255,255,255,0.35);font-size:10px">JSON</span></label><input type="text" id="${node.nodesKey}" placeholder="粘贴文档自动填入..." style="font-size:11px;"></div>
+                <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:6px;margin-top:4px;display:flex;gap:6px;align-items:center;">
+                    <button onclick="pasteToTextarea('rh_import_${node.id}')" style="padding:2px 8px;background:#475569;color:#e2e8f0;border:none;border-radius:3px;cursor:pointer;font-size:10px;">📋粘贴</button>
+                    <textarea id="rh_import_${node.id}" rows="1" placeholder="粘贴API文档后点导入..." style="flex:1;padding:3px 6px;background:#0f1724;color:#e2e8f0;border:1px solid #2d3748;border-radius:4px;font-size:10px;resize:none;font-family:monospace;"></textarea>
+                    <button onclick="importRunningHubDocInline('${node.id}')" style="padding:2px 10px;background:${node.color};color:#fff;border:none;border-radius:3px;cursor:pointer;font-size:10px;">📥导入</button>
+                </div>
+                <div id="rh_import_result_${node.id}" style="margin-top:3px;font-size:10px;display:none;"></div>
+            </div>`
+        }
+
+        function initRhNodeCards() {
+            // 数字人节点
+            const digitalContainer = document.getElementById('rhDigitalNodesContainer')
+            if (digitalContainer) {
+                digitalContainer.innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">` +
+                    RH_DIGITAL_NODES.map(n => renderRhNodeCard(n)).join('') + `</div>`
+            }
+            // TTS语音节点
+            const ttsContainer = document.getElementById('rhTtsNodesContainer')
+            if (ttsContainer) {
+                ttsContainer.innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">` +
+                    RH_TTS_NODES.map(n => renderRhTtsCard(n)).join('') + `</div>`
+            }
+        }
+
+        // 从RunningHub API文档自动提取工作流ID和节点配置
+        function importRunningHubDoc(targetMode) {
+            const docText = document.getElementById('runninghub_doc_import').value.trim();
+            const resultDiv = document.getElementById('runninghub_import_result');
+
+            if (!docText) {
+                resultDiv.style.display = 'block';
+                resultDiv.style.color = '#f87171';
+                resultDiv.textContent = '请先粘贴RunningHub API文档';
+                return;
+            }
+
+            try {
+                // 1. 提取工作流ID（从URL中提取，如 https://www.runninghub.cn/openapi/v2/run/ai-app/2011423049010126850）
+                const workflowIdMatch = docText.match(/run\/ai-app\/(\d+)/);
+                if (!workflowIdMatch) {
+                    throw new Error('未找到工作流ID，请确认文档中包含API请求URL');
+                }
+                const workflowId = workflowIdMatch[1];
+
+                // 2. 提取nodeInfoList中的节点信息
+                // 尝试从JSON代码块中提取
+                const jsonBlockMatch = docText.match(/--data-raw\s*'(\{[\s\S]*?\})'\s*```/);
+                let nodeInfoList = [];
+
+                if (jsonBlockMatch) {
+                    try {
+                        const jsonData = JSON.parse(jsonBlockMatch[1]);
+                        nodeInfoList = jsonData.nodeInfoList || [];
+                    } catch (e) {
+                        // JSON解析失败，尝试其他方式
+                    }
+                }
+
+                // 如果JSON块提取失败，尝试用正则提取所有nodeId/fieldName/description
+                if (nodeInfoList.length === 0) {
+                    const nodeIdMatches = [...docText.matchAll(/"nodeId"\s*:\s*"(\d+)"/g)];
+                    const fieldNameMatches = [...docText.matchAll(/"fieldName"\s*:\s*"([^"]+)"/g)];
+                    const descMatches = [...docText.matchAll(/"description"\s*:\s*"([^"]+)"/g)];
+
+                    for (let i = 0; i < nodeIdMatches.length; i++) {
+                        nodeInfoList.push({
+                            nodeId: nodeIdMatches[i][1],
+                            fieldName: fieldNameMatches[i] ? fieldNameMatches[i][1] : '',
+                            description: descMatches[i] ? descMatches[i][1] : ''
+                        });
+                    }
+                }
+
+                if (nodeInfoList.length === 0) {
+                    throw new Error('未找到节点信息(nodeInfoList)，请确认文档格式正确');
+                }
+
+                // 3. 根据fieldName和description智能映射节点
+                const nodes = {};
+                const isTtsMode = (targetMode === 't2' || targetMode === 't3' || targetMode === 't4');
+                for (const node of nodeInfoList) {
+                    const desc = (node.description || '').toLowerCase();
+                    const field = (node.fieldName || '').toLowerCase();
+
+                    // T2/T3/T4语音模型映射逻辑（音频+文本）
+                    if (isTtsMode) {
+                        if (field === 'audio' || desc.includes('音频') || desc.includes('克隆') || desc.includes('语音')) {
+                            nodes.audioNode = (field === 'audio') ? node.nodeId : { id: node.nodeId, fieldName: node.fieldName };
+                        } else if (field === 'text' || field === 'prompt' || desc.includes('文字') || desc.includes('文本') || desc.includes('语音文本')) {
+                            nodes.textNode = (field === 'text') ? node.nodeId : { id: node.nodeId, fieldName: node.fieldName };
+                        }
+                        continue;
+                    }
+
+                    // 数字人模型映射逻辑（视频+音频）
+                    if (field === 'file' || field === 'video' || desc.includes('视频')) {
+                        // fieldName 为 'file' 时直接存 nodeId（与默认 fieldName 一致），否则存对象格式
+                        nodes.videoNode = (field === 'file') ? node.nodeId : { id: node.nodeId, fieldName: node.fieldName };
+                    } else if (field === 'audio' || desc.includes('音频')) {
+                        nodes.audioNode = (field === 'audio') ? node.nodeId : { id: node.nodeId, fieldName: node.fieldName };
+                    } else if (desc.includes('最长边') || desc.includes('最大边') || desc.includes('max_side') || desc.includes('maxside')) {
+                        nodes.maxSideNode = node.fieldName !== 'int' ? { id: node.nodeId, fieldName: node.fieldName } : node.nodeId;
+                    } else if (desc.includes('音频开始') || desc.includes('开始秒')) {
+                        nodes.audioStartNode = node.fieldName !== 'int' ? { id: node.nodeId, fieldName: node.fieldName } : node.nodeId;
+                    } else if (desc.includes('音频结束') || desc.includes('结束秒')) {
+                        nodes.audioEndNode = node.fieldName !== 'int' ? { id: node.nodeId, fieldName: node.fieldName } : node.nodeId;
+                    } else if (desc.includes('时长') || desc.includes('duration')) {
+                        nodes.durationNode = node.fieldName !== 'value' ? { id: node.nodeId, fieldName: node.fieldName } : node.nodeId;
+                    } else if (desc.includes('帧率') || desc.includes('fps')) {
+                        nodes.fpsNode = node.fieldName !== 'int' ? { id: node.nodeId, fieldName: node.fieldName } : node.nodeId;
+                    } else if (desc.includes('宽')) {
+                        nodes.widthNode = node.fieldName !== 'int' ? { id: node.nodeId, fieldName: node.fieldName } : node.nodeId;
+                    } else if (desc.includes('高')) {
+                        nodes.heightNode = node.fieldName !== 'int' ? { id: node.nodeId, fieldName: node.fieldName } : node.nodeId;
+                    } else if (desc.includes('提示词') || desc.includes('提示') || (field === 'text' && !nodes.textNode)) {
+                        nodes.textNode = node.fieldName !== 'text' ? { id: node.nodeId, fieldName: node.fieldName } : node.nodeId;
+                    }
+                }
+
+                // 4. 填入对应的输入框
+                if (targetMode === 'mode1') {
+                    document.getElementById('cfg_runninghub_mode1_nodes').value = JSON.stringify(nodes);
+                } else if (targetMode === 'mode2') {
+                    document.getElementById('cfg_runninghub_mode2_nodes').value = JSON.stringify(nodes);
+                } else if (targetMode === 'mode3') {
+                    document.getElementById('cfg_runninghub_mode3_nodes').value = JSON.stringify(nodes);
+                } else if (targetMode === 'mode4') {
+                    document.getElementById('cfg_runninghub_mode4_nodes').value = JSON.stringify(nodes);
+                } else if (targetMode === 'mode5') {
+                    document.getElementById('cfg_runninghub_mode5_nodes').value = JSON.stringify(nodes);
+                } else if (targetMode === 'mode6') {
+                    document.getElementById('cfg_runninghub_mode6_nodes').value = JSON.stringify(nodes);
+                } else if (targetMode === 'mode7') {
+                    document.getElementById('cfg_runninghub_workflow_id_7').value = workflowId;
+                    document.getElementById('cfg_runninghub_mode7_nodes').value = JSON.stringify(nodes);
+                } else if (targetMode === 'mode8') {
+                    document.getElementById('cfg_runninghub_workflow_id_8').value = workflowId;
+                    document.getElementById('cfg_runninghub_mode8_nodes').value = JSON.stringify(nodes);
+                } else if (targetMode === 't2') {
+                    document.getElementById('cfg_runninghub_tts_workflow_id_t2').value = workflowId;
+                    document.getElementById('cfg_runninghub_tts_nodes_t2').value = JSON.stringify(nodes);
+                } else if (targetMode === 't3') {
+                    document.getElementById('cfg_runninghub_tts_workflow_id_t3').value = workflowId;
+                    document.getElementById('cfg_runninghub_tts_nodes_t3').value = JSON.stringify(nodes);
+                } else if (targetMode === 't4') {
+                    document.getElementById('cfg_runninghub_tts_workflow_id_t4').value = workflowId;
+                    document.getElementById('cfg_runninghub_tts_nodes_t4').value = JSON.stringify(nodes);
+                }
+
+                // 5. 显示提取结果
+                const modeLabels = { mode1: '网络节点01', mode2: '网络节点02', mode3: '网络节点03', mode4: '网络节点04', mode5: '网络节点05', mode6: '网络节点06', t2: 'T2语音模型', t3: 'T3语音模型', t4: 'T4语音模型' };
+                const modeLabel = modeLabels[targetMode] || targetMode;
+                resultDiv.style.display = 'block';
+                resultDiv.style.color = '#4ade80';
+                resultDiv.innerHTML = `✅ 已导入到 <b>${modeLabel}</b>：工作流ID=${workflowId}，识别到 ${nodeInfoList.length} 个节点` +
+                    `<br><span style="color:#94a3b8;font-size:11px;">节点映射：${Object.entries(nodes).map(([k,v]) => `${k}=${v}`).join(', ')}</span>` +
+                    `<br><span style="color:#fbbf24;font-size:11px;">请点击下方"保存配置"按钮使配置生效</span>`;
+
+            } catch (e) {
+                resultDiv.style.display = 'block';
+                resultDiv.style.color = '#f87171';
+                resultDiv.textContent = '导入失败：' + e.message;
+            }
+        }
+
+        // 粘贴剪贴板内容到指定textarea
+        async function pasteToTextarea(textareaId) {
+            const el = document.getElementById(textareaId);
+            if (!el) return;
+            try {
+                const text = await navigator.clipboard.readText();
+                el.value = text;
+                el.focus();
+            } catch (e) {
+                el.focus();
+                el.placeholder = '请手动粘贴(Ctrl+V)...';
+            }
+        }
+
+        // 每个节点卡片内嵌的导入函数（从各自的textarea读取文档内容）
+        function importRunningHubDocInline(targetMode) {
+            const docEl = document.getElementById('rh_import_' + targetMode);
+            const resultDiv = document.getElementById('rh_import_result_' + targetMode);
+            if (!docEl || !resultDiv) return;
+
+            const docText = docEl.value.trim();
+            if (!docText) {
+                resultDiv.style.display = 'block';
+                resultDiv.style.color = '#f87171';
+                resultDiv.textContent = '请先粘贴文档';
+                return;
+            }
+
+            // 临时设置全局输入框，复用原有解析逻辑
+            const globalImportEl = document.getElementById('runninghub_doc_import');
+            const globalResultEl = document.getElementById('runninghub_import_result');
+            if (globalImportEl) globalImportEl.value = docText;
+
+            try {
+                // 1. 提取工作流ID
+                const workflowIdMatch = docText.match(/run\/ai-app\/(\d+)/);
+                if (!workflowIdMatch) throw new Error('未找到工作流ID');
+
+                const workflowId = workflowIdMatch[1];
+
+                // 2. 提取节点信息
+                const jsonBlockMatch = docText.match(/--data-raw\s*'(\{[\s\S]*?\})'\s*```/);
+                let nodeInfoList = [];
+                if (jsonBlockMatch) {
+                    try { nodeInfoList = JSON.parse(jsonBlockMatch[1]).nodeInfoList || []; } catch (e) {}
+                }
+                if (nodeInfoList.length === 0) {
+                    const nodeIdMatches = [...docText.matchAll(/"nodeId"\s*:\s*"(\d+)"/g)];
+                    const fieldNameMatches = [...docText.matchAll(/"fieldName"\s*:\s*"([^"]+)"/g)];
+                    const descMatches = [...docText.matchAll(/"description"\s*:\s*"([^"]+)"/g)];
+                    for (let i = 0; i < nodeIdMatches.length; i++) {
+                        nodeInfoList.push({ nodeId: nodeIdMatches[i][1], fieldName: fieldNameMatches[i] ? fieldNameMatches[i][1] : '', description: descMatches[i] ? descMatches[i][1] : '' });
+                    }
+                }
+                if (nodeInfoList.length === 0) throw new Error('未找到节点信息');
+
+                // 3. 映射节点
+                const nodes = {};
+                const isTtsMode = (targetMode === 't2' || targetMode === 't3' || targetMode === 't4');
+                for (const node of nodeInfoList) {
+                    const desc = (node.description || '').toLowerCase();
+                    const field = (node.fieldName || '').toLowerCase();
+                    if (isTtsMode) {
+                        if (field === 'audio' || desc.includes('音频') || desc.includes('语音')) nodes.audioNode = (field === 'audio') ? node.nodeId : { id: node.nodeId, fieldName: node.fieldName };
+                        else if (field === 'text' || desc.includes('文字') || desc.includes('文本')) nodes.textNode = (field === 'text') ? node.nodeId : { id: node.nodeId, fieldName: node.fieldName };
+                    } else {
+                        if (field === 'file' || field === 'video' || desc.includes('视频')) nodes.videoNode = (field === 'file') ? node.nodeId : { id: node.nodeId, fieldName: node.fieldName };
+                        else if (field === 'audio' || desc.includes('音频')) nodes.audioNode = (field === 'audio') ? node.nodeId : { id: node.nodeId, fieldName: node.fieldName };
+                        else if (desc.includes('时长') || desc.includes('duration')) nodes.durationNode = node.fieldName !== 'value' ? { id: node.nodeId, fieldName: node.fieldName } : node.nodeId;
+                        else if (desc.includes('帧率') || desc.includes('fps')) nodes.fpsNode = node.fieldName !== 'int' ? { id: node.nodeId, fieldName: node.fieldName } : node.nodeId;
+                        else if (desc.includes('宽度') || desc.includes('width')) nodes.widthNode = node.fieldName !== 'int' ? { id: node.nodeId, fieldName: node.fieldName } : node.nodeId;
+                        else if (desc.includes('高度') || desc.includes('height')) nodes.heightNode = node.fieldName !== 'int' ? { id: node.nodeId, fieldName: node.fieldName } : node.nodeId;
+                        else if (desc.includes('最长边') || desc.includes('最大边')) nodes.maxSideNode = node.fieldName !== 'int' ? { id: node.nodeId, fieldName: node.fieldName } : node.nodeId;
+                    }
+                }
+
+                // 4. 填入对应输入框
+                const modeNum = targetMode.replace('mode', '').replace('t2', '_t2').replace('t3', '_t3');
+                let wfIdKey, nodesKey;
+                if (isTtsMode) {
+                    wfIdKey = `cfg_runninghub_tts_workflow_id_${targetMode}`;
+                    nodesKey = `cfg_runninghub_tts_nodes_${targetMode}`;
+                } else {
+                    // mode1-6: cfg_runninghub_workflow_id_N, mode7-8: cfg_runninghub_modeN_workflow_id
+                    const n = parseInt(modeNum);
+                    if (n >= 7) {
+                        wfIdKey = `cfg_runninghub_mode${modeNum}_workflow_id`;
+                    } else {
+                        wfIdKey = `cfg_runninghub_workflow_id_${modeNum}`;
+                    }
+                    nodesKey = `cfg_runninghub_mode${modeNum}_nodes`;
+                }
+
+                const wfEl = document.getElementById(wfIdKey);
+                const nodesEl = document.getElementById(nodesKey);
+                if (wfEl) wfEl.value = workflowId;
+                if (nodesEl) nodesEl.value = JSON.stringify(nodes);
+
+                const modeLabels = { mode1: '节点01', mode2: '节点02', mode3: '节点03', mode4: '节点04', mode5: '节点05', mode6: '节点06', mode7: '节点07', mode8: '节点08', t2: 'T2语音', t3: 'T3语音', t4: 'T4语音' };
+                resultDiv.style.display = 'block';
+                resultDiv.style.color = '#4ade80';
+                resultDiv.innerHTML = `✅ 工作流ID=${workflowId}，${nodeInfoList.length}个节点 → 保存后生效`;
+                docEl.value = '';
+
+            } catch (e) {
+                resultDiv.style.display = 'block';
+                resultDiv.style.color = '#f87171';
+                resultDiv.textContent = '导入失败：' + e.message;
+            }
+        }
+
+        async function loadSystemConfig() {
+            try {
+                const data = await authFetch(`${API_BASE}/api/admin/system/config`)
+                if (data.success) {
+                    const configKeys = [
+                        'aliyun_bailian_api_key', 'aliyun_bailian_base_url',
+                        'aliyun_oss_access_key_id', 'aliyun_oss_access_key_secret',
+                        'aliyun_oss_bucket', 'aliyun_oss_region',
+                        'volcengine_api_key', 'volcengine_model',
+                        'runninghub_api_key', 'runninghub_workflow_id_1', 'runninghub_workflow_id_2', 'runninghub_workflow_id_3', 'runninghub_workflow_id_4', 'runninghub_workflow_id_5', 'runninghub_workflow_id_6', 'runninghub_workflow_id_7', 'runninghub_workflow_id_8',
+                        'runninghub_mode1_nodes', 'runninghub_mode2_nodes',
+                        'runninghub_mode3_nodes', 'runninghub_mode4_nodes',
+                        'runninghub_mode5_nodes', 'runninghub_mode6_nodes',
+                        'runninghub_mode7_nodes',
+                        'runninghub_mode8_nodes',
+                        'runninghub_tts_workflow_id_t2', 'runninghub_tts_nodes_t2',
+                        'runninghub_tts_workflow_id_t3', 'runninghub_tts_nodes_t3',
+                        'runninghub_tts_workflow_id_t4', 'runninghub_tts_nodes_t4',
+                        'trial_duration_hours',
+                        'update_url'
+                    ]
+                    data.configs.forEach(c => {
+                        if (configKeys.includes(c.config_key)) {
+                            const el = document.getElementById('cfg_' + c.config_key)
+                            if (el) {
+                                if (el.type === 'checkbox') {
+                                    el.checked = c.config_value === 'true'
+                                    const toggle = el.nextElementSibling
+                                    if (toggle) {
+                                        toggle.style.backgroundColor = el.checked ? '#22c55e' : '#2d3748'
+                                        const dot = toggle.querySelector('span')
+                                        if (dot) dot.style.transform = el.checked ? 'translateX(20px)' : 'translateX(0)'
+                                    }
+                                } else { el.value = c.config_value || '' }
+                            }
+                        }
+                    })
+                    const callRecordConfig = data.configs.find(c => c.config_key === 'runninghub_call_record_url')
+                    const callRecordLink = document.getElementById('apiCallRecordLink')
+                    if (callRecordLink) {
+                        callRecordLink.href = callRecordConfig?.config_value || 'https://www.runninghub.cn/call-api/call-record'
+                    }
+                }
+            } catch (err) { console.error('加载配置失败:', err) }
+        }
+
+        async function saveSystemConfig() {
+            const configs = {
+                aliyun_bailian_api_key: document.getElementById('cfg_aliyun_bailian_api_key').value,
+                aliyun_bailian_base_url: document.getElementById('cfg_aliyun_bailian_base_url').value,
+                aliyun_oss_access_key_id: document.getElementById('cfg_aliyun_oss_access_key_id').value,
+                aliyun_oss_access_key_secret: document.getElementById('cfg_aliyun_oss_access_key_secret').value,
+                aliyun_oss_bucket: document.getElementById('cfg_aliyun_oss_bucket').value,
+                aliyun_oss_region: document.getElementById('cfg_aliyun_oss_region').value,
+                volcengine_api_key: document.getElementById('cfg_volcengine_api_key').value,
+                volcengine_model: document.getElementById('cfg_volcengine_model').value,
+                runninghub_api_key: document.getElementById('cfg_runninghub_api_key').value,
+                runninghub_workflow_id_1: document.getElementById('cfg_runninghub_workflow_id_1').value,
+                runninghub_workflow_id_2: document.getElementById('cfg_runninghub_workflow_id_2').value,
+                runninghub_workflow_id_3: document.getElementById('cfg_runninghub_workflow_id_3').value,
+                runninghub_workflow_id_4: document.getElementById('cfg_runninghub_workflow_id_4').value,
+                runninghub_workflow_id_5: document.getElementById('cfg_runninghub_workflow_id_5').value,
+                runninghub_workflow_id_6: document.getElementById('cfg_runninghub_workflow_id_6').value,
+                runninghub_workflow_id_7: document.getElementById('cfg_runninghub_workflow_id_7').value,
+                runninghub_workflow_id_8: document.getElementById('cfg_runninghub_workflow_id_8').value,
+                runninghub_mode1_nodes: document.getElementById('cfg_runninghub_mode1_nodes').value,
+                runninghub_mode2_nodes: document.getElementById('cfg_runninghub_mode2_nodes').value,
+                runninghub_mode3_nodes: document.getElementById('cfg_runninghub_mode3_nodes').value,
+                runninghub_mode4_nodes: document.getElementById('cfg_runninghub_mode4_nodes').value,
+                runninghub_mode5_nodes: document.getElementById('cfg_runninghub_mode5_nodes').value,
+                runninghub_mode6_nodes: document.getElementById('cfg_runninghub_mode6_nodes').value,
+                runninghub_mode7_nodes: document.getElementById('cfg_runninghub_mode7_nodes').value,
+                runninghub_mode8_nodes: document.getElementById('cfg_runninghub_mode8_nodes').value,
+                runninghub_tts_workflow_id_t2: document.getElementById('cfg_runninghub_tts_workflow_id_t2').value,
+                runninghub_tts_nodes_t2: document.getElementById('cfg_runninghub_tts_nodes_t2').value,
+                runninghub_tts_workflow_id_t3: document.getElementById('cfg_runninghub_tts_workflow_id_t3').value,
+                runninghub_tts_nodes_t3: document.getElementById('cfg_runninghub_tts_nodes_t3').value,
+                runninghub_tts_workflow_id_t4: document.getElementById('cfg_runninghub_tts_workflow_id_t4').value,
+                runninghub_tts_nodes_t4: document.getElementById('cfg_runninghub_tts_nodes_t4').value,
+                trial_duration_hours: document.getElementById('cfg_trial_duration_hours').value || '24',
+                update_url: document.getElementById('cfg_update_url').value || ''
+            }
+            const activeTab=document.querySelector('.tab-content.active');
+            let msgEl=activeTab.querySelector('.config-save-feedback');
+            if(!msgEl){msgEl=document.createElement('div');msgEl.className='config-save-feedback';msgEl.setAttribute('role','status');msgEl.style.marginTop='16px';activeTab.querySelector('.card').append(msgEl);}
+            try {
+                const data = await authFetch(`${API_BASE}/api/admin/system/config`, { method: 'PUT', body: JSON.stringify({ configs }) })
+                if (data.success) { msgEl.style.display = 'block'; msgEl.style.color = '#48bb78'; msgEl.textContent = '✅ 配置保存成功！客户端将在下次请求时自动读取新配置。'; setTimeout(() => { msgEl.style.display = 'none' }, 5000) }
+                else { msgEl.style.display = 'block'; msgEl.style.color = '#f56565'; msgEl.textContent = '❌ 保存失败: ' + (data.message || '未知错误') }
+            } catch (err) { msgEl.style.display = 'block'; msgEl.style.color = '#f56565'; msgEl.textContent = '❌ 网络错误: ' + err.message }
+        }
+
+        async function toggleCloudDigitalHuman(userId, currentDisabled) {
+            const action = currentDisabled ? '开启' : '关闭'
+            if (!confirm(`确定要${action}该用户的云端数字人功能吗？`)) return
+            try {
+                const data = await authFetch(`${API_BASE}/api/admin/user/cloud-digital-human`, { method: 'PUT', body: JSON.stringify({ user_id: userId, disabled: !currentDisabled }) })
+                if (data.success) { loadUsers() } else { alert('操作失败: ' + data.message) }
+            } catch (err) { alert('操作失败: ' + err.message) }
+        }
+
+        // ==================== 卡密管理 ====================
+        async function loadCdkeys() {
+            const status = document.getElementById('cdkeyStatusFilter').value
+            try {
+                const data = await authFetch(`${API_BASE}/api/admin/cdkeys?status=${status}&page=${cdkeysCurrentPage}&limit=20`)
+                if (data.success) {
+                    const tbody = document.getElementById('cdkeysTable')
+                    const cardsEl = document.getElementById('cdkeyCards')
+                    if (data.cdkeys.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="12" style="text-align:center">暂无卡密数据</td></tr>'
+                        cardsEl.innerHTML = '<p style="text-align:center;color:rgba(255,255,255,0.5)">暂无卡密数据</p>'
+                    } else {
+                        tbody.innerHTML = data.cdkeys.map(c => `
+                            <tr>
+                                <td>${c.id}</td>
+                                <td style="font-family:monospace;font-size:12px;cursor:pointer" onclick="copyCode('${c.code}', this)" title="点击复制">${c.code} 📋</td>
+                                <td>${c.type}</td>
+                                <td>${c.days}天</td>
+                                <td>${c.video_quota}</td>
+                                <td>${c.max_devices}</td>
+                                <td><span style="color:${c.status === 'used' ? '#ff6b6b' : '#51cf66'}">${c.status === 'used' ? '已使用' : '未使用'}</span></td>
+                                <td>${c.used_by_username || '-'}</td>
+                                <td style="font-size:12px">${c.created_at || '-'}</td>
+                                <td style="font-size:12px">${c.used_at || '-'}</td>
+                                <td style="font-size:12px;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${c.note || ''}">${c.note || '-'}</td>
+                                <td>${c.status === 'unused' ? `<button class="btn btn-danger" style="padding:2px 8px;font-size:12px" onclick="deleteCdkey(${c.id})">删除</button>` : ''}</td>
+                            </tr>`).join('')
+
+                        cardsEl.innerHTML = data.cdkeys.map(c => `
+                            <div class="cdkey-card-item">
+                                <div class="card-row"><span class="card-label">卡密</span><span class="card-value" style="font-family:monospace;font-size:12px;cursor:pointer" onclick="copyCode('${c.code}', this)" title="点击复制">${c.code} 📋</span></div>
+                                <div class="card-row"><span class="card-label">类型</span><span class="card-value">${c.type} / ${c.days}天 / ${c.video_quota}配额</span></div>
+                                <div class="card-row"><span class="card-label">状态</span><span class="card-value"><span style="color:${c.status === 'used' ? '#ff6b6b' : '#51cf66'}">${c.status === 'used' ? '已使用' : '未使用'}</span></span></div>
+                                <div class="card-row"><span class="card-label">使用者</span><span class="card-value">${c.used_by_username || '-'}</span></div>
+                                <div class="card-row"><span class="card-label">创建</span><span class="card-value" style="font-size:12px">${c.created_at || '-'}</span></div>
+                                ${c.status === 'unused' ? `<div class="card-actions"><button class="btn btn-danger" style="font-size:11px;padding:4px 8px" onclick="deleteCdkey(${c.id})">删除</button></div>` : ''}
+                            </div>`).join('')
+                    }
+                    renderCdkeysPagination(data.pagination)
+                }
+            } catch (err) { console.error('加载卡密失败:', err) }
+        }
+
+        function renderCdkeysPagination(pagination) {
+            const totalPages = Math.ceil(pagination.total / pagination.limit)
+            document.getElementById('cdkeysPrevBtn').disabled = pagination.page <= 1
+            document.getElementById('cdkeysNextBtn').disabled = pagination.page >= totalPages
+            document.getElementById('cdkeysPageNumbers').innerHTML = `第 ${pagination.page} / ${totalPages || 1} 页 (共 ${pagination.total} 条)`
+        }
+
+        function changeCdkeysPage(delta) {
+            cdkeysCurrentPage += delta
+            if (cdkeysCurrentPage < 1) cdkeysCurrentPage = 1
+            loadCdkeys()
+        }
+
+        async function loadCdkeyStats() {
+            try {
+                const data = await authFetch(`${API_BASE}/api/admin/cdkeys/stats`)
+                if (data.success) {
+                    document.getElementById('cdkeyUnused').textContent = data.stats.unused || 0
+                    document.getElementById('cdkeyUsed').textContent = data.stats.used || 0
+                }
+            } catch (err) { console.error('加载卡密统计失败:', err) }
+        }
+
+        function showCreateCdkey() {
+            const html = `
+                <div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:1000;display:flex;align-items:center;justify-content:center" id="cdkeyModal">
+                    <div style="background:#1e1e3f;border-radius:12px;padding:24px;width:500px;max-width:95%;max-height:80vh;overflow-y:auto">
+                        <h3 style="margin:0 0 20px;color:#fff">🎫 生成卡密</h3>
+                        <div style="margin-bottom:12px">
+                            <label style="color:rgba(255,255,255,0.7);display:block;margin-bottom:4px">卡密类型</label>
+                            <select id="cdkeyType" onchange="onCdkeyTypeChange()" style="width:100%;padding:8px;border-radius:6px;background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2)">
+                                <option value="trial">试用卡（1天 / 50配额）</option>
+                                <option value="annual">年卡（365天 / 500配额）</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom:12px">
+                            <label style="color:rgba(255,255,255,0.7);display:block;margin-bottom:4px">生成数量</label>
+                            <input type="number" id="cdkeyCount" value="1" min="1" max="100" style="width:100%;padding:8px;border-radius:6px;background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2)">
+                        </div>
+                        <div style="margin-bottom:12px;padding:12px;background:rgba(102,126,234,0.15);border-radius:8px;border:1px solid rgba(102,126,234,0.3)">
+                            <div style="color:#6ad6a7;font-size:13px;margin-bottom:8px">📋 配额说明</div>
+                            <div style="color:rgba(255,255,255,0.7);font-size:12px;line-height:1.8">
+                                • 文字生成语音 = 消耗 1 配额<br>
+                                • 数字人对口型 = 消耗 1 配额<br>
+                                • 克隆音色 = 消耗 1 配额/条
+                            </div>
+                        </div>
+                        <input type="hidden" id="cdkeyDays" value="1">
+                        <input type="hidden" id="cdkeyVideoQuota" value="50">
+                        <input type="hidden" id="cdkeyMaxDevices" value="1">
+                        <div style="margin-bottom:12px">
+                            <label style="color:rgba(255,255,255,0.7);display:block;margin-bottom:4px">备注</label>
+                            <input type="text" id="cdkeyNote" placeholder="可选备注" style="width:100%;padding:8px;border-radius:6px;background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2)">
+                        </div>
+                        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
+                            <button class="btn" onclick="document.getElementById('cdkeyModal').remove()">取消</button>
+                            <button class="btn btn-success" onclick="createCdkeys()">生成</button>
+                        </div>
+                    </div>
+                </div>
+            `
+            document.body.insertAdjacentHTML('beforeend', html)
+        }
+
+        function onCdkeyTypeChange() {
+            const type = document.getElementById('cdkeyType').value
+            if (type === 'trial') { document.getElementById('cdkeyDays').value = 1; document.getElementById('cdkeyVideoQuota').value = 50 }
+            else if (type === 'annual') { document.getElementById('cdkeyDays').value = 365; document.getElementById('cdkeyVideoQuota').value = 500 }
+        }
+
+        async function createCdkeys() {
+            const count = parseInt(document.getElementById('cdkeyCount').value)
+            const type = document.getElementById('cdkeyType').value
+            const days = parseInt(document.getElementById('cdkeyDays').value)
+            const video_quota = parseInt(document.getElementById('cdkeyVideoQuota').value)
+            const max_devices = parseInt(document.getElementById('cdkeyMaxDevices').value)
+            const note = document.getElementById('cdkeyNote').value
+            try {
+                let data
+                if (count > 1) {
+                    data = await authFetch(`${API_BASE}/api/admin/cdkey/batch-create`, { method: 'POST', body: JSON.stringify({ count, type, days, video_quota, max_devices, note }) })
+                } else {
+                    data = await authFetch(`${API_BASE}/api/admin/cdkey/create`, { method: 'POST', body: JSON.stringify({ type, days, video_quota, max_devices, note }) })
+                }
+                if (data.success) {
+                    let msg = `成功生成 ${count > 1 ? data.count : 1} 张卡密\n\n`
+                    if (count > 1) { data.cdkeys.forEach(c => { msg += `${c.code}\n` }) }
+                    else { msg += `卡密: ${data.cdkey.code}\n类型: ${data.cdkey.type}\n天数: ${data.cdkey.days}\n配额: ${data.cdkey.video_quota}` }
+                    alert(msg); document.getElementById('cdkeyModal').remove(); loadCdkeys(); loadCdkeyStats()
+                } else { alert('创建失败: ' + data.message) }
+            } catch (err) { alert('创建失败: ' + err.message) }
+        }
+
+        async function deleteCdkey(id) {
+            if (!confirm('确定要删除此卡密吗？')) return
+            try {
+                const data = await authFetch(`${API_BASE}/api/admin/cdkey/${id}`, { method: 'DELETE' })
+                if (data.success) { loadCdkeys(); loadCdkeyStats() } else { alert('删除失败: ' + data.message) }
+            } catch (err) { alert('删除失败: ' + err.message) }
+        }
+
+        function showExportCdkeysModal() {
+            const html = `
+                <div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:1000;display:flex;align-items:center;justify-content:center" id="exportModal">
+                    <div style="background:#1e1e3f;border-radius:12px;padding:24px;width:400px;max-width:95%">
+                        <h3 style="margin:0 0 20px;color:#fff">导出用户卡密</h3>
+                        <div style="margin-bottom:12px">
+                            <label style="color:rgba(255,255,255,0.7);display:block;margin-bottom:4px">筛选状态</label>
+                            <select id="exportStatus" style="width:100%;padding:8px;border-radius:6px;background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2)">
+                                <option value="">全部</option>
+                                <option value="unused">未使用</option>
+                                <option value="used">已使用</option>
+                            </select>
+                        </div>
+                        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
+                            <button class="btn" onclick="document.getElementById('exportModal').remove()">取消</button>
+                            <button class="btn btn-success" onclick="exportCdkeys()">导出 CSV</button>
+                        </div>
+                    </div>
+                </div>
+            `
+            document.body.insertAdjacentHTML('beforeend', html)
+        }
+
+        async function exportCdkeys() {
+            const status = document.getElementById('exportStatus').value
+            const token = localStorage.getItem('adminToken')
+            window.open(`${API_BASE}/api/admin/cdkeys/export?status=${status}&token=${token}`, '_blank')
+            document.getElementById('exportModal').remove()
+        }
+
+        // ==================== 模型推送管理 ====================
+        let modelProviders = []
+
+        async function loadModelProviders() {
+            try {
+                const data = await authFetch(`${API_BASE}/api/admin/model-providers`)
+                if (data.success) {
+                    modelProviders = data.providers || []
+
+                    // 自动从系统配置补充内置语音/文本/数字人供应商（无需手动点击同步）
+                    try {
+                        const sysData = await authFetch(`${API_BASE}/api/admin/system/config`)
+                        if (sysData.success) {
+                            const configs = {}
+                            sysData.configs.forEach(c => { configs[c.config_key] = c.config_value })
+
+                            // 阿里百炼语音模型
+                            const aliyunApiKey = configs.aliyun_bailian_api_key || ''
+                            if (aliyunApiKey && !modelProviders.find(p => p.id === 'sync_builtInAliyun')) {
+                                modelProviders.push({
+                                    id: 'sync_builtInAliyun',
+                                    title: '阿里云百炼（语音）',
+                                    type: 'dashscope',
+                                    apiHost: configs.aliyun_bailian_base_url || 'https://dashscope.aliyuncs.com/compatible-mode/v1',
+                                    apiKey: aliyunApiKey,
+                                    models: [
+                                        { id: 'fun-asr', name: 'FunASR 语音识别', types: ['asr'], enabled: true },
+                                        { id: 'cosyvoice-v3.5-plus', name: 'CosyVoice 语音合成', types: ['voice-clone'], enabled: true }
+                                    ],
+                                    enabled: true,
+                                    isServerPush: true
+                                })
+                            }
+
+                            // 火山引擎豆包文本模型
+                            const volcApiKey = configs.volcengine_api_key || ''
+                            const volcModel = configs.volcengine_model || 'doubao-seed-2-0-lite-260215'
+                            const doubaoModels = [
+                                { id: volcModel, name: volcModel === 'doubao-seed-2-0-lite-260215' ? '豆包-2.0-lite (首推)' : '豆包-2.0-mini (最新)', types: ['text'], enabled: true },
+                                { id: volcModel === 'doubao-seed-2-0-lite-260215' ? 'doubao-seed-2-0-mini-260215' : 'doubao-seed-2-0-lite-260215', name: volcModel === 'doubao-seed-2-0-lite-260215' ? '豆包-2.0-mini (最新)' : '豆包-2.0-lite (首推)', types: ['text'], enabled: true }
+                            ]
+                            const existingDoubaoLoad = modelProviders.find(p => p.id === 'sync_builtInDoubao')
+                            if (volcApiKey && !existingDoubaoLoad) {
+                                modelProviders.push({
+                                    id: 'sync_builtInDoubao',
+                                    title: '火山引擎（豆包）',
+                                    type: 'openai',
+                                    apiHost: 'https://ark.cn-beijing.volces.com/api/v3/',
+                                    apiKey: volcApiKey,
+                                    models: doubaoModels,
+                                    enabled: true,
+                                    isServerPush: true
+                                })
+                            } else if (volcApiKey && existingDoubaoLoad) {
+                                // 追加缺失的模型
+                                doubaoModels.forEach(m => {
+                                    if (!existingDoubaoLoad.models.find(em => em.id === m.id)) {
+                                        existingDoubaoLoad.models.push(m)
+                                    }
+                                })
+                            }
+
+                            // RunningHub数字人模型（网络节点01-08）
+                            const rhApiKey = configs.runninghub_api_key || ''
+                            const rhWf1 = configs.runninghub_workflow_id_1 || ''
+                            const rhWf2 = configs.runninghub_workflow_id_2 || ''
+                            const rhWf3 = configs.runninghub_workflow_id_3 || ''
+                            const rhWf4 = configs.runninghub_workflow_id_4 || ''
+                            const rhWf5 = configs.runninghub_workflow_id_5 || ''
+                            const rhWf6 = configs.runninghub_workflow_id_6 || ''
+                            const rhWf7 = configs.runninghub_workflow_id_7 || ''
+                            const rhWf8 = configs.runninghub_workflow_id_8 || ''
+                            if (rhApiKey && (rhWf1 || rhWf2 || rhWf3 || rhWf4 || rhWf5 || rhWf6 || rhWf7 || rhWf8) && !modelProviders.find(p => p.id === 'sync_builtInRunningHub')) {
+                                const dhModels = []
+                                if (rhWf1) dhModels.push({ id: 'cloud_digital_human', name: '云端模型1（网络节点01）', types: ['digital-human'], enabled: true, workflowId: rhWf1, nodes: configs.runninghub_mode1_nodes || '' })
+                                if (rhWf2) dhModels.push({ id: 'cloud_digital_human_plus', name: '云端模型Plus（网络节点02）', types: ['digital-human'], enabled: true, workflowId: rhWf2, nodes: configs.runninghub_mode2_nodes || '' })
+                                if (rhWf3) dhModels.push({ id: 'cloud_digital_human_3', name: '云端模型3（网络节点03）', types: ['digital-human'], enabled: true, workflowId: rhWf3, nodes: configs.runninghub_mode3_nodes || '' })
+                                if (rhWf4) dhModels.push({ id: 'cloud_digital_human_4', name: '云端模型4（网络节点04）', types: ['digital-human'], enabled: true, workflowId: rhWf4, nodes: configs.runninghub_mode4_nodes || '' })
+                                if (rhWf5) dhModels.push({ id: 'cloud_digital_human_5', name: '云端模型5（网络节点05）', types: ['digital-human'], enabled: true, workflowId: rhWf5, nodes: configs.runninghub_mode5_nodes || '' })
+                                if (rhWf6) dhModels.push({ id: 'cloud_digital_human_6', name: '云端模型6（网络节点06）', types: ['digital-human'], enabled: true, workflowId: rhWf6, nodes: configs.runninghub_mode6_nodes || '' })
+                                if (rhWf7) dhModels.push({ id: 'cloud_digital_human_7', name: '云端模型7（网络节点07）', types: ['digital-human'], enabled: true, workflowId: rhWf7, nodes: configs.runninghub_mode7_nodes || '' })
+                                if (rhWf8) dhModels.push({ id: 'cloud_digital_human_8', name: '云端模型8（AI应用）', types: ['digital-human'], enabled: true, workflowId: rhWf8, nodes: configs.runninghub_mode8_nodes || '' })
+                                modelProviders.push({
+                                    id: 'sync_builtInRunningHub',
+                                    title: 'RunningHub（数字人）',
+                                    type: 'runninghub',
+                                    apiHost: 'https://www.runninghub.cn',
+                                    apiKey: rhApiKey,
+                                    models: dhModels,
+                                    enabled: true,
+                                    isServerPush: true
+                                })
+                            }
+
+                            // RunningHub T2/T3/T4语音模型
+                            const rhTtsWfT2 = configs.runninghub_tts_workflow_id_t2 || ''
+                            const rhTtsWfT3 = configs.runninghub_tts_workflow_id_t3 || ''
+                            const rhTtsWfT4 = configs.runninghub_tts_workflow_id_t4 || ''
+                            if (rhApiKey && (rhTtsWfT2 || rhTtsWfT3 || rhTtsWfT4) && !modelProviders.find(p => p.id === 'sync_builtInRunningHubTTS')) {
+                                const ttsModels = []
+                                if (rhTtsWfT2) ttsModels.push({ id: 'runninghub_t2', name: 'T2语音模型', types: ['tts'], enabled: true, workflowId: rhTtsWfT2, nodes: configs.runninghub_tts_nodes_t2 || '' })
+                                if (rhTtsWfT3) ttsModels.push({ id: 'runninghub_t3', name: 'T3语音模型', types: ['tts'], enabled: true, workflowId: rhTtsWfT3, nodes: configs.runninghub_tts_nodes_t3 || '' })
+                                if (rhTtsWfT4) ttsModels.push({ id: 'runninghub_t4', name: 'T4语音模型', types: ['tts'], enabled: true, workflowId: rhTtsWfT4, nodes: configs.runninghub_tts_nodes_t4 || '' })
+                                modelProviders.push({
+                                    id: 'sync_builtInRunningHubTTS',
+                                    title: 'RunningHub（语音）',
+                                    type: 'runninghub-tts',
+                                    apiHost: 'https://www.runninghub.cn',
+                                    apiKey: rhApiKey,
+                                    models: ttsModels,
+                                    enabled: true,
+                                    isServerPush: true
+                                })
+                            }
+                        }
+                    } catch (e) { console.warn('自动补充内置供应商失败:', e) }
+
+                    renderModelProviders()
+                }
+            } catch (err) { alert('加载失败: ' + err.message) }
+        }
+
+        function renderModelProviders() {
+            // 模型类型映射
+            const typeMap = {
+                'text': { label: '💬 文字', color: '#6ad6a7', bg: 'rgba(59,130,246,0.15)', border: 'rgba(59,130,246,0.3)' },
+                'asr': { label: '🎙️ 语音识别', color: '#48bb78', bg: 'rgba(72,187,120,0.15)', border: 'rgba(72,187,120,0.3)' },
+                'voice-clone': { label: '🎵 语音合成', color: '#9bcab4', bg: 'rgba(159,122,234,0.15)', border: 'rgba(159,122,234,0.3)' },
+                'digital-human': { label: '🧑 数字人', color: '#f59e0b', bg: 'rgba(245,158,11,0.15)', border: 'rgba(245,158,11,0.3)' }
+            }
+            function getTypeBadge(t) {
+                const info = typeMap[t] || { label: t, color: '#a0aec0', bg: 'rgba(160,174,192,0.1)', border: 'rgba(160,174,192,0.2)' }
+                return `<span style="background:${info.bg};border:1px solid ${info.border};color:${info.color};border-radius:3px;padding:1px 5px;font-size:10px">${info.label}</span>`
+            }
+
+            function renderProviderCard(p, i) {
+                const allTypes = new Set()
+                ;(p.models || []).forEach(m => (m.types || []).forEach(t => allTypes.add(t)))
+                const usageTags = [...allTypes].map(t => getTypeBadge(t)).join(' ')
+                return `
+                <div style="background:rgba(255,255,255,0.06);border-radius:10px;padding:14px;border:1px solid rgba(255,255,255,0.1);margin-bottom:8px">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                        <div style="display:flex;align-items:center;gap:8px">
+                            <span style="font-weight:600;font-size:14px">${p.title || '未命名'}</span>
+                            <span class="badge" style="background:${p.enabled !== false ? '#48bb78' : '#718096'};font-size:11px">${p.enabled !== false ? '已启用' : '已禁用'}</span>
+                            ${usageTags}
+                        </div>
+                        <div style="display:flex;gap:6px">
+                            <button class="btn" style="font-size:11px;padding:4px 10px" onclick="toggleModelProvider(${i})">${p.enabled !== false ? '禁用' : '启用'}</button>
+                            <button class="btn" style="font-size:11px;padding:4px 10px" onclick="editModelProvider(${i})">编辑</button>
+                            <button class="btn btn-danger" style="font-size:11px;padding:4px 10px" onclick="deleteModelProvider(${i})">删除</button>
+                        </div>
+                    </div>
+                    <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:6px">
+                        API: <code style="background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:3px;font-size:11px">${p.apiHost || '未配置'}</code>
+                        &nbsp;Key: <code style="background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:3px;font-size:11px">${p.apiKey ? p.apiKey.substring(0,8) + '...' : '未配置'}</code>
+                    </div>
+                    <div style="display:flex;flex-wrap:wrap;gap:5px">
+                        ${(p.models || []).map((m, mi) => {
+                            const mTypes = (m.types || []).map(t => getTypeBadge(t)).join('')
+                            return `<span style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:6px;padding:3px 7px;font-size:11px;display:flex;align-items:center;gap:3px">${m.name || m.id} ${mTypes} <button style="background:none;border:none;color:#f56565;cursor:pointer;font-size:13px;padding:0 2px" onclick="removeProviderModel(${i},${mi})">×</button></span>`
+                        }).join('')}
+                        <button style="background:rgba(255,255,255,0.05);border:1px dashed rgba(255,255,255,0.2);border-radius:4px;padding:3px 8px;font-size:11px;color:rgba(255,255,255,0.5);cursor:pointer" onclick="addProviderModel(${i})">+ 模型</button>
+                    </div>
+                </div>`
+            }
+
+            // 按模型类型分类供应商
+            const textProviders = []
+            const voiceProviders = []
+            const digitalProviders = []
+
+            modelProviders.forEach((p, i) => {
+                const allTypes = new Set()
+                ;(p.models || []).forEach(m => (m.types || []).forEach(t => allTypes.add(t)))
+                const types = [...allTypes]
+                if (types.includes('text') && !types.includes('voice-clone') && !types.includes('asr') && !types.includes('digital-human')) {
+                    textProviders.push(i)
+                } else if (types.includes('voice-clone') || types.includes('asr')) {
+                    voiceProviders.push(i)
+                } else if (types.includes('digital-human')) {
+                    digitalProviders.push(i)
+                } else if (types.length === 0 || types.includes('text')) {
+                    // 无类型或只有text的归入文本
+                    textProviders.push(i)
+                } else {
+                    // 其他归入文本
+                    textProviders.push(i)
+                }
+            })
+
+            // 渲染文本模型
+            const textEl = document.getElementById('textModelProviders')
+            textEl.innerHTML = textProviders.length ? textProviders.map(i => renderProviderCard(modelProviders[i], i)).join('') : '<p style="text-align:center;color:rgba(255,255,255,0.3);font-size:12px;padding:10px">暂无文本模型供应商，点击"同步内置模型"或"添加供应商"</p>'
+
+            // 渲染语音模型
+            const voiceEl = document.getElementById('voiceModelProviders')
+            voiceEl.innerHTML = voiceProviders.length ? voiceProviders.map(i => renderProviderCard(modelProviders[i], i)).join('') : '<p style="text-align:center;color:rgba(255,255,255,0.3);font-size:12px;padding:10px">暂无语音模型供应商，点击"同步内置模型"或"添加供应商"</p>'
+
+            // 渲染数字人模型
+            const digitalEl = document.getElementById('digitalModelProviders')
+            digitalEl.innerHTML = digitalProviders.length ? digitalProviders.map(i => renderProviderCard(modelProviders[i], i)).join('') : '<p style="text-align:center;color:rgba(255,255,255,0.3);font-size:12px;padding:10px">暂无数字人模型供应商，点击"添加供应商"并设置类型为 digital-human</p>'
+        }
+
+        function showAddModelProvider() {
+            const modal = document.createElement('div')
+            modal.className = 'modal'
+            modal.id = 'addProviderModal'
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width:500px">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+                        <h3 style="margin:0">添加模型供应商</h3>
+                        <button onclick="closeModal('addProviderModal')" style="background:none;border:none;color:rgba(255,255,255,0.6);font-size:24px;cursor:pointer">×</button>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:12px">
+                        <div><label style="font-size:13px;color:rgba(255,255,255,0.6)">供应商名称 *</label><input id="mpTitle" placeholder="如：DeepSeek、智谱AI" style="width:100%;padding:8px 12px;border-radius:6px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;margin-top:4px"></div>
+                        <div><label style="font-size:13px;color:rgba(255,255,255,0.6)">接口类型</label><select id="mpType" style="width:100%;padding:8px 12px;border-radius:6px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;margin-top:4px"><option value="openai">OpenAI 兼容</option></select></div>
+                        <div><label style="font-size:13px;color:rgba(255,255,255,0.6)">API 地址 *</label><input id="mpApiHost" placeholder="如：https://api.deepseek.com/v1" style="width:100%;padding:8px 12px;border-radius:6px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;margin-top:4px"></div>
+                        <div><label style="font-size:13px;color:rgba(255,255,255,0.6)">API Key *</label><input id="mpApiKey" type="password" placeholder="sk-..." style="width:100%;padding:8px 12px;border-radius:6px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;margin-top:4px"></div>
+                        <div><label style="font-size:13px;color:rgba(255,255,255,0.6)">模型列表（每行一个，格式：模型ID|显示名称|类型）</label>
+                            <div style="margin-top:4px;margin-bottom:6px;display:flex;gap:6px;flex-wrap:wrap">
+                                <span style="font-size:11px;color:rgba(255,255,255,0.4)">类型说明：</span>
+                                <span style="font-size:11px;background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3);color:#6ad6a7;border-radius:3px;padding:1px 6px">text = 💬 文字对话</span>
+                                <span style="font-size:11px;background:rgba(72,187,120,0.15);border:1px solid rgba(72,187,120,0.3);color:#48bb78;border-radius:3px;padding:1px 6px">asr = 🎙️ 语音识别</span>
+                                <span style="font-size:11px;background:rgba(159,122,234,0.15);border:1px solid rgba(159,122,234,0.3);color:#9bcab4;border-radius:3px;padding:1px 6px">voice-clone = 🎵 语音合成/克隆</span>
+                                <span style="font-size:11px;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);color:#f59e0b;border-radius:3px;padding:1px 6px">digital-human = 🧑 数字人</span>
+                            </div>
+                            <textarea id="mpModels" rows="4" placeholder="deepseek-chat|DeepSeek Chat|text&#10;fun-asr|FunASR 语音识别|asr&#10;cosyvoice|CosyVoice 语音合成|voice-clone&#10;cloud-dh|云端数字人|digital-human" style="width:100%;padding:8px 12px;border-radius:6px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;margin-top:4px;font-family:monospace;font-size:12px"></textarea>
+                        </div>
+                    </div>
+                    <div style="margin-top:16px;display:flex;gap:8px;justify-content:flex-end">
+                        <button class="btn" onclick="closeModal('addProviderModal')">取消</button>
+                        <button class="btn btn-primary" onclick="confirmAddModelProvider()">添加</button>
+                    </div>
+                </div>
+            `
+            document.querySelectorAll(`[id="${modal.id}"]`).forEach(el => el.remove())
+            document.body.appendChild(modal)
+            modal.style.display = 'flex'
+        }
+
+        function confirmAddModelProvider() {
+            const title = document.getElementById('mpTitle').value.trim()
+            const type = document.getElementById('mpType').value
+            const apiHost = document.getElementById('mpApiHost').value.trim()
+            const apiKey = document.getElementById('mpApiKey').value.trim()
+            const modelsText = document.getElementById('mpModels').value.trim()
+
+            if (!title || !apiHost || !apiKey) { alert('请填写供应商名称、API地址和API Key'); return }
+
+            const models = modelsText.split('\n').filter(l => l.trim()).map(line => {
+                const parts = line.split('|').map(s => s.trim())
+                return { id: parts[0], name: parts[1] || parts[0], types: parts[2] ? parts[2].split(',') : ['text'], enabled: true }
+            })
+
+            modelProviders.push({ id: 'push_' + Date.now(), title, type, apiHost, apiKey, models, enabled: true, isServerPush: true })
+            renderModelProviders()
+            closeModal('addProviderModal')
+        }
+
+        function editModelProvider(index) {
+            const p = modelProviders[index]
+            const modal = document.createElement('div')
+            modal.className = 'modal'
+            modal.id = 'editProviderModal'
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width:500px">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+                        <h3 style="margin:0">编辑供应商</h3>
+                        <button onclick="closeModal('editProviderModal')" style="background:none;border:none;color:rgba(255,255,255,0.6);font-size:24px;cursor:pointer">×</button>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:12px">
+                        <div><label style="font-size:13px;color:rgba(255,255,255,0.6)">供应商名称</label><input id="epTitle" value="${p.title}" style="width:100%;padding:8px 12px;border-radius:6px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;margin-top:4px"></div>
+                        <div><label style="font-size:13px;color:rgba(255,255,255,0.6)">API 地址</label><input id="epApiHost" value="${p.apiHost||''}" style="width:100%;padding:8px 12px;border-radius:6px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;margin-top:4px"></div>
+                        <div><label style="font-size:13px;color:rgba(255,255,255,0.6)">API Key</label><input id="epApiKey" type="password" value="${p.apiKey||''}" style="width:100%;padding:8px 12px;border-radius:6px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;margin-top:4px"></div>
+                    </div>
+                    <div style="margin-top:16px;display:flex;gap:8px;justify-content:flex-end">
+                        <button class="btn" onclick="closeModal('editProviderModal')">取消</button>
+                        <button class="btn btn-primary" onclick="confirmEditModelProvider(${index})">保存</button>
+                    </div>
+                </div>
+            `
+            document.querySelectorAll(`[id="${modal.id}"]`).forEach(el => el.remove())
+            document.body.appendChild(modal)
+            modal.style.display = 'flex'
+        }
+
+        function confirmEditModelProvider(index) {
+            const p = modelProviders[index]
+            if (!p) { closeModal('editProviderModal'); return }
+            p.title = document.getElementById('epTitle').value.trim()
+            p.apiHost = document.getElementById('epApiHost').value.trim()
+            const newKey = document.getElementById('epApiKey').value.trim()
+            if (newKey) p.apiKey = newKey
+            renderModelProviders()
+            closeModal('editProviderModal')
+        }
+
+        function toggleModelProvider(index) {
+            modelProviders[index].enabled = modelProviders[index].enabled === false ? true : false
+            renderModelProviders()
+        }
+
+        function deleteModelProvider(index) {
+            if (!confirm('确定删除该供应商配置？')) return
+            modelProviders.splice(index, 1)
+            renderModelProviders()
+        }
+
+        function addProviderModel(providerIndex) {
+            const modelId = prompt('请输入模型ID（如：gpt-4o）:')
+            if (!modelId) return
+            const modelName = prompt('显示名称（留空则同模型ID）:', modelId) || modelId
+            modelProviders[providerIndex].models.push({ id: modelId.trim(), name: modelName.trim(), types: ['text'], enabled: true })
+            renderModelProviders()
+        }
+
+        function removeProviderModel(providerIndex, modelIndex) {
+            modelProviders[providerIndex].models.splice(modelIndex, 1)
+            renderModelProviders()
+        }
+
+        async function syncBuiltInModels() {
+            if (!confirm('将读取系统配置中已有的 API Key，自动生成模型推送配置。已有的推送配置不会被覆盖。确定继续？')) return
+            try {
+                const data = await authFetch(`${API_BASE}/api/admin/system/config`)
+                if (!data.success) { alert('读取系统配置失败'); return }
+                const configs = {}
+                data.configs.forEach(c => { configs[c.config_key] = c.config_value })
+
+                let added = 0
+
+                // 同步火山引擎（豆包）
+                const volcApiKey = configs.volcengine_api_key || ''
+                const volcModel = configs.volcengine_model || 'doubao-seed-2-0-lite-260215'
+                if (volcApiKey) {
+                    const existingDoubao = modelProviders.find(p => p.id === 'sync_builtInDoubao')
+                    const doubaoModels = [
+                        { id: volcModel, name: volcModel === 'doubao-seed-2-0-lite-260215' ? '豆包-2.0-lite (首推)' : '豆包-2.0-mini (最新)', types: ['text'], enabled: true },
+                        { id: volcModel === 'doubao-seed-2-0-lite-260215' ? 'doubao-seed-2-0-mini-260215' : 'doubao-seed-2-0-lite-260215', name: volcModel === 'doubao-seed-2-0-lite-260215' ? '豆包-2.0-mini (最新)' : '豆包-2.0-lite (首推)', types: ['text'], enabled: true }
+                    ]
+                    if (!existingDoubao) {
+                        modelProviders.push({
+                            id: 'sync_builtInDoubao',
+                            title: '火山引擎（豆包）',
+                            type: 'openai',
+                            apiHost: 'https://ark.cn-beijing.volces.com/api/v3/',
+                            apiKey: volcApiKey,
+                            models: doubaoModels,
+                            enabled: true,
+                            isServerPush: true
+                        })
+                        added++
+                    } else {
+                        // 追加缺失的模型
+                        doubaoModels.forEach(m => {
+                            if (!existingDoubao.models.find(em => em.id === m.id)) {
+                                existingDoubao.models.push(m)
+                                added++
+                            }
+                        })
+                    }
+                }
+
+                // 同步阿里云百炼（仅语音模型，不含文字模型）
+                const aliyunApiKey = configs.aliyun_bailian_api_key || ''
+                const aliyunBaseUrl = configs.aliyun_bailian_base_url || 'https://dashscope.aliyuncs.com/compatible-mode/v1'
+                if (aliyunApiKey) {
+                    const existingAliyun = modelProviders.find(p => p.id === 'sync_builtInAliyun')
+                    if (!existingAliyun) {
+                        modelProviders.push({
+                            id: 'sync_builtInAliyun',
+                            title: '阿里云百炼（语音）',
+                            type: 'dashscope',
+                            apiHost: aliyunBaseUrl,
+                            apiKey: aliyunApiKey,
+                            models: [
+                                { id: 'fun-asr', name: 'FunASR 语音识别', types: ['asr'], enabled: true },
+                                { id: 'cosyvoice-v3.5-plus', name: 'CosyVoice 语音合成', types: ['voice-clone'], enabled: true }
+                            ],
+                            enabled: true,
+                            isServerPush: true
+                        })
+                        added++
+                    }
+                }
+
+                // 同步 RunningHub（数字人模型：网络节点01-08）
+                const runninghubApiKey = configs.runninghub_api_key || ''
+                const rhWorkflow1 = configs.runninghub_workflow_id_1 || ''
+                const rhWorkflow2 = configs.runninghub_workflow_id_2 || ''
+                const rhWorkflow3 = configs.runninghub_workflow_id_3 || ''
+                const rhWorkflow4 = configs.runninghub_workflow_id_4 || ''
+                const rhWorkflow5 = configs.runninghub_workflow_id_5 || ''
+                const rhWorkflow6 = configs.runninghub_workflow_id_6 || ''
+                const rhWorkflow7 = configs.runninghub_workflow_id_7 || ''
+                const rhWorkflow8 = configs.runninghub_workflow_id_8 || ''
+                if (runninghubApiKey && (rhWorkflow1 || rhWorkflow2 || rhWorkflow3 || rhWorkflow4 || rhWorkflow5 || rhWorkflow6 || rhWorkflow7 || rhWorkflow8)) {
+                    const existingRH = modelProviders.find(p => p.id === 'sync_builtInRunningHub')
+                    if (!existingRH) {
+                        const dhModels = []
+                        if (rhWorkflow1) dhModels.push({ id: 'cloud_digital_human', name: '云端模型1（网络节点01）', types: ['digital-human'], enabled: true, workflowId: rhWorkflow1, nodes: configs.runninghub_mode1_nodes || '' })
+                        if (rhWorkflow2) dhModels.push({ id: 'cloud_digital_human_plus', name: '云端模型2（网络节点02）', types: ['digital-human'], enabled: true, workflowId: rhWorkflow2, nodes: configs.runninghub_mode2_nodes || '' })
+                        if (rhWorkflow3) dhModels.push({ id: 'cloud_digital_human_3', name: '云端模型3（网络节点03）', types: ['digital-human'], enabled: true, workflowId: rhWorkflow3, nodes: configs.runninghub_mode3_nodes || '' })
+                        if (rhWorkflow4) dhModels.push({ id: 'cloud_digital_human_4', name: '云端模型4（网络节点04）', types: ['digital-human'], enabled: true, workflowId: rhWorkflow4, nodes: configs.runninghub_mode4_nodes || '' })
+                        if (rhWorkflow5) dhModels.push({ id: 'cloud_digital_human_5', name: '云端模型5（网络节点05）', types: ['digital-human'], enabled: true, workflowId: rhWorkflow5, nodes: configs.runninghub_mode5_nodes || '' })
+                        if (rhWorkflow6) dhModels.push({ id: 'cloud_digital_human_6', name: '云端模型6（网络节点06）', types: ['digital-human'], enabled: true, workflowId: rhWorkflow6, nodes: configs.runninghub_mode6_nodes || '' })
+                        if (rhWorkflow7) dhModels.push({ id: 'cloud_digital_human_7', name: '云端模型7（网络节点07）', types: ['digital-human'], enabled: true, workflowId: rhWorkflow7, nodes: configs.runninghub_mode7_nodes || '' })
+                        if (rhWorkflow8) dhModels.push({ id: 'cloud_digital_human_8', name: '云端模型8（AI应用）', types: ['digital-human'], enabled: true, workflowId: rhWorkflow8, nodes: configs.runninghub_mode8_nodes || '' })
+                        modelProviders.push({
+                            id: 'sync_builtInRunningHub',
+                            title: 'RunningHub（数字人）',
+                            type: 'runninghub',
+                            apiHost: 'https://www.runninghub.cn',
+                            apiKey: runninghubApiKey,
+                            models: dhModels,
+                            enabled: true,
+                            isServerPush: true
+                        })
+                    }
+                }
+
+                // 同步 RunningHub T2/T3/T4语音模型
+                const rhTtsWfT2 = configs.runninghub_tts_workflow_id_t2 || ''
+                const rhTtsWfT3 = configs.runninghub_tts_workflow_id_t3 || ''
+                const rhTtsWfT4 = configs.runninghub_tts_workflow_id_t4 || ''
+                if (runninghubApiKey && (rhTtsWfT2 || rhTtsWfT3 || rhTtsWfT4)) {
+                    const existingRHTTS = modelProviders.find(p => p.id === 'sync_builtInRunningHubTTS')
+                    if (!existingRHTTS) {
+                        const ttsModels = []
+                        if (rhTtsWfT2) ttsModels.push({ id: 'runninghub_t2', name: 'T2语音模型', types: ['tts'], enabled: true, workflowId: rhTtsWfT2, nodes: configs.runninghub_tts_nodes_t2 || '' })
+                        if (rhTtsWfT3) ttsModels.push({ id: 'runninghub_t3', name: 'T3语音模型', types: ['tts'], enabled: true, workflowId: rhTtsWfT3, nodes: configs.runninghub_tts_nodes_t3 || '' })
+                        if (rhTtsWfT4) ttsModels.push({ id: 'runninghub_t4', name: 'T4语音模型', types: ['tts'], enabled: true, workflowId: rhTtsWfT4, nodes: configs.runninghub_tts_nodes_t4 || '' })
+                        modelProviders.push({
+                            id: 'sync_builtInRunningHubTTS',
+                            title: 'RunningHub（语音）',
+                            type: 'runninghub-tts',
+                            apiHost: 'https://www.runninghub.cn',
+                            apiKey: runninghubApiKey,
+                            models: ttsModels,
+                            enabled: true,
+                            isServerPush: true
+                        })
+                        added++
+                    }
+                }
+
+                if (added === 0) {
+                    alert('未发现可同步的内置模型配置（API Key 为空或已存在于推送列表中）')
+                    return
+                }
+
+                renderModelProviders()
+                // 同步后自动保存到服务器
+                try {
+                    const saveData = await authFetch(`${API_BASE}/api/admin/model-providers`, { method: 'PUT', body: JSON.stringify({ providers: modelProviders }) })
+                    if (saveData.success) {
+                        alert(`成功同步 ${added} 个内置模型供应商并已保存！客户端将自动同步。`)
+                    } else {
+                        alert(`已同步 ${added} 个供应商，但保存失败，请手动点击"保存推送配置"。`)
+                    }
+                } catch (e) {
+                    alert(`已同步 ${added} 个供应商，但保存失败，请手动点击"保存推送配置"。`)
+                }
+            } catch (err) {
+                alert('同步失败: ' + err.message)
+            }
+        }
+
+        async function saveModelProviders() {
+            const msgEl = document.getElementById('modelPushSaveMsg')
+            try {
+                const data = await authFetch(`${API_BASE}/api/admin/model-providers`, { method: 'PUT', body: JSON.stringify({ providers: modelProviders }) })
+                msgEl.style.display = 'block'
+                msgEl.style.color = data.success ? '#48bb78' : '#f56565'
+                msgEl.textContent = data.success ? '✅ 保存成功！客户端将自动同步' : '❌ ' + (data.message || data.error || '保存失败')
+                setTimeout(() => { msgEl.style.display = 'none' }, 3000)
+            } catch (err) {
+                msgEl.style.display = 'block'
+                msgEl.style.color = '#f56565'
+                msgEl.textContent = '❌ 保存失败: ' + err.message
+            }
+        }
+    </script>
+<script src="./apple-admin.js"></script>
+</body>
+
+</html>

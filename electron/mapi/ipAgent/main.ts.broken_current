@@ -1,0 +1,1343 @@
+import { ipcMain, BrowserWindow, dialog, app } from "electron";
+import { Log } from "../log/main";
+import ServerApi from "../server/api";
+import { spawn } from "child_process";
+import * as path from "path";
+import * as fs from "fs";
+import {
+    recognizeAudioWithFunasr,
+    extractAudioFromVideo,
+    funasrResultToSrt,
+    FunasrResult
+} from "./funasr";
+import { AppEnv } from "../env";
+import { execFFmpegCommand } from "../shell";
+import { DouyinVideoDownloader } from "./videoDownloader";
+
+let browserWindow: BrowserWindow | null = null;
+let videoDownloader: DouyinVideoDownloader | null = null;
+
+// 获取设置文件路径
+const getSettingsFilePath = () => {
+    return path.join(AppEnv.dataRoot, 'ipAgent', 'settings.json');
+};
+
+// 获取统一的输出目录（所有生成的文件都保存在这里）
+const getOutputDir = () => {
+    const outputDir = path.join(AppEnv.dataRoot, 'output');
+    if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir, { recursive: true });
+    }
+    return outputDir;
+};
+
+// 确保设置目录存在
+const ensureSettingsDir = () => {
+    const settingsDir = path.join(AppEnv.dataRoot, 'ipAgent');
+    if (!fs.existsSync(settingsDir)) {
+        fs.mkdirSync(settingsDir, { recursive: true });
+    }
+};
+
+// 打开浏览器窗口并自动抓取数据
+ipcMain.handle("ipAgent:openBrowserWindow", async (event, params: { url: string }) => {
+    try {
+        const { url } = params;
+
+        Log.info("ipAgent.openBrowserWindow", { url });
+
+        // 关闭之前的窗口（如果存在）
+        if (browserWindow && !browserWindow.isDestroyed()) {
+            browserWindow.close();
+            browserWindow = null;
+        }
+
+        // Create new browser window - 隐藏Electron特征，防止抖音检测
+        browserWindow = new BrowserWindow({
+            width: 1200,
+            height: 800,
+            webPreferences: {
+                nodeIntegration: false,
+                contextIsolation: true,
+                webSecurity: false,
+                // 不使用预加载脚本，避免暴露Electron特征
+                preload: undefined
+            }
+        });
+
+        // 修改User-Agent，移除Electron标识
+        browserWindow.webContents.setUserAgent(
+            browserWindow.webContents.getUserAgent()
+                .replace(/Electron\/[\d.]+\s/gi, '')
+                .replace(/aigcpanel[^\s]*/gi, '')
+        );
+
+        browserWindow.loadURL(url);
+
+        // 监听页面加载完成事件
+        return new Promise((resolve) => {
+            if (!browserWindow) {
+                resolve({
+                    success: false,
+                    message: "Browser window creation failed"
+                });
+                return;
+            }
+
+            // 设置超时时间（30秒）
+            const timeout = setTimeout(() => {
+                Log.info("ipAgent.openBrowserWindow.timeout", { url });
+                resolve({
+                    success: false,
+                    message: "页面加载超时，请检查网络连接或稍后重试"
+                });
+            }, 30000);
+
+            // 监听页面加载完成
+            browserWindow.webContents.on("did-finish-load", async () => {
+                clearTimeout(timeout);
+
+                Log.info("ipAgent.openBrowserWindow.pageLoaded", { url });
+
+                // 等待3秒让页面完全渲染（抖音是动态加载的）
+                await new Promise(r => setTimeout(r, 3000));
+
+                try {
+                    // 自动执行抓取脚本
+                    const script = `
+                        (async function() {
+                            // 获取账号名称 - 多种尝试
+                            let accountName = '';
+
+                            // 尝试1: 查找包含nickname的元素
+                            const nicknameEl = document.querySelector('[class*="nickname"], [class*="account"], h1');
+                            if (nicknameEl) accountName = nicknameEl.textContent?.trim();
+
+                            // 尝试2: 查找meta标签
+                            if (!accountName) {
+                                const metaEl = document.querySelector('meta[property="og:title"]');
+                                if (metaEl) accountName = metaEl.getAttribute('content');
+                            }
+
+                            // 尝试3: 从URL或页面标题获取
+                            if (!accountName) {
+                                accountName = document.title.split('-')[0]?.trim() || '';
+                            }
+
+                            // 辅助函数：延迟等待
+                            const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+                            // 等待元素出现（最多等待5秒）
+                            const waitForElement = async (selector) => {
+                                for (let i = 0; i < 10; i++) {
+                                    const els = document.querySelectorAll(selector);
+                                    if (els.length > 0) return els;
+                                    await sleep(500);
+                                }
+                                return [];
+                            };
+
+                            // 方法1: 优先尝试结构化采集（从截图中确认这是存在的）
+                            // 必须等待内容加载，因为抖音是动态渲染
+                            let videoItems = await waitForElement('ul[data-e2e="scroll-list"] > li');
+                            
+                            // 排除词列表
+                            const excludeWords = ['抖音号', 'IP属地', '获赞', '粉丝', '关注', '作品', '点赞', '评论', '分享', '收藏', '置顶'];
+                            const videoTitles = [];
+
+                            if (videoItems.length > 0) {
+                                // 策略A: 结构化采集 (最准确，顺序绝对正确)
+                                for (const item of videoItems) {
+                                    if (videoTitles.length >= 6) break;
+                                    
+                                    // 在每个li中找标题p标签
+                                    const pTags = item.querySelectorAll('p');
+                                    
+                                    for (const p of pTags) {
+                                        const text = p.textContent?.trim();
+                                        // 宽松的长度限制，适应短标题
+                                        if (text && text.length >= 4) { 
+                                            // 排除无关元素
+                                            const hasExcludeWord = excludeWords.some(word => text.includes(word));
+                                            if (hasExcludeWord) continue;
+
+                                            // 检查是否为纯标签
+                                            const textWithoutHashtags = text.replace(/#[^\s#]+/g, '').trim();
+                                            if (textWithoutHashtags.length < 2 && !text.includes('棋')) continue; // 象棋视频可能字很少
+
+                                            if (!videoTitles.includes(text)) {
+                                                videoTitles.push(text);
+                                                break; // 每个li只取第一个有效标题
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            // 方法2: 如果结构化采集失败，回退到基于位置的采集
+                            if (videoTitles.length < 3) {
+                                // 查找所有p标签
+                                const allPTags = document.querySelectorAll('p');
+                                
+                                // 收集带位置信息的候选标题
+                                const titleCandidates = [];
+                                
+                                allPTags.forEach((el) => {
+                                    const text = el.textContent?.trim();
+                                    if (!text || text.length < 4) return; // 进一步降低长度限制
+
+                                    const hasExcludeWord = excludeWords.some(word => text.includes(word));
+                                    if (hasExcludeWord) return;
+                                    
+                                    const textWithoutHashtags = text.replace(/#[^\s#]+/g, '').trim();
+                                    if (textWithoutHashtags.length < 2 && !text.includes('棋')) return;
+                                    
+                                    const rect = el.getBoundingClientRect();
+                                    
+                                    // 只要存在于文档流中
+                                    titleCandidates.push({
+                                        text: text,
+                                        top: rect.top,
+                                        left: rect.left
+                                    });
+                                });
+                                
+                                // 严格视觉排序：上->下 (阈值50px)，左->右
+                                titleCandidates.sort((a, b) => {
+                                    const yDiff = a.top - b.top;
+                                    if (Math.abs(yDiff) > 50) return yDiff;
+                                    return a.left - b.left;
+                                });
+                                
+                                // 补充标题直到6个
+                                for (const candidate of titleCandidates) {
+                                    if (videoTitles.length >= 6) break;
+                                    if (!videoTitles.includes(candidate.text)) {
+                                        videoTitles.push(candidate.text);
+                                    }
+                                }
+                            }
+
+                            return {
+                                accountName,
+                                videoTitles: videoTitles.slice(0, 6)
+                            };
+                        })();
+                    `;
+
+                    const data = await browserWindow!.webContents.executeJavaScript(script);
+
+                    Log.info("ipAgent.openBrowserWindow.scraped", {
+                        accountName: data.accountName,
+                        videoCount: data.videoTitles?.length || 0
+                    });
+
+                    // 关闭浏览器窗口
+                    if (browserWindow && !browserWindow.isDestroyed()) {
+                        browserWindow.close();
+                        browserWindow = null;
+                    }
+
+                    resolve({
+                        success: true,
+                        data
+                    });
+
+                } catch (scrapeError) {
+                    Log.error("ipAgent.openBrowserWindow.scrapeError", scrapeError);
+                    resolve({
+                        success: false,
+                        message: "数据采集失败: " + (scrapeError?.message || scrapeError)
+                    });
+                }
+            });
+
+            browserWindow.on("closed", () => {
+                clearTimeout(timeout);
+                browserWindow = null;
+            });
+        });
+
+    } catch (error) {
+        Log.error("ipAgent.openBrowserWindow.error", error);
+        return {
+            success: false,
+            message: "打开浏览器失败: " + (error?.message || error)
+        };
+    }
+});
+
+// 分析抖音账号（与openBrowserWindow相同的实现）
+ipcMain.handle("ipAgent:analyzeDouyinAccount", async (event, params: { url: string }) => {
+    try {
+        const { url } = params;
+
+        Log.info("ipAgent.analyzeDouyinAccount", { url });
+
+        // 关闭之前的窗口（如果存在）
+        if (browserWindow && !browserWindow.isDestroyed()) {
+            browserWindow.close();
+            browserWindow = null;
+        }
+
+        // Create new browser window - 隐藏Electron特征，防止抖音检测
+        browserWindow = new BrowserWindow({
+            width: 1200,
+            height: 800,
+            webPreferences: {
+                nodeIntegration: false,
+                contextIsolation: true,
+                webSecurity: false,
+                // 不使用预加载脚本，避免暴露Electron特征
+                preload: undefined
+            }
+        });
+
+        // 修改User-Agent，移除Electron标识
+        browserWindow.webContents.setUserAgent(
+            browserWindow.webContents.getUserAgent()
+                .replace(/Electron\/[\d.]+\s/gi, '')
+                .replace(/aigcpanel[^\s]*/gi, '')
+        );
+
+        browserWindow.loadURL(url);
+
+        // 监听页面加载完成事件
+        return new Promise((resolve) => {
+            if (!browserWindow) {
+                resolve({
+                    success: false,
+                    message: "Browser window creation failed"
+                });
+                return;
+            }
+
+            // 设置超时时间（30秒）
+            const timeout = setTimeout(() => {
+                Log.info("ipAgent.analyzeDouyinAccount.timeout", { url });
+                if (browserWindow && !browserWindow.isDestroyed()) {
+                    browserWindow.close();
+                    browserWindow = null;
+                }
+                resolve({
+                    success: false,
+                    message: "页面加载超时，请检查网络连接或稍后重试"
+                });
+            }, 30000);
+
+            // 监听页面加载完成
+            browserWindow.webContents.on("did-finish-load", async () => {
+                clearTimeout(timeout);
+
+                Log.info("ipAgent.analyzeDouyinAccount.pageLoaded", { url });
+
+                // 等待3秒让页面完全渲染（抖音是动态加载的）
+                await new Promise(r => setTimeout(r, 3000));
+
+                try {
+                    // 自动执行抓取脚本
+                    const script = `
+                        (async function() {
+                            // 获取账号名称 - 多种尝试
+                            let accountName = '';
+
+                            // 尝试1: 查找包含nickname的元素
+                            const nicknameEl = document.querySelector('[class*="nickname"], [class*="account"], h1');
+                            if (nicknameEl) accountName = nicknameEl.textContent?.trim();
+
+                            // 尝试2: 查找meta标签
+                            if (!accountName) {
+                                const metaEl = document.querySelector('meta[property="og:title"]');
+                                if (metaEl) accountName = metaEl.getAttribute('content');
+                            }
+
+                            // 尝试3: 从URL或页面标题获取
+                            if (!accountName) {
+                                accountName = document.title.split('-')[0]?.trim() || '';
+                            }
+
+                            // 辅助函数：延迟等待
+                            const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+                            // 等待元素出现（最多等待5秒）
+                            const waitForElement = async (selector) => {
+                                for (let i = 0; i < 10; i++) {
+                                    const els = document.querySelectorAll(selector);
+                                    if (els.length > 0) return els;
+                                    await sleep(500);
+                                }
+                                return [];
+                            };
+
+                            // 方法1: 优先尝试结构化采集（从截图中确认这是存在的）
+                            // 必须等待内容加载，因为抖音是动态渲染
+                            let videoItems = await waitForElement('ul[data-e2e="scroll-list"] > li');
+                            
+                            // 排除词列表
+                            const excludeWords = ['抖音号', 'IP属地', '获赞', '粉丝', '关注', '作品', '点赞', '评论', '分享', '收藏', '置顶'];
+                            const videoTitles = [];
+
+                            if (videoItems.length > 0) {
+                                // 策略A: 结构化采集 (最准确，顺序绝对正确)
+                                for (const item of videoItems) {
+                                    if (videoTitles.length >= 6) break;
+                                    
+                                    // 在每个li中找标题p标签
+                                    const pTags = item.querySelectorAll('p');
+                                    
+                                    for (const p of pTags) {
+                                        const text = p.textContent?.trim();
+                                        // 宽松的长度限制，适应短标题
+                                        if (text && text.length >= 4) { 
+                                            // 排除无关元素
+                                            const hasExcludeWord = excludeWords.some(word => text.includes(word));
+                                            if (hasExcludeWord) continue;
+
+                                            // 检查是否为纯标签
+                                            const textWithoutHashtags = text.replace(/#[^\s#]+/g, '').trim();
+                                            if (textWithoutHashtags.length < 2 && !text.includes('棋')) continue; // 象棋视频可能字很少
+
+                                            if (!videoTitles.includes(text)) {
+                                                videoTitles.push(text);
+                                                break; // 每个li只取第一个有效标题
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            // 方法2: 如果结构化采集失败，回退到基于位置的采集
+                            if (videoTitles.length < 3) {
+                                // 查找所有p标签
+                                const allPTags = document.querySelectorAll('p');
+                                
+                                // 收集带位置信息的候选标题
+                                const titleCandidates = [];
+                                
+                                allPTags.forEach((el) => {
+                                    const text = el.textContent?.trim();
+                                    if (!text || text.length < 4) return; // 进一步降低长度限制
+
+                                    const hasExcludeWord = excludeWords.some(word => text.includes(word));
+                                    if (hasExcludeWord) return;
+                                    
+                                    const textWithoutHashtags = text.replace(/#[^\s#]+/g, '').trim();
+                                    if (textWithoutHashtags.length < 2 && !text.includes('棋')) return;
+                                    
+                                    const rect = el.getBoundingClientRect();
+                                    
+                                    // 只要存在于文档流中
+                                    titleCandidates.push({
+                                        text: text,
+                                        top: rect.top,
+                                        left: rect.left
+                                    });
+                                });
+                                
+                                // 严格视觉排序：上->下 (阈值50px)，左->右
+                                titleCandidates.sort((a, b) => {
+                                    const yDiff = a.top - b.top;
+                                    if (Math.abs(yDiff) > 50) return yDiff;
+                                    return a.left - b.left;
+                                });
+                                
+                                // 补充标题直到6个
+                                for (const candidate of titleCandidates) {
+                                    if (videoTitles.length >= 6) break;
+                                    if (!videoTitles.includes(candidate.text)) {
+                                        videoTitles.push(candidate.text);
+                                    }
+                                }
+                            }
+
+                            return {
+                                accountName,
+                                videoTitles: videoTitles.slice(0, 6)
+                            };
+                        })();
+                    `;
+
+                    const data = await browserWindow!.webContents.executeJavaScript(script);
+
+                    Log.info("ipAgent.analyzeDouyinAccount.scraped", {
+                        accountName: data.accountName,
+                        videoCount: data.videoTitles?.length || 0
+                    });
+
+                    // 关闭浏览器窗口
+                    if (browserWindow && !browserWindow.isDestroyed()) {
+                        browserWindow.close();
+                        browserWindow = null;
+                    }
+
+                    resolve({
+                        success: true,
+                        data
+                    });
+
+                } catch (scrapeError) {
+                    Log.error("ipAgent.analyzeDouyinAccount.scrapeError", scrapeError);
+                    if (browserWindow && !browserWindow.isDestroyed()) {
+                        browserWindow.close();
+                        browserWindow = null;
+                    }
+                    resolve({
+                        success: false,
+                        message: "数据采集失败: " + (scrapeError?.message || scrapeError)
+                    });
+                }
+            });
+
+            browserWindow.on("closed", () => {
+                clearTimeout(timeout);
+                browserWindow = null;
+            });
+        });
+
+    } catch (error) {
+        Log.error("ipAgent.analyzeDouyinAccount.error", error);
+        return {
+            success: false,
+            message: "分析失败: " + (error?.message || error)
+        };
+    }
+});
+
+// 下载视频 - 仅下载，返回本地路径
+ipcMain.handle("ipAgent:downloadVideo", async (event, params: { url: string }) => {
+    try {
+        const { url } = params;
+        Log.info("ipAgent.downloadVideo", { url });
+
+        if (!videoDownloader) {
+            videoDownloader = new DouyinVideoDownloader();
+        }
+
+        const result = await videoDownloader.downloadDouyinVideo(url);
+
+        if (result.success) {
+            Log.info("ipAgent.downloadVideo.success", { path: result.videoPath });
+            return {
+                success: true,
+                videoPath: result.videoPath,
+                videoInfo: result.videoInfo
+            };
+        } else {
+            Log.error("ipAgent.downloadVideo.fail", result.error);
+            return {
+                success: false,
+                message: result.error || "下载失败"
+            };
+        }
+
+    } catch (error) {
+        Log.error("ipAgent.downloadVideo.error", error);
+        return {
+            success: false,
+            message: "下载视频出错: " + (error?.message || error)
+        };
+    }
+});
+
+// 仿写标题 - 使用配置的文本模型
+ipcMain.handle("ipAgent:rewriteTitles", async (event, params: {
+    titles: string[],
+    accountName: string,
+    modelConfig: { providerId: string, modelId: string, apiUrl: string, apiHost: string, apiKey: string, type: string },
+    rewritePrompt: string
+}) => {
+    try {
+        const { titles, accountName, modelConfig, rewritePrompt } = params;
+
+        Log.info("ipAgent.rewriteTitles", { accountName, titleCount: titles.length, modelConfig });
+
+        if (!modelConfig || !modelConfig.providerId || !modelConfig.modelId) {
+            return {
+                success: false,
+                message: "未配置文本模型，请先在设置中选择模型"
+            };
+        }
+
+        const rewrittenTitles: string[] = [];
+
+        // 构建提示词 - 一次性仿写所有标题
+        const titlesText = titles.map((t, i) => `${i + 1}. ${t}`).join('\n');
+
+        // 使用用户自定义提示词,如果没有则使用默认提示词
+        let prompt = rewritePrompt;
+        if (!prompt || prompt.trim() === '') {
+            prompt = `参考以下5个标题，帮我生成5个新的标题。要求：
+1. 保持相似的主题和风格
+2. 标题简洁有力
+3. 不要添加表情符号和标签
+4. 直接输出5个标题，每行一个，不要编号
+
+参考标题：
+${titlesText}
+
+请生成5个新标题：`;
+        } else {
+            // 替换提示词中的变量
+            prompt = prompt.replace(/\{\{content\}\}/g, titlesText);
+            prompt = prompt.replace(/\{content\}/g, titlesText);
+        }
+
+        try {
+            // 调用文本模型API
+            const response = await fetch(modelConfig.apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${modelConfig.apiKey}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: modelConfig.modelId,
+                    messages: [{ role: 'user', content: prompt }]
+                })
+            });
+
+            if (!response.ok) {
+                const error = await response.text();
+                throw new Error(`API请求失败: ${response.status}\n${error}`);
+            }
+
+            const data = await response.json();
+            const content = data.choices?.[0]?.message?.content;
+
+            if (!content) {
+                throw new Error('模型返回内容为空');
+            }
+
+            // 解析返回的标题（每行一个）
+            const lines = content.trim().split('\n').filter(line => line.trim());
+
+            // 清理可能的编号前缀（如"1. ", "1、", "- "等）
+            const cleanedTitles = lines.map(line => {
+                return line.replace(/^[\d\s\.\-、]+/, '').trim();
+            });
+
+            // 确保返回的标题数量与输入一致
+            if (cleanedTitles.length >= titles.length) {
+                rewrittenTitles.push(...cleanedTitles.slice(0, titles.length));
+            } else {
+                // 如果返回的标题不够，用原标题填充
+                rewrittenTitles.push(...cleanedTitles);
+                for (let i = cleanedTitles.length; i < titles.length; i++) {
+                    rewrittenTitles.push(titles[i]);
+                }
+            }
+
+            Log.info("ipAgent.rewriteTitles.success", {
+                originalCount: titles.length,
+                rewrittenCount: rewrittenTitles.length
+            });
+
+        } catch (e) {
+            Log.error("ipAgent.rewriteTitles.api.error", e);
+            // API调用失败时返回原标题
+            return {
+                success: false,
+                message: "AI模型调用失败: " + (e?.message || e),
+                rewrittenTitles: titles
+            };
+        }
+
+        return {
+            success: true,
+            rewrittenTitles
+        };
+    } catch (error) {
+        Log.error("ipAgent.rewriteTitles.error", error);
+        return {
+            success: false,
+            message: "仿写失败: " + (error?.message || error),
+            rewrittenTitles: params.titles // 失败时返回原标题
+        };
+    }
+});
+
+// 保存设置
+ipcMain.handle("ipAgent:saveSettings", async (event, params: { settings: any }) => {
+    try {
+        const { settings } = params;
+
+        Log.info("ipAgent.saveSettings", { settings });
+
+        // 确保目录存在
+        ensureSettingsDir();
+
+        // 保存到JSON文件
+        const settingsFilePath = getSettingsFilePath();
+        fs.writeFileSync(settingsFilePath, JSON.stringify(settings, null, 2), 'utf-8');
+
+        Log.info("ipAgent.saveSettings.success", { path: settingsFilePath });
+
+        return {
+            success: true
+        };
+    } catch (error) {
+        Log.error("ipAgent.saveSettings.error", error);
+        return {
+            success: false,
+            message: "保存设置失败: " + (error?.message || error)
+        };
+    }
+});
+
+// 获取设置
+ipcMain.handle("ipAgent:getSettings", async (event) => {
+    try {
+        Log.info("ipAgent.getSettings");
+
+        const settingsFilePath = getSettingsFilePath();
+
+        // 如果文件不存在，返回null
+        if (!fs.existsSync(settingsFilePath)) {
+            Log.info("ipAgent.getSettings.notFound", { path: settingsFilePath });
+            return {
+                success: true,
+                settings: null
+            };
+        }
+
+        // 读取并解析JSON文件
+        const content = fs.readFileSync(settingsFilePath, 'utf-8');
+        const settings = JSON.parse(content);
+
+        Log.info("ipAgent.getSettings.success", { path: settingsFilePath });
+
+        return {
+            success: true,
+            settings
+        };
+    } catch (error) {
+        Log.error("ipAgent.getSettings.error", error);
+        return {
+            success: false,
+            message: "获取设置失败: " + (error?.message || error)
+        };
+    }
+});
+
+// 生成文案 - 根据标题使用AI模型生成文案
+ipcMain.handle("ipAgent:generateScript", async (event, params: {
+    title: string,
+    count: number,
+    modelConfig: { providerId: string, modelId: string, apiUrl: string, apiHost: string, apiKey: string, type: string },
+    scriptPrompt: string
+}) => {
+    try {
+        const { title, count, modelConfig, scriptPrompt } = params;
+
+        Log.info("ipAgent.generateScript", { title, count, modelConfig });
+
+        if (!modelConfig || !modelConfig.providerId || !modelConfig.modelId) {
+            return {
+                success: false,
+                message: "未配置文本模型，请先在设置中选择模型"
+            };
+        }
+
+        // 使用用户自定义提示词，如果没有则使用默认提示词
+        let prompt = scriptPrompt;
+        if (!prompt || prompt.trim() === '') {
+            prompt = `请根据以下标题，生成一篇约{count}字的短视频文案。要求：
+1. 内容有趣、生动、吸引人
+2. 适合短视频口播
+3. 语言简洁易懂
+4. 直接输出文案内容，不要其他说明
+
+标题：{title}
+
+请生成文案：`;
+        }
+
+        // 替换提示词中的变量
+        prompt = prompt.replace(/\{title\}/g, title);
+        prompt = prompt.replace(/\{\{title\}\}/g, title);
+        prompt = prompt.replace(/\{count\}/g, count.toString());
+        prompt = prompt.replace(/\{\{count\}\}/g, count.toString());
+
+        try {
+            // 调用文本模型API
+            const response = await fetch(modelConfig.apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${modelConfig.apiKey}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: modelConfig.modelId,
+                    messages: [{ role: 'user', content: prompt }]
+                })
+            });
+
+            if (!response.ok) {
+                const error = await response.text();
+                throw new Error(`API请求失败: ${response.status}\n${error}`);
+            }
+
+            const data = await response.json();
+            const script = data.choices?.[0]?.message?.content;
+
+            if (!script) {
+                throw new Error('模型返回内容为空');
+            }
+
+            Log.info("ipAgent.generateScript.success", {
+                titleLength: title.length,
+                scriptLength: script.length
+            });
+
+            return {
+                success: true,
+                script: script.trim()
+            };
+
+        } catch (e) {
+            Log.error("ipAgent.generateScript.api.error", e);
+            return {
+                success: false,
+                message: "AI模型调用失败: " + (e?.message || e)
+            };
+        }
+    } catch (error) {
+        Log.error("ipAgent.generateScript.error", error);
+        return {
+            success: false,
+            message: "生成文案失败: " + (error?.message || error)
+        };
+    }
+});
+
+// 生成标题标签关键词 - 根据文案生成
+ipcMain.handle("ipAgent:generateTitleTags", async (event, params: {
+    script: string,
+    modelConfig: { providerId: string, modelId: string, apiUrl: string, apiHost: string, apiKey: string, type: string },
+    titleTagsPrompt: string
+}) => {
+    try {
+        const { script, modelConfig, titleTagsPrompt } = params;
+
+        Log.info("ipAgent.generateTitleTags", { scriptLength: script.length, modelConfig });
+
+        if (!modelConfig || !modelConfig.providerId || !modelConfig.modelId) {
+            return {
+                success: false,
+                message: "未配置文本模型，请先在设置中选择模型"
+            };
+        }
+
+        // 使用用户自定义提示词，如果没有则使用默认提示词
+        let prompt = titleTagsPrompt;
+        if (!prompt || prompt.trim() === '') {
+            prompt = `请根据以下文案内容，生成：
+1. 一个吸引人的标题（不超过30字）
+2. 3-5个相关话题标签（格式：#话题）
+3. 5-8个关键词
+
+文案内容：
+{content}
+
+请按以下格式输出：
+标题：xxx
+标签：#xxx #xxx #xxx
+关键词：xxx, xxx, xxx`;
+        }
+
+        // 替换提示词中的变量
+        prompt = prompt.replace(/\{content\}/g, script);
+        prompt = prompt.replace(/\{\{content\}\}/g, script);
+
+        try {
+            // 调用文本模型API
+            const response = await fetch(modelConfig.apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${modelConfig.apiKey}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: modelConfig.modelId,
+                    messages: [{ role: 'user', content: prompt }]
+                })
+            });
+
+            if (!response.ok) {
+                const error = await response.text();
+                throw new Error(`API请求失败: ${response.status}\n${error}`);
+            }
+
+            const data = await response.json();
+            const content = data.choices?.[0]?.message?.content;
+
+            if (!content) {
+                throw new Error('模型返回内容为空');
+            }
+
+            // 解析返回的内容
+            const lines = content.split('\n');
+            let title = '';
+            let tags = '';
+            let keywords = '';
+
+            for (const line of lines) {
+                if (line.includes('标题') || line.includes('Title')) {
+                    title = line.split(/[：:]/)[1]?.trim() || '';
+                } else if (line.includes('标签') || line.includes('Tags') || line.includes('#')) {
+                    tags = line.split(/[：:]/)[1]?.trim() || line.trim();
+                } else if (line.includes('关键词') || line.includes('Keywords')) {
+                    keywords = line.split(/[：:]/)[1]?.trim() || '';
+                }
+            }
+
+            Log.info("ipAgent.generateTitleTags.success", {
+                title, tags, keywords
+            });
+
+            return {
+                success: true,
+                title,
+                tags,
+                keywords
+            };
+
+        } catch (e) {
+            Log.error("ipAgent.generateTitleTags.api.error", e);
+            return {
+                success: false,
+                message: "AI模型调用失败: " + (e?.message || e)
+            };
+        }
+    } catch (error) {
+        Log.error("ipAgent.generateTitleTags.error", error);
+        return {
+            success: false,
+            message: "生成标题标签失败: " + (error?.message || error)
+        };
+    }
+});
+
+// 视频文案分析：使用浏览器自动化+API拦截+语音识别
+ipcMain.handle("ipAgent:rewriteVideoContent", async (event, params: {
+    videoUrl: string,
+    modelConfig: { providerId: string, modelId: string, apiUrl: string, apiHost: string, apiKey: string, type: string },
+    rewritePrompt: string,
+    asrModelKey?: string,
+    scriptWordCount?: number
+}) => {
+    // 提升参数到外层作用域，确保catch块中可访问
+    const videoUrl = params.videoUrl;
+    const modelConfig = params.modelConfig;
+    const rewritePrompt = params.rewritePrompt;
+    const asrModelKey = params.asrModelKey;
+    const scriptWordCount = params.scriptWordCount || 300;  // 默认 300 字
+
+    // 提升浏览器上下文变量到外层作用域，确保catch块中可访问
+    let externalBrowserContext: any = null;
+
+    try {
+
+        Log.info("ipAgent.rewriteVideoContent.start", {
+            videoUrl,
+            hasModelConfig: !!modelConfig,
+            hasRewritePrompt: !!rewritePrompt,
+            mode: "浏览器自动化+语音识别模式"
+        });
+
+        // 导入视频下载器
+        const { DouyinVideoDownloader } = await import('./videoDownloader');
+
+        // 尝试从publish模块获取现有的浏览器上下文
+        try {
+            const { getBrowserContext } = await import('../publish/main');
+            console.log('尝试从publish模块获取浏览器...');
+            externalBrowserContext = await getBrowserContext('douyin');
+            console.log('成功获取publish模块的浏览器上下文，将复用该浏览器');
+        } catch (error) {
+            console.log('未能从publish模块获取浏览器，将使用独立的浏览器管理器:', error instanceof Error ? error.message : error);
+        }
+
+        // 创建下载器实例（传入外部浏览器上下文，如果有的话）
+        const downloader = new DouyinVideoDownloader(externalBrowserContext);
+
+        let videoPath: string | null = null;
+        let audioPath: string | null = null;
+        let textPath: string | null = null;
+
+        try {
+            // 第一步：下载视频文件
+            Log.info("ipAgent.rewriteVideoContent.step1", { step: "使用浏览器自动化下载视频" });
+
+            const downloadResult = await downloader.downloadDouyinVideo(videoUrl);
+
+            Log.info("ipAgent.rewriteVideoContent.step1.result", {
+                success: downloadResult.success,
+                error: downloadResult.error,
+                videoPath: downloadResult.videoPath
+            });
+
+            if (!downloadResult.success) {
+                throw new Error(downloadResult.error || "视频下载失败");
+            }
+
+            videoPath = downloadResult.videoPath;
+            audioPath = downloadResult.audioPath;
+
+            Log.info("ipAgent.rewriteVideoContent.step1.success", {
+                videoPath: downloadResult.videoPath,
+                videoTitle: downloadResult.videoInfo?.desc,
+                author: downloadResult.videoInfo?.author?.nickname
+            });
+
+            // 【立即关闭浏览器】- 视频下载完成，不再需要浏览器
+            Log.info("ipAgent.rewriteVideoContent.closeBrowser", { reason: "视频下载完成，关闭浏览器" });
+            try {
+                await downloader.close();
+                // 如果使用了外部浏览器上下文，需要显式关闭它
+                if (externalBrowserContext) {
+                    const { closeBrowserContext } = await import('../publish/main');
+                    await closeBrowserContext('douyin');
+                    Log.info("ipAgent.rewriteVideoContent.closeBrowser.success", { message: "已关闭抖音浏览器上下文" });
+                }
+            } catch (closeError) {
+                Log.error("ipAgent.rewriteVideoContent.close.error", closeError);
+            }
+
+            // 第二步：提取音频并进行语音识别（本地处理）
+            Log.info("ipAgent.rewriteVideoContent.step2", { step: "提取音频并进行语音识别" });
+
+            // 第二步：提取音频并进行语音识别
+            // 目前所有情况都使用FUNASR实现
+            Log.info("ipAgent.rewriteVideoContent.step2.usingFunasr", { asrModelKey });
+            const recognizeResult = await extractAudioAndRecognize(
+                downloadResult.videoPath!,
+                downloadResult.audioPath!,
+                asrModelKey
+            );
+
+            const extractedText = recognizeResult.text;
+            textPath = recognizeResult.textPath;
+
+            Log.info("ipAgent.rewriteVideoContent.step2.success", {
+                extractedTextLength: extractedText.length,
+                extractedTextPreview: extractedText.substring(0, 100) + "...",
+                textPath: textPath
+            });
+
+            // 第三步：先用AI优化识别文本（添加标点符号），再进行仿写
+            Log.info("ipAgent.rewriteVideoContent.step3", { step: "优化识别文本并进行仿写" });
+
+            // 【新增】先调用AI优化识别文本，添加标点符号
+            Log.info("ipAgent.rewriteVideoContent.step3.optimizingText", {
+                sourceLength: extractedText.length,
+                preview: extractedText.substring(0, 100)
+            });
+
+            const optimizationPrompt = `这是我使用ASR技术对音频内容进行转录的结果。请直接输出优化后的文本，添加适当的标点符号，无需任何额外说明文字。
+
+转录结果：${extractedText}`;
+
+            let optimizedText = extractedText;
+            try {
+                optimizedText = await callTextModelAPI(optimizationPrompt, modelConfig);
+                Log.info("ipAgent.rewriteVideoContent.step3.optimizationSuccess", {
+                    optimizedLength: optimizedText?.length || 0,
+                    preview: optimizedText?.substring(0, 100) || ''
+                });
+            } catch (optimizationError) {
+                Log.info("ipAgent.rewriteVideoContent.step3.optimizationFailed", {
+                    error: optimizationError instanceof Error ? optimizationError.message : optimizationError
+                });
+                // 如果优化失败，继续使用原始文本
+            }
+
+            // 使用优化后的文本作为仿写的源内容
+            Log.info("ipAgent.rewriteVideoContent.step3.rewriteSourceText", {
+                sourceLength: optimizedText.length,
+                preview: optimizedText.substring(0, 100)
+            });
+
+            // 使用用户配置的提示词（rewritePrompt来自设置）
+            // 替换提示词中的占位符：{content} 和 {{count}}
+            let finalRewritePrompt = rewritePrompt && rewritePrompt.trim().length > 0
+                ? rewritePrompt
+                : `请基于以下视频原文案，创作一个新的仿写文案：\n\n原文案：${optimizedText}\n\n要求：\n1. 保持原文案的核心内容和风格\n2. 适当改变表达方式和用词\n3. 确保新文案通顺自然\n4. 长度与原文案相当\n\n请直接输出仿写后的文案：`;
+
+            // 替换 {content} 和 {{content}} 为优化后的文本
+            finalRewritePrompt = finalRewritePrompt
+                .replace(/{content}/g, optimizedText)
+                .replace(/{{content}}/g, optimizedText);
+
+            // 替换 {{count}} 为实际字数（支持多种格式：{{count}}、{count} 等）
+            finalRewritePrompt = finalRewritePrompt
+                .replace(/{{count}}/g, String(scriptWordCount))
+                .replace(/{count}/g, String(scriptWordCount));
+
+            Log.info("ipAgent.rewriteVideoContent.step3.usingPrompt", {
+                isCustomPrompt: !!(rewritePrompt && rewritePrompt.trim().length > 0),
+                promptLength: finalRewritePrompt.length,
+                promptPreview: finalRewritePrompt.substring(0, 80)
+            });
+
+            // 调用设置中的在线文案模型进行仿写
+            Log.info("ipAgent.rewriteVideoContent.step3.callingTextModel", {
+                modelId: modelConfig.modelId,
+                providerId: modelConfig.providerId
+            });
+
+            const rewrittenContent = await callTextModelAPI(finalRewritePrompt, modelConfig);
+
+            Log.info("ipAgent.rewriteVideoContent.step3.rewriteResult", {
+                resultLength: rewrittenContent?.length || 0,
+                resultPreview: rewrittenContent?.substring(0, 100) || ''
+            });
+
+            Log.info("ipAgent.rewriteVideoContent.success", {
+                originalTextLength: extractedText.length,
+                rewrittenTextLength: rewrittenContent.length
+            });
+
+            return {
+                success: true,
+                recognizedText: extractedText,      // 返回识别文本（txt文件的内容：去掉空格，保留标点）
+                rewrittenText: rewrittenContent,   // 返回AI生成的仿写内容（原样返回，不处理）
+                videoInfo: {
+                    title: downloadResult.videoInfo?.desc,
+                    author: downloadResult.videoInfo?.author?.nickname,
+                    duration: downloadResult.videoInfo?.video?.duration
+                },
+                message: "视频文案分析完成",
+                debug: {
+                    videoUrl: videoUrl,
+                    recognizedTextLength: extractedText.length,
+                    rewrittenTextLength: rewrittenContent.length,
+                    videoPath: videoPath,
+                    audioPath: audioPath,
+                    textPath: textPath
+                }
+            };
+
+        } catch (processingError) {
+            throw processingError;
+        }
+
+    } catch (error: any) {
+        // 记录详细的错误信息，便于诊断
+        console.error("【浏览器自动化失败】详细错误信息：");
+        console.error("错误类型:", error?.constructor?.name);
+        console.error("错误消息:", error?.message);
+        console.error("错误堆栈:", error?.stack);
+        console.error("原始错误对象:", error);
+
+        Log.error("ipAgent.rewriteVideoContent.error", {
+            errorType: error?.constructor?.name,
+            errorMessage: error?.message,
+            errorStack: error?.stack,
+            fullError: String(error)
+        });
+
+        // 发生错误时也要关闭浏览器
+        if (externalBrowserContext) {
+            try {
+                const { closeBrowserContext } = await import('../publish/main');
+                await closeBrowserContext('douyin');
+                Log.info("ipAgent.rewriteVideoContent.closeBrowser.onError", { message: "错误发生后已关闭抖音浏览器上下文" });
+            } catch (closeError) {
+                Log.error("ipAgent.rewriteVideoContent.closeBrowser.onError.failed", closeError);
+            }
+        }
+
+        // 直接抛出错误，返回失败状态
+        return {
+            success: false,
+            error: error?.message || "视频处理失败",
+            message: "视频仿写失败：" + (error?.message || "未知错误"),
+            debug: {
+                videoUrl: videoUrl,
+                errorType: error?.constructor?.name,
+                errorMessage: error?.message,
+                errorStack: error?.stack
+            }
+        };
+    }
+});
+
+/**
+ * 提取音频并进行语音识别
+ */
+async function extractAudioAndRecognize(videoPath: string, audioPath: string, asrModelKey?: string): Promise<{ text: string, textPath: string }> {
+    try {
+        const { exec } = await import('child_process');
+        const { dirname, join, extname } = await import('path');
+        const { existsSync, mkdirSync, writeFileSync, statSync } = await import('fs');
+
+        Log.info("extractAudioAndRecognize.start", { videoPath, audioPath });
+
+        // 确保音频目录存在
+        const audioDir = dirname(audioPath);
+        if (!existsSync(audioDir)) {
+            mkdirSync(audioDir, { recursive: true });
+        }
+
+        // 【修复】检查音频文件是否已存在且有效
+        if (existsSync(audioPath)) {
+            try {
+                const stats = statSync(audioPath);
+                if (stats.size > 0) {
+                    Log.info("extractAudioAndRecognize.audioExists", {
+                        audioPath,
+                        fileSize: stats.size
+                    });
+                    // 音频文件已存在且大小有效，直接使用
+                } else {
+                    Log.info("extractAudioAndRecognize.audioFileEmpty", { audioPath });
+                    // 音频文件为空，删除并重新提取
+                    require('fs').unlinkSync(audioPath);
+                }
+            } catch (statError) {
+                Log.info("extractAudioAndRecognize.statError", statError);
+            }
+        }
+
+        // 如果音频文件不存在，使用FFmpeg提取
+        if (!existsSync(audioPath)) {
+            Log.info("extractAudioAndRecognize.extractingAudio", { videoPath, audioPath });
+
+            // 使用FFmpeg提取音频，添加更好的错误处理
+            const ffmpegCommand = `ffmpeg -i "${videoPath}" -vn -acodec pcm_s16le -ar 16000 -ac 1 "${audioPath}" -y`;
+
+            Log.info("extractAudioAndRecognize.ffmpeg", { command: ffmpegCommand });
+
+            await new Promise<void>((resolve, reject) => {
+                exec(ffmpegCommand, (error: any, stdout: string, stderr: string) => {
+                    if (error) {
+                        Log.error("extractAudioAndRecognize.ffmpeg.error", { error: error.message, stderr });
+                        reject(new Error(`音频提取失败: ${error.message}`));
+                    } else {
+                        Log.info("extractAudioAndRecognize.ffmpeg.success", { stdout, stderr });
+                        resolve();
+                    }
+                });
+            });
+
+            // 检查音频文件是否生成成功
+            if (!existsSync(audioPath)) {
+                throw new Error("音频文件提取失败");
+            }
+        }
+
+        // 再次检查提取后的音频文件大小
+        const audioFileSize = statSync(audioPath).size;
+        if (audioFileSize === 0) {
+            throw new Error("提取的音频文件为空");
+        }
+
+        Log.info("extractAudioAndRecognize.audioReady", {
+            audioPath,
+            fileSize: audioFileSize
+        });
+
+        // 使用FUNASR进行语音识别
+        Log.info("extractAudioAndRecognize.funasr.start", { audioPath });
+
+        const funasrResult = await recognizeAudioWithFunasr(audioPath, {
+            language: 'zh',
+            enableWordTimestamp: true
+        });
+
+        // 将FUNASR结果转换为识别的文本
+        // 【修复】去掉所有空格，与"声音-语音识别"功能保持一致
+        const recognitionText = funasrResult.segments
+            .map(seg => seg.text.trim())
+            .filter(text => text.length > 0)
+            .join('')
+            .replace(/\s+/g, '');  // 去掉所有空格（包括字与字之间的空格）
+
+        // 保存识别文本到文件（与音频同目录，扩展名改为 .txt）
+        const textPath = audioPath.replace(extname(audioPath), '.txt');
+        writeFileSync(textPath, recognitionText, 'utf-8');
+
+        Log.info("extractAudioAndRecognize.success", {
+            resultLength: recognitionText.length,
+            resultPreview: recognitionText.substring(0, 100),
+            segmentCount: funasrResult.segments.length,
+            textPath: textPath
+        });
+
+        return {
+            text: recognitionText,
+            textPath: textPath
+        };
+
+    } catch (error) {
+        Log.error("extractAudioAndRecognize.error", error);
+        throw new Error(`音频提取和识别失败: ${error instanceof Error ? error.message : error}`);
+    }
+}
+
+
+/**
+ * 调用文本模型API
+ */
+async function callTextModelAPI(prompt: string, modelConfig: {
+    providerId: string,
+    modelId: string,
+    apiUrl: string,
+    apiKey: string
+}): Promise<string> {
+    try {
+        Log.info("callTextModelAPI.start", {
+            providerId: modelConfig.providerId,
+            modelId: modelConfig.modelId,
+            promptLength: prompt.length
+        });
+
+        const requestBody = {
+            model: modelConfig.modelId,
+            messages: [
+                {
+                    role: "user",
+                    content: prompt
+                }
+            ],
+            max_tokens: 1000,
+            temperature: 0.7
+        };
+
+        const response = await fetch(modelConfig.apiUrl, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${modelConfig.apiKey}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        });
+
+        if (!response.ok) {
+            throw new Error(`API请求失败: ${response.status} ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        const content = result.choices?.[0]?.message?.content || result.content || '';
+
+        Log.info("callTextModelAPI.success", {
+            responseLength: content.length,
+            responsePreview: content.substring(0, 100)
+        });
+
+        return content.trim();
+
+    } catch (error) {
+        Log.error("callTextModelAPI.error", error);
+        throw new Error(`文本模型API调用失败: ${error instanceof Error ? error.message : error}`);
+    }
+}
+
+export default {
+    init: () => {
+        Log.info("ipAgent.module.initialized");
+        console.log("ipAgent.module.initialized");
+        console.log('ipAgent module initialized, handlers should already be registered');
+    }
+};

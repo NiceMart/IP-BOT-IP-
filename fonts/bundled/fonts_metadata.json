@@ -1,0 +1,30 @@
+{
+  "version": "1.0.0",
+  "fonts": [
+    {
+      "family": "Alibaba PuHuiTi",
+      "display_name": "阿里巴巴普惠体",
+      "path": "../../src/assets/fonts/AlibabaPuHuiTi-3-55-Regular.ttf",
+      "source": "bundled",
+      "category": "sans-serif",
+      "languages": ["zh-CN", "en"],
+      "description": "阿里巴巴普惠体是一款现代化的中文字体",
+      "variants": ["Regular"],
+      "isInternational": false
+    },
+    {
+      "family": "Noto Serif CJK",
+      "display_name": "🌍 Noto Serif CJK (国际字体)",
+      "path": "NotoSerifCJK-VF.ttf.ttc",
+      "source": "bundled",
+      "category": "serif",
+      "languages": ["zh-CN", "ja", "ko", "en", "ru"],
+      "description": "支持中日韩及西里尔字母的国际字体，完美显示多语言字幕",
+      "variants": ["Regular", "Bold"],
+      "isInternational": true,
+      "supportsCyrillic": true,
+      "supportsHangul": true,
+      "supportsKana": true
+    }
+  ]
+}

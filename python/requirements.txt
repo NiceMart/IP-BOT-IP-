@@ -1,0 +1,18 @@
+# Python 依赖包列表
+# 用于人像抠图和封面生成功能
+
+# 核心依赖
+opencv-python>=4.8.0        # 图像处理
+numpy>=1.24.0               # 数值计算
+Pillow>=10.0.0              # 图像处理库
+loguru>=0.7.0               # 日志记录库（必需）
+
+# 人像抠图（必需）
+rembg>=2.0.68               # 背景移除库（包含 U2-Net 模型）
+onnxruntime>=1.16.0         # ONNX 模型运行时（rembg 依赖）
+
+# 中文 NLP（必需）
+jieba>=0.42.1               # 中文分词和关键词提取
+
+# 可选依赖（提升性能）
+# onnxruntime-gpu>=1.16.0   # GPU 加速版本（如果有 NVIDIA GPU）

@@ -1,0 +1,472 @@
+import {ipcMain, BrowserWindow, dialog, app} from "electron";
+import {Log} from "../log/main";
+import ServerApi from "../server/api";
+import {spawn} from "child_process";
+import * as path from "path";
+import * as fs from "fs";
+import {
+    recognizeAudioWithFunasr,
+    extractAudioFromVideo,
+    funasrResultToSrt,
+    FunasrResult
+} from "./funasr";
+import {AppEnv} from "../env";
+
+let browserWindow: BrowserWindow | null = null;
+
+// 获取设置文件路径
+const getSettingsFilePath = () => {
+    return path.join(AppEnv.dataRoot, 'ipAgent', 'settings.json');
+};
+
+/**
+ * 将文本按最大字符数分割成多行
+ * 优化：优先在标点符号处分割，避免在词语中间分割
+ */
+function splitTextIntoLinesOptimized(text: string, maxCharsPerLine: number): string[] {
+    const lines: string[] = [];
+    let currentLine = '';
+
+    // 按标点符号和空格分词，保留分隔符
+    // 中文标点：，。！？、；：""''（）【】《》
+    const words = text.split(/([，。！？、；：\s""''（）【】《》]+)/);
+
+    for (const word of words) {
+        if (!word.trim()) {
+            // 保留标点符号和空格
+            currentLine += word;
+            continue;
+        }
+
+        // 如果当前行加上新词不超过限制，直接添加
+        if ((currentLine + word).length <= maxCharsPerLine) {
+            currentLine += word;
+        } else {
+            // 如果当前行不为空，先保存当前行
+            if (currentLine.trim()) {
+                lines.push(currentLine.trim());
+            }
+            
+            // 如果单个词就超过限制，需要强制分割（这种情况很少见）
+            if (word.length > maxCharsPerLine) {
+                // 尝试在词中间分割（尽量避免，但必要时也要分割）
+                let remainingWord = word;
+                while (remainingWord.length > maxCharsPerLine) {
+                    lines.push(remainingWord.substring(0, maxCharsPerLine));
+                    remainingWord = remainingWord.substring(maxCharsPerLine);
+                }
+                currentLine = remainingWord;
+            } else {
+                currentLine = word;
+            }
+        }
+    }
+
+    // 添加最后一行
+    if (currentLine.trim()) {
+        lines.push(currentLine.trim());
+    }
+
+    return lines.length > 0 ? lines : [text];
+}
+
+// 确保设置目录存在
+const ensureSettingsDir = () => {
+    const settingsDir = path.join(AppEnv.dataRoot, 'ipAgent');
+    if (!fs.existsSync(settingsDir)) {
+        fs.mkdirSync(settingsDir, {recursive: true});
+    }
+};
+
+// 打开浏览器窗口并自动抓取数据
+ipcMain.handle("ipAgent:openBrowserWindow", async (event, params: {url: string}) => {
+    try {
+        const {url} = params;
+
+        Log.info("ipAgent.openBrowserWindow", {url});
+
+        // 关闭之前的窗口（如果存在）
+        if (browserWindow && !browserWindow.isDestroyed()) {
+            browserWindow.close();
+            browserWindow = null;
+        }
+
+        // 创建新的浏览器窗口
+        browserWindow = new BrowserWindow({
+            width: 1200,
+            height: 800,
+            webPreferences: {
+                nodeIntegration: false,
+                contextIsolation: true,
+                webSecurity: false
+            }
+        });
+
+        browserWindow.loadURL(url);
+
+        // 监听页面加载完成事件
+        return new Promise((resolve) => {
+            if (!browserWindow) {
+                resolve({
+                    success: false,
+                    message: "浏览器窗口创建失败"
+                });
+                return;
+            }
+
+            // 设置超时时间（30秒）
+            const timeout = setTimeout(() => {
+                Log.info("ipAgent.openBrowserWindow.timeout", {url});
+                resolve({
+                    success: false,
+                    message: "页面加载超时，请检查网络连接或稍后重试"
+                });
+            }, 30000);
+
+            // 监听页面加载完成
+            browserWindow.webContents.on("did-finish-load", async () => {
+                clearTimeout(timeout);
+
+                Log.info("ipAgent.openBrowserWindow.pageLoaded", {url});
+
+                // 等待3秒让页面完全渲染（抖音是动态加载的）
+                await new Promise(r => setTimeout(r, 3000));
+
+                try {
+                    // 自动执行抓取脚本
+                    const script = `
+                        (function() {
+                            // 获取账号名称 - 多种尝试
+                            let accountName = '';
+
+                            // 尝试1: 查找包含nickname的元素
+                            const nicknameEl = document.querySelector('[class*="nickname"], [class*="account"], h1');
+                            if (nicknameEl) accountName = nicknameEl.textContent?.trim();
+
+                            // 尝试2: 查找meta标签
+                            if (!accountName) {
+                                const metaEl = document.querySelector('meta[property="og:title"]');
+                                if (metaEl) accountName = metaEl.getAttribute('content');
+                            }
+
+                            // 尝试3: 从URL或页面标题获取
+                            if (!accountName) {
+                                accountName = document.title.split('-')[0]?.trim() || '';
+                            }
+
+                            // 获取视频列表（最新5个）
+                            const videoTitles = [];
+
+                            // 方法1: 查找所有p标签，过滤出可能是标题的
+                            const allPTags = document.querySelectorAll('p');
+                            allPTags.forEach((el) => {
+                                const text = el.textContent?.trim();
+                                if (text && text.length > 15 && (text.includes('#') || text.includes('AI') || text.includes('超级'))) {
+                                    if (videoTitles.length < 5 && !videoTitles.includes(text)) {
+                                        videoTitles.push(text);
+                                    }
+                                }
+                            });
+
+                            // 方法2: 如果方法1没找到，尝试特定class
+                            if (videoTitles.length === 0) {
+                                const titleElements = document.querySelectorAll('p[class*="title"], p[class*="desc"], div[class*="title"]');
+                                titleElements.forEach((el) => {
+                                    if (videoTitles.length < 5) {
+                                        const text = el.textContent?.trim();
+                                        if (text && text.length > 10) {
+                                            videoTitles.push(text);
+                                        }
+                                    }
+                                });
+                            }
+
+                            return {
+                                accountName,
+                                videoTitles: videoTitles.slice(0, 5)
+                            };
+                        })();
+                    `;
+
+                    const data = await browserWindow!.webContents.executeJavaScript(script);
+
+                    Log.info("ipAgent.openBrowserWindow.scraped", {
+                        accountName: data.accountName,
+                        videoCount: data.videoTitles?.length || 0
+                    });
+
+                    // 关闭浏览器窗口
+                    if (browserWindow && !browserWindow.isDestroyed()) {
+                        browserWindow.close();
+                        browserWindow = null;
+                    }
+
+                    resolve({
+                        success: true,
+                        data
+                    });
+
+                } catch (scrapeError) {
+                    Log.error("ipAgent.openBrowserWindow.scrapeError", scrapeError);
+                    resolve({
+                        success: false,
+                        message: "数据采集失败: " + (scrapeError?.message || scrapeError)
+                    });
+                }
+            });
+
+            browserWindow.on("closed", () => {
+                clearTimeout(timeout);
+                browserWindow = null;
+            });
+        });
+
+    } catch (error) {
+        Log.error("ipAgent.openBrowserWindow.error", error);
+        return {
+            success: false,
+            message: "打开浏览器失败: " + (error?.message || error)
+        };
+    }
+});
+
+// 从浏览器窗口抓取数据
+ipcMain.handle("ipAgent:scrapeFromBrowser", async (event, params: {url: string}) => {
+    try {
+        const {url} = params;
+
+        Log.info("ipAgent.scrapeFromBrowser", {url});
+
+        if (!browserWindow) {
+            return {
+                success: false,
+                message: "浏览器窗口未打开"
+            };
+        }
+
+        // 执行JavaScript获取页面数据
+        const script = `
+            (function() {
+                // 获取账号名称 - 多种尝试
+                let accountName = '';
+
+                // 尝试1: 查找包含nickname的元素
+                const nicknameEl = document.querySelector('[class*="nickname"], [class*="account"], h1');
+                if (nicknameEl) accountName = nicknameEl.textContent?.trim();
+
+                // 尝试2: 查找meta标签
+                if (!accountName) {
+                    const metaEl = document.querySelector('meta[property="og:title"]');
+                    if (metaEl) accountName = metaEl.getAttribute('content');
+                }
+
+                // 尝试3: 从URL或页面标题获取
+                if (!accountName) {
+                    accountName = document.title.split('-')[0]?.trim() || '';
+                }
+
+                // 获取视频列表（最新5个）
+                // 抖音使用的class名是动态的，我们使用包含关键class片段的方式
+                const videoTitles = [];
+
+                // 方法1: 查找所有p标签，过滤出可能是标题的（长度>10且包含#标签）
+                const allPTags = document.querySelectorAll('p');
+                allPTags.forEach((el) => {
+                    const text = el.textContent?.trim();
+                    if (text && text.length > 15 && (text.includes('#') || text.includes('AI') || text.includes('超级'))) {
+                        if (videoTitles.length < 5 && !videoTitles.includes(text)) {
+                            videoTitles.push(text);
+                        }
+                    }
+                });
+
+                // 方法2: 如果方法1没找到，尝试特定class
+                if (videoTitles.length === 0) {
+                    const titleElements = document.querySelectorAll('p[class*="title"], p[class*="desc"], div[class*="title"]');
+                    titleElements.forEach((el) => {
+                        if (videoTitles.length < 5) {
+                            const text = el.textContent?.trim();
+                            if (text && text.length > 10) {
+                                videoTitles.push(text);
+                            }
+                        }
+                    });
+                }
+
+                return {
+                    accountName,
+                    videoTitles: videoTitles.slice(0, 5)
+                };
+            })();
+        `;
+
+        const data = await browserWindow.webContents.executeJavaScript(script);
+
+        return {
+            success: true,
+            data
+        };
+
+    } catch (error) {
+        Log.error("ipAgent.scrapeFromBrowser.error", error);
+        return {
+            success: false,
+            message: "抓取失败: " + (error?.message || error)
+        };
+    }
+});
+
+// 分析抖音账号（保留原有功能用于测试）
+ipcMain.handle("ipAgent:analyzeDouyinAccount", async (event, params: {url: string}) => {
+    try {
+        const {url} = params;
+
+        // TODO: 实际实现抖音账号分析逻辑
+        // 这里需要调用抖音API或爬虫来获取账号信息
+        // 暂时返回模拟数据
+
+        Log.info("ipAgent.analyzeDouyinAccount", {url});
+
+        // 模拟数据 - 实际应该从抖音获取
+        // 注意：这些标题应该按时间倒序排列（最新的在前面）
+        const accountName = "欧大帅Allen"; // 从URL解析出账号名
+        const videoTitles = [
+            "2024年最值得学习的AI技能清单，掌握这些你就赢了 #技能提升 #AI学习",
+            "ChatGPT让我的工作效率提升10倍！这些技巧你必须知道 #效率工具 #AI应用",
+            "从程序员到超级个体的转变：我的三年实战经验分享 #职场成长 #个人发展",
+            "AI时代的个人品牌打造：如何用数字足迹建立影响力 #个人品牌 #AI营销",
+            "微软CTO韦青戳破真相：35岁不是坎，不会驾驭机器才是！超级个体靠常识+沟通+数字足迹立足，AI是工具不是对手。#AI生存法则 #超级个体"
+        ];
+
+        return {
+            success: true,
+            accountName,
+            videoTitles
+        };
+    } catch (error) {
+        Log.error("ipAgent.analyzeDouyinAccount.error", error);
+        return {
+            success: false,
+            message: "分析失败: " + (error?.message || error)
+        };
+    }
+});
+
+// 仿写标题 - 使用配置的文本模型
+ipcMain.handle("ipAgent:rewriteTitles", async (event, params: {
+    titles: string[],
+    accountName: string,
+    modelConfig: {providerId: string, modelId: string, apiUrl: string, apiHost: string, apiKey: string, type: string},
+    rewritePrompt: string
+}) => {
+    try {
+        const {titles, accountName, modelConfig, rewritePrompt} = params;
+
+        Log.info("ipAgent.rewriteTitles", {accountName, titleCount: titles.length, modelConfig});
+
+        if (!modelConfig || !modelConfig.providerId || !modelConfig.modelId) {
+            return {
+                success: false,
+                message: "未配置文本模型，请先在设置中选择模型"
+            };
+        }
+
+        const rewrittenTitles: string[] = [];
+
+        // 构建提示词 - 一次性仿写所有标题
+        const titlesText = titles.map((t, i) => `${i + 1}. ${t}`).join('\n');
+
+        // 使用用户自定义提示词,如果没有则使用默认提示词
+        let prompt = rewritePrompt;
+        if (!prompt || prompt.trim() === '') {
+            prompt = `参考以下5个标题，帮我生成5个新的标题。要求：
+1. 保持相似的主题和风格
+2. 标题简洁有力
+3. 不要添加表情符号和#标签
+4. 直接输出5个标题，每行一个，不要编号
+
+参考标题：
+${titlesText}
+
+请生成5个新标题：`;
+        } else {
+            // 替换提示词中的变量
+            prompt = prompt.replace(/\{\{content\}\}/g, titlesText);
+            prompt = prompt.replace(/\{content\}/g, titlesText);
+        }
+
+        try {
+            // 调用文本模型API
+            const response = await fetch(modelConfig.apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${modelConfig.apiKey}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: modelConfig.modelId,
+                    messages: [{role: 'user', content: prompt}]
+                })
+            });
+
+            if (!response.ok) {
+                const error = await response.text();
+                throw new Error(`API请求失败: ${response.status}\n${error}`);
+            }
+
+            const data = await response.json();
+            const content = data.choices?.[0]?.message?.content;
+
+            if (!content) {
+                throw new Error('模型返回内容为空');
+            }
+
+            // 解析返回的标题（每行一个）
+            const lines = content.trim().split('\n').filter(line => line.trim());
+
+            // 清理可能的编号前缀（如"1. ", "1、", "- "等）
+            const cleanedTitles = lines.map(line => {
+                return line.replace(/^[\d\s\.\-、]+/, '').trim();
+            });
+
+            // 确保返回的标题数量与输入一致
+            if (cleanedTitles.length >= titles.length) {
+                rewrittenTitles.push(...cleanedTitles.slice(0, titles.length));
+            } else {
+                // 如果返回的标题不够，用原标题填充
+                rewrittenTitles.push(...cleanedTitles);
+                for (let i = cleanedTitles.length; i < titles.length; i++) {
+                    rewrittenTitles.push(titles[i]);
+                }
+            }
+
+            Log.info("ipAgent.rewriteTitles.success", {
+                originalCount: titles.length,
+                rewrittenCount: rewrittenTitles.length
+            });
+
+        } catch (e) {
+            Log.error("ipAgent.rewriteTitles.api.error", e);
+            // API调用失败时返回原标题
+            return {
+                success: false,
+                message: "AI模型调用失败: " + (e?.message || e),
+                rewrittenTitles: titles
+            };
+        }
+
+        return {
+            success: true,
+            rewrittenTitles
+        };
+    } catch (error) {
+        Log.error("ipAgent.rewriteTitles.error", error);
+        return {
+            success: false,
+            message: "仿写失败: " + (error?.message || error),
+            rewrittenTitles: params.titles // 失败时返回原标题
+        };
+    }
+});
+
+// 生成视频文案

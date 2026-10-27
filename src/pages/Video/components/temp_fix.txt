@@ -1,0 +1,12 @@
+// 在customStyle定义后添加初始化标志
+const isInitialized = ref(false);
+
+// 修改getSelectedStyle函数，添加初始化检查
+if (!isInitialized.value) {
+    console.warn('[getSelectedStyle] 组件尚未初始化完成，返回默认值');
+    return { ...defaultStyle };
+}
+
+// 在onMounted最后添加
+isInitialized.value = true;
+console.log('[SubtitleStyleSelector] ✅ 组件初始化完成');

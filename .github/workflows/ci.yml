@@ -1,0 +1,30 @@
+name: Source validation
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            user-server/package-lock.json
+      - run: npm ci --no-audit --no-fund
+      - run: npm --prefix user-server ci --no-audit --no-fund
+      - run: npm run init:local
+      - run: npm test
+      - run: npm run audit:source
+      - run: npm run build
+      - name: Record inherited TypeScript debt
+        continue-on-error: true
+        run: npm run typecheck
+      - name: Dependency advisories (visible, currently non-blocking)
+        continue-on-error: true
+        run: npm audit

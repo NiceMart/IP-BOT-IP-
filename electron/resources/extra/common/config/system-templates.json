@@ -1,0 +1,4542 @@
+{
+  "version": "1.0.0",
+  "description": "System template config with 16 subtitle templates and 8 cover templates",
+  "subtitleTemplates": [
+    {
+      "id": "template_system_11",
+      "name": "11 Inline",
+      "description": "System subtitle template 11 inline keyword emphasis",
+      "config": {
+        "subtitleStyleId": "system-subtitle-11",
+        "subtitleFontSizeScale": 100,
+        "subtitlePosition": "bottom",
+        "enableKeywordEffects": true,
+        "keywordRenderMode": "inline-emphasis",
+        "keywordGroupsStyles": [
+          {
+            "groupName": "行动词",
+            "styleOverride": {
+              "fontColor": "#FFFF00",
+              "outlineColor": "#000000",
+              "outlineWidth": 2,
+              "fontSize": 24,
+              "fontName": "胡晓波男神体"
+            },
+            "effectId": "intense-flash",
+            "effectDuration": null,
+            "color": "#FFFF00",
+            "soundEffectId": "bubble",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "情感词",
+            "styleOverride": {
+              "fontColor": "#FFFF00",
+              "outlineColor": "#000000",
+              "outlineWidth": 0,
+              "fontSize": 24,
+              "fontName": "胡晓波男神体"
+            },
+            "effectId": "danmaku",
+            "effectDuration": null,
+            "color": "#FFFF00",
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          },
+          {
+            "groupName": "描述词",
+            "styleOverride": {
+              "fontColor": "#FFFF00",
+              "outlineColor": "#000000",
+              "outlineWidth": 2,
+              "fontSize": 24,
+              "fontName": "胡晓波男神体"
+            },
+            "effectId": "flying-tilt",
+            "effectDuration": null,
+            "color": "#FFFF00",
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          },
+          {
+            "groupName": "重点词/成语词",
+            "styleOverride": {
+              "fontColor": "#FFFF00",
+              "outlineColor": "#000000",
+              "outlineWidth": 2,
+              "fontSize": 24,
+              "fontName": "胡晓波男神体"
+            },
+            "effectId": "fly-in",
+            "effectDuration": null,
+            "color": "#FFFF00",
+            "soundEffectId": "ding",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "12",
+            "styleOverride": null,
+            "effectId": null,
+            "effectDuration": null,
+            "color": null,
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          }
+        ],
+        "screenWidth": 1920,
+        "screenHeight": 1080,
+        "fontSize": 48,
+        "fontFamily": "Arial, sans-serif",
+        "subtitleStyle": {
+          "id": "custom",
+          "name": "自定义样式",
+          "description": "完全自定义的字幕样式",
+          "preview": "示例文字",
+          "fontName": "胡晓波男神体",
+          "fontSize": 35,
+          "fontColor": "#FFFFFF",
+          "outlineColor": "#000000",
+          "outlineWidth": 0,
+          "backgroundColor": "transparent",
+          "backgroundOpacity": 0,
+          "position": "bottom",
+          "shadowOffset": 2,
+          "shadowBlur": 4,
+          "shadowColor": "#000000"
+        },
+        "titleSubtitleConfig": {
+          "enabled": true,
+          "sourceTitle": "有娃家庭马桶清洁妙招",
+          "maxCharsPerLine": 8,
+          "maxLines": 5,
+          "lineSpacingPercent": 5,
+          "topMarginPercent": 5,
+          "lines": [
+            {
+              "text": "有娃家庭马桶清洁",
+              "fontName": "优设标题黑",
+              "fontSize": 80,
+              "fontColor": "#ffff00",
+              "backgroundColor": "transparent",
+              "backgroundOpacity": 0,
+              "outlineColor": "#000000",
+              "outlineWidth": 1,
+              "shadowColor": "#000000",
+              "shadowOffset": 3,
+              "yOffsetPercent": 5
+            },
+            {
+              "text": "妙招",
+              "fontName": "优设标题黑",
+              "fontSize": 80,
+              "fontColor": "#ffffff",
+              "backgroundColor": "transparent",
+              "backgroundOpacity": 0,
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "shadowColor": "#000000",
+              "shadowOffset": 2,
+              "yOffsetPercent": 10
+            }
+          ],
+          "startTime": 0,
+          "fadeInDuration": 0,
+          "fadeOutDuration": 0
+        },
+        "previewConfig": {
+          "backgroundKey": "portrait",
+          "backgroundPosition": "center 28%",
+          "overlayStartColor": "rgba(0, 0, 0, 0.14)",
+          "overlayEndColor": "rgba(0, 0, 0, 0.58)",
+          "subtitleTexts": [
+            "生活不会辜负认真[努力]的人",
+            "用心前行日子总会[温柔]以待"
+          ],
+          "backgroundImage": "extra/common/cover-templates/subtitle-preview-template_system_11.png",
+          "titleTexts": [
+            "生活不会辜负认真努力的人",
+            "用心前行日子总会温柔以待"
+          ]
+        }
+      },
+      "createdAt": 1768396885438,
+      "isSystem": true,
+      "is_system": 1
+    },
+    {
+      "id": "template_system_classic_11",
+      "name": "11 Classic",
+      "description": "System subtitle template 11 classic original style",
+      "config": {
+        "subtitleStyleId": "system-subtitle-11",
+        "subtitleFontSizeScale": 100,
+        "subtitlePosition": "bottom",
+        "enableKeywordEffects": true,
+        "keywordGroupsStyles": [
+          {
+            "groupName": "行动词",
+            "styleOverride": {
+              "fontColor": "#FFFFFF",
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "fontSize": 68,
+              "fontName": "字玩哥特黑白无常 免费 超黑"
+            },
+            "effectId": "intense-flash",
+            "effectDuration": null,
+            "color": "#FFFFFF",
+            "soundEffectId": "magic-sfx",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "情感词",
+            "styleOverride": {
+              "fontColor": "#DDE3EC",
+              "outlineColor": "#000000",
+              "outlineWidth": 2,
+              "fontSize": 64,
+              "fontName": "庞门正道标题体免费版"
+            },
+            "effectId": "danmaku",
+            "effectDuration": null,
+            "color": "#DDE3EC",
+            "soundEffectId": "cash-register",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "描述词",
+            "styleOverride": {
+              "fontColor": "#DBC541",
+              "outlineColor": "#000000",
+              "outlineWidth": 7,
+              "fontSize": 88,
+              "fontName": "优设标题黑"
+            },
+            "effectId": "flying-tilt",
+            "effectDuration": null,
+            "color": "#DBC541",
+            "soundEffectId": "pop-1",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "重点词/成语词",
+            "styleOverride": {
+              "fontColor": "#980C0CEC",
+              "outlineColor": "#000000",
+              "outlineWidth": 10,
+              "fontSize": 104,
+              "fontName": "字玩哥特黑白无常 免费 超黑"
+            },
+            "effectId": "fly-in",
+            "effectDuration": null,
+            "color": "#980C0CEC",
+            "soundEffectId": "punch",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "12",
+            "styleOverride": null,
+            "effectId": null,
+            "effectDuration": null,
+            "color": null,
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          }
+        ],
+        "screenWidth": 1920,
+        "screenHeight": 1080,
+        "fontSize": 48,
+        "fontFamily": "Arial, sans-serif",
+        "subtitleStyle": {
+          "id": "system-subtitle-11",
+          "name": "11",
+          "description": "自定义字幕样式 - 黑底白字，精致描边",
+          "preview": "示例文字",
+          "fontName": "优设标题黑",
+          "fontSize": 48,
+          "fontColor": "#35A9E2",
+          "outlineColor": "#000000",
+          "outlineWidth": 1,
+          "backgroundColor": "transparent",
+          "backgroundOpacity": 0.3,
+          "position": "bottom",
+          "shadowOffset": 2,
+          "shadowBlur": 4,
+          "shadowColor": "#000000"
+        },
+        "titleSubtitleConfig": {
+          "enabled": true,
+          "sourceTitle": "芒格稳赢几十年的三件事",
+          "maxCharsPerLine": 8,
+          "maxLines": 5,
+          "lineSpacingPercent": 5,
+          "topMarginPercent": 5,
+          "lines": [
+            {
+              "text": "芒格稳赢几十年的",
+              "fontName": "优设标题黑",
+              "fontSize": 80,
+              "fontColor": "#FFFFFF",
+              "backgroundColor": "transparent",
+              "backgroundOpacity": 0,
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "shadowColor": "#000000",
+              "shadowOffset": 2,
+              "yOffsetPercent": 5
+            },
+            {
+              "text": "三件事",
+              "fontName": "优设标题黑",
+              "fontSize": 80,
+              "fontColor": "#6decee",
+              "backgroundColor": "transparent",
+              "backgroundOpacity": 0,
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "shadowColor": "#000000",
+              "shadowOffset": 2,
+              "yOffsetPercent": 10
+            }
+          ],
+          "startTime": 0,
+          "fadeInDuration": 0,
+          "fadeOutDuration": 0
+        },
+        "previewConfig": {
+          "backgroundImage": "extra/common/cover-templates/subtitle-preview-template_system_classic_11.png",
+          "titleTexts": [
+            "生活不会辜负认真努力的人",
+            "用心前行日子总会温柔以待"
+          ],
+          "subtitleTexts": [
+            "生活不会辜负认真努力的人",
+            "用心前行日子总会温柔以待"
+          ]
+        }
+      },
+      "createdAt": 1768396885438,
+      "isSystem": true,
+      "is_system": 1
+    },
+    {
+      "id": "template_system_22",
+      "name": "22 Inline",
+      "description": "System subtitle template 22 inline keyword emphasis",
+      "config": {
+        "subtitleStyleId": "system-subtitle-22",
+        "subtitleFontSizeScale": 100,
+        "subtitlePosition": "bottom",
+        "enableKeywordEffects": true,
+        "keywordRenderMode": "inline-emphasis",
+        "keywordGroupsStyles": [
+          {
+            "groupName": "行动词",
+            "styleOverride": {
+              "fontColor": "#E25353EC",
+              "outlineColor": "#FBF3F3",
+              "outlineWidth": 3,
+              "fontSize": 24,
+              "fontName": "月星楷"
+            },
+            "effectId": "intense-flash",
+            "effectDuration": null,
+            "color": "#E25353EC",
+            "soundEffectId": "bubble",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "情感词",
+            "styleOverride": {
+              "fontName": "月星楷",
+              "fontSize": 24,
+              "fontColor": "#E25353EC",
+              "outlineColor": "#FEFEFE",
+              "outlineWidth": 3
+            },
+            "effectId": "danmaku",
+            "effectDuration": null,
+            "color": "#E25353EC",
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          },
+          {
+            "groupName": "描述词",
+            "styleOverride": {
+              "fontName": "月星楷",
+              "fontSize": 24,
+              "fontColor": "#E25353EC",
+              "outlineColor": "#F8F8F8",
+              "outlineWidth": 3
+            },
+            "effectId": "flying-tilt",
+            "effectDuration": null,
+            "color": "#E25353EC",
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          },
+          {
+            "groupName": "重点词/成语词",
+            "styleOverride": {
+              "fontColor": "#E25353EC",
+              "outlineColor": "#FFFFFF",
+              "outlineWidth": 3,
+              "fontSize": 24,
+              "fontName": "月星楷"
+            },
+            "effectId": "fly-in",
+            "effectDuration": null,
+            "color": "#E25353EC",
+            "soundEffectId": "ding",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "12",
+            "styleOverride": null,
+            "effectId": null,
+            "effectDuration": null,
+            "color": null,
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          }
+        ],
+        "screenWidth": 1920,
+        "screenHeight": 1080,
+        "fontSize": 48,
+        "fontFamily": "Arial, sans-serif",
+        "subtitleStyle": {
+          "id": "custom",
+          "name": "自定义样式",
+          "description": "完全自定义的字幕样式",
+          "preview": "示例文字",
+          "fontName": "月星楷",
+          "fontSize": 48,
+          "fontColor": "#FFFFFF",
+          "outlineColor": "#000000",
+          "outlineWidth": 3,
+          "backgroundColor": "transparent",
+          "backgroundOpacity": 0,
+          "position": "bottom",
+          "shadowOffset": 2,
+          "shadowBlur": 4,
+          "shadowColor": "#000000"
+        },
+        "titleSubtitleConfig": {
+          "enabled": true,
+          "sourceTitle": "有娃家庭马桶清洁妙招",
+          "maxCharsPerLine": 8,
+          "maxLines": 5,
+          "lineSpacingPercent": 5,
+          "topMarginPercent": 5,
+          "lines": [
+            {
+              "text": "有娃家庭马桶清洁",
+              "fontName": "优设标题黑",
+              "fontSize": 80,
+              "fontColor": "#9b0808",
+              "backgroundColor": "transparent",
+              "backgroundOpacity": 0,
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "shadowColor": "#000000",
+              "shadowOffset": 2,
+              "yOffsetPercent": 5
+            },
+            {
+              "text": "妙招",
+              "fontName": "优设标题黑",
+              "fontSize": 80,
+              "fontColor": "#FFFFFF",
+              "backgroundColor": "transparent",
+              "backgroundOpacity": 0,
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "shadowColor": "#000000",
+              "shadowOffset": 2,
+              "yOffsetPercent": 10
+            }
+          ],
+          "startTime": 0,
+          "fadeInDuration": 0,
+          "fadeOutDuration": 0
+        },
+        "previewConfig": {
+          "backgroundKey": "portrait",
+          "backgroundPosition": "center 26%",
+          "overlayStartColor": "rgba(15, 23, 42, 0.16)",
+          "overlayEndColor": "rgba(15, 23, 42, 0.62)",
+          "subtitleTexts": [
+            "别让[焦虑]打乱你原本的节奏",
+            "慢慢变好才是给自己的[答案]"
+          ],
+          "backgroundImage": "extra/common/cover-templates/subtitle-preview-template_system_22.png",
+          "titleTexts": [
+            "别让焦虑打乱你原本的节奏",
+            "慢慢变好才是给自己的答案"
+          ]
+        }
+      },
+      "createdAt": 1768396885439,
+      "isSystem": true,
+      "is_system": 1
+    },
+    {
+      "id": "template_system_classic_22",
+      "name": "22 Classic",
+      "description": "System subtitle template 22 classic original style",
+      "config": {
+        "subtitleStyleId": "system-subtitle-22",
+        "subtitleFontSizeScale": 100,
+        "subtitlePosition": "bottom",
+        "enableKeywordEffects": true,
+        "keywordGroupsStyles": [
+          {
+            "groupName": "行动词",
+            "styleOverride": {
+              "fontColor": "#FFFFFF",
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "fontSize": 68,
+              "fontName": "字玩哥特黑白无常 免费 超黑"
+            },
+            "effectId": "intense-flash",
+            "color": "#FFFFFF",
+            "soundEffectId": "magic-sfx",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "情感词",
+            "styleOverride": {
+              "fontColor": "#DDE3EC",
+              "outlineColor": "#000000",
+              "outlineWidth": 2,
+              "fontSize": 64,
+              "fontName": "庞门正道标题体免费版"
+            },
+            "effectId": "danmaku",
+            "color": "#DDE3EC",
+            "soundEffectId": "cash-register",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "描述词",
+            "styleOverride": {
+              "fontColor": "#DBC541",
+              "outlineColor": "#000000",
+              "outlineWidth": 7,
+              "fontSize": 88,
+              "fontName": "优设标题黑"
+            },
+            "effectId": "flying-tilt",
+            "color": "#DBC541",
+            "soundEffectId": "pop-1",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "重点词/成语词",
+            "styleOverride": {
+              "fontColor": "#980C0CEC",
+              "outlineColor": "#000000",
+              "outlineWidth": 10,
+              "fontSize": 104,
+              "fontName": "字玩哥特黑白无常 免费 超黑"
+            },
+            "effectId": "fly-in",
+            "color": "#980C0CEC",
+            "soundEffectId": "punch",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "12",
+            "effectId": null,
+            "color": null,
+            "soundEffectId": null
+          }
+        ],
+        "screenWidth": 1920,
+        "screenHeight": 1080,
+        "fontSize": 48,
+        "fontFamily": "Arial, sans-serif",
+        "subtitleStyle": {
+          "id": "custom",
+          "name": "自定义样式",
+          "description": "完全自定义的字幕样式",
+          "preview": "示例文字",
+          "fontName": "月星楷",
+          "fontSize": 48,
+          "fontColor": "#FFFFFF",
+          "outlineColor": "#000000",
+          "outlineWidth": 3,
+          "backgroundColor": "transparent",
+          "backgroundOpacity": 0,
+          "position": "bottom",
+          "shadowOffset": 2,
+          "shadowBlur": 4,
+          "shadowColor": "#000000"
+        },
+        "titleSubtitleConfig": {
+          "enabled": true,
+          "sourceTitle": "芒格稳赢几十年的三件事",
+          "maxCharsPerLine": 8,
+          "maxLines": 5,
+          "lineSpacingPercent": 5,
+          "topMarginPercent": 5,
+          "lines": [
+            {
+              "text": "芒格稳赢几十年的",
+              "fontName": "优设标题黑",
+              "fontSize": 80,
+              "fontColor": "#9b0808",
+              "backgroundColor": "transparent",
+              "backgroundOpacity": 0,
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "shadowColor": "#000000",
+              "shadowOffset": 2,
+              "yOffsetPercent": 5
+            },
+            {
+              "text": "三件事",
+              "fontName": "优设标题黑",
+              "fontSize": 80,
+              "fontColor": "#FFFFFF",
+              "backgroundColor": "transparent",
+              "backgroundOpacity": 0,
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "shadowColor": "#000000",
+              "shadowOffset": 2,
+              "yOffsetPercent": 10
+            }
+          ],
+          "startTime": 0,
+          "fadeInDuration": 0,
+          "fadeOutDuration": 0
+        },
+        "previewConfig": {
+          "backgroundImage": "extra/common/cover-templates/subtitle-preview-template_system_classic_22.png",
+          "titleTexts": [
+            "别让焦虑打乱你原本的节奏",
+            "慢慢变好才是给自己的答案"
+          ],
+          "subtitleTexts": [
+            "别让焦虑打乱你原本的节奏",
+            "慢慢变好才是给自己的答案"
+          ]
+        }
+      },
+      "createdAt": 1768396885439,
+      "isSystem": true,
+      "is_system": 1
+    },
+    {
+      "id": "template_system_33",
+      "name": "33 Inline",
+      "description": "System subtitle template 33 inline keyword emphasis",
+      "config": {
+        "subtitleStyleId": "system-subtitle-33",
+        "subtitleFontSizeScale": 100,
+        "subtitlePosition": "bottom",
+        "enableKeywordEffects": true,
+        "keywordRenderMode": "inline-emphasis",
+        "keywordGroupsStyles": [
+          {
+            "groupName": "行动词",
+            "styleOverride": {
+              "fontColor": "#FFFF00",
+              "outlineColor": "#000000",
+              "outlineWidth": 2,
+              "fontSize": 24,
+              "fontName": "霞鹜文楷-Light"
+            },
+            "effectId": "intense-flash",
+            "effectDuration": null,
+            "color": "#FFFF00",
+            "soundEffectId": "bubble",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "情感词",
+            "styleOverride": {
+              "fontColor": "#FFFF00",
+              "outlineColor": "#000000",
+              "outlineWidth": 2,
+              "fontSize": 24,
+              "fontName": "霞鹜文楷-Light"
+            },
+            "effectId": "danmaku",
+            "effectDuration": null,
+            "color": "#FFFF00",
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          },
+          {
+            "groupName": "描述词",
+            "styleOverride": {
+              "fontColor": "#FFFF00",
+              "outlineColor": "#000000",
+              "outlineWidth": 2,
+              "fontSize": 24,
+              "fontName": "霞鹜文楷-Light"
+            },
+            "effectId": "flying-tilt",
+            "effectDuration": null,
+            "color": "#FFFF00",
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          },
+          {
+            "groupName": "重点词/成语词",
+            "styleOverride": {
+              "fontColor": "#FFFF00",
+              "outlineColor": "#000000",
+              "outlineWidth": 2,
+              "fontSize": 24,
+              "fontName": "霞鹜文楷-Light"
+            },
+            "effectId": "fly-in",
+            "effectDuration": null,
+            "color": "#FFFF00",
+            "soundEffectId": "ding",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "12",
+            "styleOverride": null,
+            "effectId": null,
+            "effectDuration": null,
+            "color": null,
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          }
+        ],
+        "screenWidth": 1920,
+        "screenHeight": 1080,
+        "fontSize": 48,
+        "fontFamily": "Arial, sans-serif",
+        "subtitleStyle": {
+          "id": "custom",
+          "name": "自定义样式",
+          "description": "完全自定义的字幕样式",
+          "preview": "示例文字",
+          "fontName": "霞鹜文楷-Light",
+          "fontSize": 48,
+          "fontColor": "#FFFFFF",
+          "outlineColor": "#000000",
+          "outlineWidth": 3,
+          "backgroundColor": "transparent",
+          "backgroundOpacity": 0,
+          "position": "bottom",
+          "shadowOffset": 2,
+          "shadowBlur": 4,
+          "shadowColor": "#000000"
+        },
+        "titleSubtitleConfig": {
+          "enabled": true,
+          "sourceTitle": "有娃家庭马桶清洁妙招",
+          "maxCharsPerLine": 8,
+          "maxLines": 5,
+          "lineSpacingPercent": 7,
+          "topMarginPercent": 4,
+          "lines": [
+            {
+              "text": "有娃家庭马桶清洁",
+              "fontName": "USMCCyuanjiantecu",
+              "fontSize": 75,
+              "fontColor": "#000000",
+              "backgroundColor": "#ffffff",
+              "backgroundOpacity": 0.8,
+              "outlineColor": "#ffffff",
+              "outlineWidth": 0,
+              "shadowColor": "#000000",
+              "shadowOffset": 1,
+              "yOffsetPercent": 4
+            },
+            {
+              "text": "妙招",
+              "fontName": "USMCCyuanjiantecu",
+              "fontSize": 75,
+              "fontColor": "#e2c018",
+              "backgroundColor": "transparent",
+              "backgroundOpacity": 0,
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "shadowColor": "#000000",
+              "shadowOffset": 2,
+              "yOffsetPercent": 11
+            }
+          ],
+          "startTime": 0,
+          "fadeInDuration": 0,
+          "fadeOutDuration": 0
+        },
+        "previewConfig": {
+          "backgroundKey": "portrait",
+          "backgroundPosition": "center 25%",
+          "overlayStartColor": "rgba(0, 0, 0, 0.12)",
+          "overlayEndColor": "rgba(0, 0, 0, 0.56)",
+          "subtitleTexts": [
+            "好好[爱自己]永远是头等大事",
+            "温柔岁月里做最[自在]的自己"
+          ],
+          "backgroundImage": "extra/common/cover-templates/subtitle-preview-template_system_33.png",
+          "titleTexts": [
+            "好好爱自己永远是头等大事",
+            "温柔岁月里做最自在的自己"
+          ]
+        }
+      },
+      "createdAt": 1768396885440,
+      "isSystem": true,
+      "is_system": 1
+    },
+    {
+      "id": "template_system_classic_33",
+      "name": "33 Classic",
+      "description": "System subtitle template 33 classic original style",
+      "config": {
+        "subtitleStyleId": "system-subtitle-33",
+        "subtitleFontSizeScale": 100,
+        "subtitlePosition": "bottom",
+        "enableKeywordEffects": true,
+        "keywordGroupsStyles": [
+          {
+            "groupName": "行动词",
+            "styleOverride": {
+              "fontColor": "#FFFFFF",
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "fontSize": 68,
+              "fontName": "字玩哥特黑白无常 免费 超黑"
+            },
+            "effectId": "intense-flash",
+            "effectDuration": null,
+            "color": "#FFFFFF",
+            "soundEffectId": "magic-sfx",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "情感词",
+            "styleOverride": {
+              "fontColor": "#DDE3EC",
+              "outlineColor": "#000000",
+              "outlineWidth": 2,
+              "fontSize": 64,
+              "fontName": "庞门正道标题体免费版"
+            },
+            "effectId": "danmaku",
+            "effectDuration": null,
+            "color": "#DDE3EC",
+            "soundEffectId": "cash-register",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "描述词",
+            "styleOverride": {
+              "fontColor": "#DBC541",
+              "outlineColor": "#000000",
+              "outlineWidth": 7,
+              "fontSize": 88,
+              "fontName": "优设标题黑"
+            },
+            "effectId": "flying-tilt",
+            "effectDuration": null,
+            "color": "#DBC541",
+            "soundEffectId": "pop-1",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "重点词/成语词",
+            "styleOverride": {
+              "fontColor": "#980C0CEC",
+              "outlineColor": "#000000",
+              "outlineWidth": 10,
+              "fontSize": 104,
+              "fontName": "字玩哥特黑白无常 免费 超黑"
+            },
+            "effectId": "fly-in",
+            "effectDuration": null,
+            "color": "#980C0CEC",
+            "soundEffectId": "punch",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "12",
+            "styleOverride": null,
+            "effectId": null,
+            "effectDuration": null,
+            "color": null,
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          }
+        ],
+        "screenWidth": 1920,
+        "screenHeight": 1080,
+        "fontSize": 48,
+        "fontFamily": "Arial, sans-serif",
+        "subtitleStyle": {
+          "id": "custom",
+          "name": "自定义样式",
+          "description": "完全自定义的字幕样式",
+          "preview": "示例文字",
+          "fontName": "庞门正道标题体免费版",
+          "fontSize": 48,
+          "fontColor": "#FFFFFF",
+          "outlineColor": "#000000",
+          "outlineWidth": 3,
+          "backgroundColor": "transparent",
+          "backgroundOpacity": 0,
+          "position": "bottom",
+          "shadowOffset": 2,
+          "shadowBlur": 4,
+          "shadowColor": "#000000"
+        },
+        "titleSubtitleConfig": {
+          "enabled": true,
+          "sourceTitle": "芒格稳赢几十年的三件事",
+          "maxCharsPerLine": 8,
+          "maxLines": 5,
+          "lineSpacingPercent": 7,
+          "topMarginPercent": 5,
+          "lines": [
+            {
+              "text": "芒格稳赢几十年的",
+              "fontName": "USMCCyuanjiantecu",
+              "fontSize": 80,
+              "fontColor": "#FFFFFF",
+              "backgroundColor": "transparent",
+              "backgroundOpacity": 0,
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "shadowColor": "#000000",
+              "shadowOffset": 2,
+              "yOffsetPercent": 5
+            },
+            {
+              "text": "三件事",
+              "fontName": "USMCCyuanjiantecu",
+              "fontSize": 80,
+              "fontColor": "#e2c018",
+              "backgroundColor": "transparent",
+              "backgroundOpacity": 0,
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "shadowColor": "#000000",
+              "shadowOffset": 2,
+              "yOffsetPercent": 12
+            }
+          ],
+          "startTime": 0,
+          "fadeInDuration": 0,
+          "fadeOutDuration": 0
+        },
+        "previewConfig": {
+          "backgroundImage": "extra/common/cover-templates/subtitle-preview-template_system_classic_33.png",
+          "titleTexts": [
+            "好好爱自己永远是头等大事",
+            "温柔岁月里做最自在的自己"
+          ],
+          "subtitleTexts": [
+            "好好爱自己永远是头等大事",
+            "温柔岁月里做最自在的自己"
+          ]
+        }
+      },
+      "createdAt": 1768396885440,
+      "isSystem": true,
+      "is_system": 1
+    },
+    {
+      "id": "template_system_44",
+      "name": "44 Inline",
+      "description": "System subtitle template 44 inline keyword emphasis",
+      "config": {
+        "subtitleStyleId": "system-subtitle-44",
+        "subtitleFontSizeScale": 100,
+        "subtitlePosition": "bottom",
+        "enableKeywordEffects": true,
+        "keywordRenderMode": "inline-emphasis",
+        "keywordGroupsStyles": [
+          {
+            "groupName": "行动词",
+            "styleOverride": {
+              "fontColor": "#850F0F",
+              "outlineColor": "#FFFFFF",
+              "outlineWidth": 3,
+              "fontSize": 68,
+              "fontName": "USMCCyuanjiantecu"
+            },
+            "effectId": "intense-flash",
+            "effectDuration": null,
+            "color": "#850F0F",
+            "soundEffectId": "bubble",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "情感词",
+            "styleOverride": {
+              "fontName": "USMCCyuanjiantecu",
+              "fontSize": 24,
+              "fontColor": "#850F0F",
+              "outlineColor": "#FEFEFE",
+              "outlineWidth": 2
+            },
+            "effectId": "danmaku",
+            "effectDuration": null,
+            "color": "#850F0F",
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          },
+          {
+            "groupName": "描述词",
+            "styleOverride": {
+              "fontName": "USMCCyuanjiantecu",
+              "fontSize": 24,
+              "fontColor": "#850F0F",
+              "outlineColor": "#FFFFFF",
+              "outlineWidth": 3
+            },
+            "effectId": "flying-tilt",
+            "effectDuration": null,
+            "color": "#850F0F",
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          },
+          {
+            "groupName": "重点词/成语词",
+            "styleOverride": {
+              "fontColor": "#850F0F",
+              "outlineColor": "#FFFFFF",
+              "outlineWidth": 3,
+              "fontSize": 24,
+              "fontName": "USMCCyuanjiantecu"
+            },
+            "effectId": "fly-in",
+            "effectDuration": null,
+            "color": "#850F0F",
+            "soundEffectId": "ding",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "12",
+            "styleOverride": null,
+            "effectId": null,
+            "effectDuration": null,
+            "color": null,
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          }
+        ],
+        "screenWidth": 1920,
+        "screenHeight": 1080,
+        "fontSize": 48,
+        "fontFamily": "Arial, sans-serif",
+        "subtitleStyle": {
+          "id": "custom",
+          "name": "自定义样式",
+          "description": "完全自定义的字幕样式",
+          "preview": "示例文字",
+          "fontName": "USMCCyuanjiantecu",
+          "fontSize": 48,
+          "fontColor": "#EFE9E9",
+          "outlineColor": "#000000",
+          "outlineWidth": 3,
+          "backgroundColor": "transparent",
+          "backgroundOpacity": 0,
+          "position": "bottom",
+          "shadowOffset": 0,
+          "shadowBlur": 4,
+          "shadowColor": "#000000"
+        },
+        "titleSubtitleConfig": {
+          "enabled": true,
+          "sourceTitle": "带娃妈妈黏土副业月入过万",
+          "maxCharsPerLine": 8,
+          "maxLines": 5,
+          "lineSpacingPercent": 5,
+          "topMarginPercent": 5,
+          "lines": [
+            {
+              "text": "带娃妈妈黏土副业",
+              "fontName": "USMCCyuanjiantecu",
+              "fontSize": 80,
+              "fontColor": "#FFFFFF",
+              "backgroundColor": "transparent",
+              "backgroundOpacity": 0,
+              "outlineColor": "#a91919",
+              "outlineWidth": 3,
+              "shadowColor": "#850f0f",
+              "shadowOffset": 2,
+              "yOffsetPercent": 5
+            },
+            {
+              "text": "月入过万",
+              "fontName": "USMCCyuanjiantecu",
+              "fontSize": 80,
+              "fontColor": "#a30f0f",
+              "backgroundColor": "transparent",
+              "backgroundOpacity": 0,
+              "outlineColor": "#ffffff",
+              "outlineWidth": 4,
+              "shadowColor": "#000000",
+              "shadowOffset": 2,
+              "yOffsetPercent": 10
+            }
+          ],
+          "startTime": 0,
+          "fadeInDuration": 0,
+          "fadeOutDuration": 0
+        },
+        "previewConfig": {
+          "backgroundKey": "portrait",
+          "backgroundPosition": "center 27%",
+          "overlayStartColor": "rgba(0, 0, 0, 0.08)",
+          "overlayEndColor": "rgba(0, 0, 0, 0.42)",
+          "subtitleTexts": [
+            "平凡日常也能过得[闪闪发光]",
+            "心怀欢喜生活处处皆是[美好]"
+          ],
+          "backgroundImage": "extra/common/cover-templates/subtitle-preview-template_system_44.png",
+          "titleTexts": [
+            "平凡日常也能过得闪闪发光",
+            "心怀欢喜生活处处皆是美好"
+          ]
+        }
+      },
+      "createdAt": 1768396885441,
+      "isSystem": true,
+      "is_system": 1
+    },
+    {
+      "id": "template_system_classic_44",
+      "name": "44 Classic",
+      "description": "System subtitle template 44 classic original style",
+      "config": {
+        "subtitleStyleId": "system-subtitle-44",
+        "subtitleFontSizeScale": 100,
+        "subtitlePosition": "bottom",
+        "enableKeywordEffects": true,
+        "keywordGroupsStyles": [
+          {
+            "groupName": "行动词",
+            "styleOverride": {
+              "fontColor": "#FFFFFF",
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "fontSize": 68,
+              "fontName": "字玩哥特黑白无常 免费 超黑"
+            },
+            "effectId": "intense-flash",
+            "effectDuration": null,
+            "color": "#FFFFFF",
+            "soundEffectId": "magic-sfx",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "情感词",
+            "styleOverride": {
+              "fontColor": "#DDE3EC",
+              "outlineColor": "#000000",
+              "outlineWidth": 2,
+              "fontSize": 64,
+              "fontName": "庞门正道标题体免费版"
+            },
+            "effectId": "danmaku",
+            "effectDuration": null,
+            "color": "#DDE3EC",
+            "soundEffectId": "cash-register",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "描述词",
+            "styleOverride": {
+              "fontColor": "#DBC541",
+              "outlineColor": "#000000",
+              "outlineWidth": 7,
+              "fontSize": 88,
+              "fontName": "优设标题黑"
+            },
+            "effectId": "flying-tilt",
+            "effectDuration": null,
+            "color": "#DBC541",
+            "soundEffectId": "pop-1",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "重点词/成语词",
+            "styleOverride": {
+              "fontColor": "#980C0CEC",
+              "outlineColor": "#000000",
+              "outlineWidth": 10,
+              "fontSize": 104,
+              "fontName": "字玩哥特黑白无常 免费 超黑"
+            },
+            "effectId": "fly-in",
+            "effectDuration": null,
+            "color": "#980C0CEC",
+            "soundEffectId": "punch",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "12",
+            "styleOverride": null,
+            "effectId": null,
+            "effectDuration": null,
+            "color": null,
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          }
+        ],
+        "screenWidth": 1920,
+        "screenHeight": 1080,
+        "fontSize": 48,
+        "fontFamily": "Arial, sans-serif",
+        "subtitleStyle": {
+          "id": "custom",
+          "name": "自定义样式",
+          "description": "完全自定义的字幕样式",
+          "preview": "示例文字",
+          "fontName": "USMCCyuanjiantecu",
+          "fontSize": 48,
+          "fontColor": "#EFE9E9",
+          "outlineColor": "#000000",
+          "outlineWidth": 3,
+          "backgroundColor": "transparent",
+          "backgroundOpacity": 0,
+          "position": "bottom",
+          "shadowOffset": 0,
+          "shadowBlur": 4,
+          "shadowColor": "#000000"
+        },
+        "titleSubtitleConfig": {
+          "enabled": true,
+          "sourceTitle": "芒格稳赢几十年的三件事",
+          "maxCharsPerLine": 8,
+          "maxLines": 5,
+          "lineSpacingPercent": 5,
+          "topMarginPercent": 5,
+          "lines": [
+            {
+              "text": "芒格稳赢几十年的",
+              "fontName": "USMCCyuanjiantecu",
+              "fontSize": 80,
+              "fontColor": "#FFFFFF",
+              "backgroundColor": "transparent",
+              "backgroundOpacity": 0,
+              "outlineColor": "#a91919",
+              "outlineWidth": 3,
+              "shadowColor": "#850f0f",
+              "shadowOffset": 2,
+              "yOffsetPercent": 5
+            },
+            {
+              "text": "三件事",
+              "fontName": "USMCCyuanjiantecu",
+              "fontSize": 80,
+              "fontColor": "#a30f0f",
+              "backgroundColor": "transparent",
+              "backgroundOpacity": 0,
+              "outlineColor": "#ffffff",
+              "outlineWidth": 4,
+              "shadowColor": "#000000",
+              "shadowOffset": 2,
+              "yOffsetPercent": 10
+            }
+          ],
+          "startTime": 0,
+          "fadeInDuration": 0,
+          "fadeOutDuration": 0
+        },
+        "previewConfig": {
+          "backgroundImage": "extra/common/cover-templates/subtitle-preview-template_system_classic_44.png",
+          "titleTexts": [
+            "平凡日常也能过得闪闪发光",
+            "心怀欢喜生活处处皆是美好"
+          ],
+          "subtitleTexts": [
+            "平凡日常也能过得闪闪发光",
+            "心怀欢喜生活处处皆是美好"
+          ]
+        },
+        "keywordRenderMode": "floating"
+      },
+      "createdAt": 1768396885441,
+      "isSystem": true,
+      "is_system": 1
+    },
+    {
+      "id": "template_system_55",
+      "name": "55 Inline",
+      "description": "System subtitle template 55 inline keyword emphasis",
+      "config": {
+        "subtitleStyleId": "system-subtitle-55",
+        "subtitleFontSizeScale": 100,
+        "subtitlePosition": "bottom",
+        "enableKeywordEffects": true,
+        "keywordRenderMode": "inline-emphasis",
+        "keywordGroupsStyles": [
+          {
+            "groupName": "行动词",
+            "styleOverride": {
+              "fontColor": "#FFFF00",
+              "outlineColor": "#000000",
+              "outlineWidth": 2,
+              "fontSize": 24,
+              "fontName": "月星楷"
+            },
+            "effectId": "intense-flash",
+            "effectDuration": null,
+            "color": "#FFFF00",
+            "soundEffectId": "bubble",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "情感词",
+            "styleOverride": {
+              "fontName": "USMCCyuanjiantecu",
+              "fontSize": 24,
+              "fontColor": "#850F0F",
+              "outlineColor": "#FEFEFE",
+              "outlineWidth": 2
+            },
+            "effectId": "danmaku",
+            "effectDuration": null,
+            "color": "#850F0F",
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          },
+          {
+            "groupName": "描述词",
+            "styleOverride": {
+              "fontName": "USMCCyuanjiantecu",
+              "fontSize": 24,
+              "fontColor": "#850F0F",
+              "outlineColor": "#FFFFFF",
+              "outlineWidth": 3
+            },
+            "effectId": "flying-tilt",
+            "effectDuration": null,
+            "color": "#850F0F",
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          },
+          {
+            "groupName": "重点词/成语词",
+            "styleOverride": {
+              "fontColor": "#FFFF00",
+              "outlineColor": "#000000",
+              "outlineWidth": 2,
+              "fontSize": 24,
+              "fontName": "月星楷"
+            },
+            "effectId": "fly-in",
+            "effectDuration": null,
+            "color": "#FFFF00",
+            "soundEffectId": "ding",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "12",
+            "styleOverride": null,
+            "effectId": null,
+            "effectDuration": null,
+            "color": null,
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          }
+        ],
+        "screenWidth": 1920,
+        "screenHeight": 1080,
+        "fontSize": 48,
+        "fontFamily": "Arial, sans-serif",
+        "subtitleStyle": {
+          "id": "custom",
+          "name": "自定义样式",
+          "description": "完全自定义的字幕样式",
+          "preview": "示例文字",
+          "fontName": "月星楷",
+          "fontSize": 48,
+          "fontColor": "#FFFFFF",
+          "outlineColor": "#FFFFFF",
+          "outlineWidth": 0,
+          "backgroundColor": "transparent",
+          "backgroundOpacity": 0,
+          "position": "bottom",
+          "shadowOffset": 3,
+          "shadowBlur": 4,
+          "shadowColor": "#000000"
+        },
+        "titleSubtitleConfig": {
+          "enabled": true,
+          "sourceTitle": "有娃家庭马桶简直是灾难现场",
+          "maxCharsPerLine": 15,
+          "maxLines": 5,
+          "lineSpacingPercent": 7,
+          "topMarginPercent": 5,
+          "lines": [
+            {
+              "text": "有娃家庭马桶简直是灾难现场",
+              "fontName": "千图厚黑体",
+              "fontSize": 75,
+              "fontColor": "#d2d459",
+              "backgroundColor": "transparent",
+              "backgroundOpacity": 0,
+              "outlineColor": "#000000",
+              "outlineWidth": 0,
+              "shadowColor": "#000000",
+              "shadowOffset": 3,
+              "yOffsetPercent": 5
+            }
+          ],
+          "startTime": 0,
+          "fadeInDuration": 0,
+          "fadeOutDuration": 0
+        },
+        "previewConfig": {
+          "backgroundKey": "portrait",
+          "backgroundPosition": "center 28%",
+          "overlayStartColor": "rgba(7, 10, 17, 0.12)",
+          "overlayEndColor": "rgba(7, 10, 17, 0.5)",
+          "subtitleTexts": [
+            "不必讨好世界[取悦]自己就好",
+            "随心而行人生自在且[从容]"
+          ],
+          "backgroundImage": "extra/common/cover-templates/subtitle-preview-template_system_55.png",
+          "titleTexts": [
+            "不必讨好世界取悦自己就好",
+            "随心而行人生自在且从容"
+          ]
+        }
+      },
+      "createdAt": 1768396885442,
+      "isSystem": true,
+      "is_system": 1
+    },
+    {
+      "id": "template_system_classic_55",
+      "name": "55 Classic",
+      "description": "System subtitle template 55 classic original style",
+      "config": {
+        "subtitleStyleId": "system-subtitle-55",
+        "subtitleFontSizeScale": 100,
+        "subtitlePosition": "bottom",
+        "enableKeywordEffects": true,
+        "keywordGroupsStyles": [
+          {
+            "groupName": "行动词",
+            "styleOverride": {
+              "fontColor": "#FFFFFF",
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "fontSize": 68,
+              "fontName": "字玩哥特黑白无常 免费 超黑"
+            },
+            "effectId": "intense-flash",
+            "color": "#FFFFFF",
+            "soundEffectId": "magic-sfx",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "情感词",
+            "styleOverride": {
+              "fontColor": "#DDE3EC",
+              "outlineColor": "#000000",
+              "outlineWidth": 2,
+              "fontSize": 64,
+              "fontName": "庞门正道标题体免费版"
+            },
+            "effectId": "danmaku",
+            "color": "#DDE3EC",
+            "soundEffectId": "cash-register",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "描述词",
+            "styleOverride": {
+              "fontColor": "#DBC541",
+              "outlineColor": "#000000",
+              "outlineWidth": 7,
+              "fontSize": 88,
+              "fontName": "优设标题黑"
+            },
+            "effectId": "flying-tilt",
+            "color": "#DBC541",
+            "soundEffectId": "pop-1",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "重点词/成语词",
+            "styleOverride": {
+              "fontColor": "#980C0CEC",
+              "outlineColor": "#000000",
+              "outlineWidth": 10,
+              "fontSize": 104,
+              "fontName": "字玩哥特黑白无常 免费 超黑"
+            },
+            "effectId": "fly-in",
+            "color": "#980C0CEC",
+            "soundEffectId": "punch",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "12",
+            "effectId": null,
+            "color": null,
+            "soundEffectId": null
+          }
+        ],
+        "screenWidth": 1920,
+        "screenHeight": 1080,
+        "fontSize": 48,
+        "fontFamily": "Arial, sans-serif",
+        "subtitleStyle": {
+          "id": "custom",
+          "name": "自定义样式",
+          "description": "完全自定义的字幕样式",
+          "preview": "示例文字",
+          "fontName": "Microsoft YaHei Bold",
+          "fontSize": 48,
+          "fontColor": "#FFFFFF",
+          "outlineColor": "#000000",
+          "outlineWidth": 4,
+          "backgroundColor": "transparent",
+          "backgroundOpacity": 0,
+          "position": "bottom",
+          "shadowOffset": 2,
+          "shadowBlur": 4,
+          "shadowColor": "#000000"
+        },
+        "titleSubtitleConfig": {
+          "enabled": true,
+          "sourceTitle": "芒格稳赢几十年的三件事",
+          "maxCharsPerLine": 15,
+          "maxLines": 5,
+          "lineSpacingPercent": 7,
+          "topMarginPercent": 5,
+          "lines": [
+            {
+              "text": "芒格稳赢几十年的三件事",
+              "fontName": "千图厚黑体",
+              "fontSize": 100,
+              "fontColor": "#efc52e",
+              "backgroundColor": "#ffffff",
+              "backgroundOpacity": 0.5,
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "shadowColor": "#000000",
+              "shadowOffset": 3,
+              "yOffsetPercent": 5
+            }
+          ],
+          "startTime": 0,
+          "fadeInDuration": 0,
+          "fadeOutDuration": 0
+        },
+        "previewConfig": {
+          "backgroundImage": "extra/common/cover-templates/subtitle-preview-template_system_classic_55.png",
+          "titleTexts": [
+            "不必讨好世界取悦自己就好",
+            "随心而行人生自在且从容"
+          ],
+          "subtitleTexts": [
+            "不必讨好世界取悦自己就好",
+            "随心而行人生自在且从容"
+          ]
+        }
+      },
+      "createdAt": 1768396885442,
+      "isSystem": true,
+      "is_system": 1
+    },
+    {
+      "id": "template_system_66",
+      "name": "66 Inline",
+      "description": "System subtitle template 66 inline keyword emphasis",
+      "config": {
+        "subtitleStyleId": "system-subtitle-66",
+        "subtitleFontSizeScale": 100,
+        "subtitlePosition": "bottom",
+        "enableKeywordEffects": true,
+        "keywordRenderMode": "inline-emphasis",
+        "keywordGroupsStyles": [
+          {
+            "groupName": "行动词",
+            "styleOverride": {
+              "fontColor": "#F13B83",
+              "outlineColor": "#FFFFFF",
+              "outlineWidth": 5,
+              "fontSize": 68,
+              "fontName": "杨任东竹石体"
+            },
+            "effectId": "intense-flash",
+            "effectDuration": null,
+            "color": "#F13B83",
+            "soundEffectId": "bubble",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "情感词",
+            "styleOverride": {
+              "fontColor": "#F13B83",
+              "outlineColor": "#FFFFFF",
+              "outlineWidth": 5,
+              "fontSize": 24,
+              "fontName": "杨任东竹石体"
+            },
+            "effectId": "danmaku",
+            "effectDuration": null,
+            "color": "#F13B83",
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          },
+          {
+            "groupName": "描述词",
+            "styleOverride": {
+              "fontColor": "#F13B83",
+              "outlineColor": "#FFFFFF",
+              "outlineWidth": 5,
+              "fontSize": 24,
+              "fontName": "杨任东竹石体"
+            },
+            "effectId": "flying-tilt",
+            "effectDuration": null,
+            "color": "#F13B83",
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          },
+          {
+            "groupName": "重点词/成语词",
+            "styleOverride": {
+              "fontColor": "#F13B83",
+              "outlineColor": "#FEFEFE",
+              "outlineWidth": 5,
+              "fontSize": 24,
+              "fontName": "杨任东竹石体"
+            },
+            "effectId": "fly-in",
+            "effectDuration": null,
+            "color": "#F13B83",
+            "soundEffectId": "ding",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "12",
+            "styleOverride": null,
+            "effectId": null,
+            "effectDuration": null,
+            "color": null,
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          }
+        ],
+        "screenWidth": 1920,
+        "screenHeight": 1080,
+        "fontSize": 48,
+        "fontFamily": "Arial, sans-serif",
+        "subtitleStyle": {
+          "id": "custom",
+          "name": "自定义样式",
+          "description": "完全自定义的字幕样式",
+          "preview": "示例文字",
+          "fontName": "杨任东竹石体",
+          "fontSize": 48,
+          "fontColor": "#FFFFFF",
+          "outlineColor": "#F13B83",
+          "outlineWidth": 3,
+          "backgroundColor": "transparent",
+          "backgroundOpacity": 0,
+          "position": "bottom",
+          "shadowOffset": 1,
+          "shadowBlur": 4,
+          "shadowColor": "#000000"
+        },
+        "titleSubtitleConfig": {
+          "enabled": true,
+          "sourceTitle": "有娃家庭马桶简直是灾难现场",
+          "maxCharsPerLine": 15,
+          "maxLines": 5,
+          "lineSpacingPercent": 7,
+          "topMarginPercent": 5,
+          "lines": [
+            {
+              "text": "有娃家庭马桶简直是灾难现场",
+              "fontName": "猫啃珠圆体 MaokenZhuyuanTi",
+              "fontSize": 90,
+              "fontColor": "#f59ed1",
+              "backgroundColor": "transparent",
+              "backgroundOpacity": 0,
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "shadowColor": "#000000",
+              "shadowOffset": 3,
+              "yOffsetPercent": 5
+            }
+          ],
+          "startTime": 0,
+          "fadeInDuration": 0,
+          "fadeOutDuration": 0
+        },
+        "previewConfig": {
+          "backgroundKey": "portrait",
+          "backgroundPosition": "center 29%",
+          "overlayStartColor": "rgba(0, 0, 0, 0.1)",
+          "overlayEndColor": "rgba(0, 0, 0, 0.46)",
+          "subtitleTexts": [
+            "把烦恼清空让[快乐]住进心里",
+            "保持[热爱]奔赴每一场新遇见"
+          ],
+          "backgroundImage": "extra/common/cover-templates/subtitle-preview-template_system_66.png",
+          "titleTexts": [
+            "把烦恼清空让快乐住进心里",
+            "保持热爱奔赴每一场新遇见"
+          ]
+        }
+      },
+      "createdAt": 1768396885443,
+      "isSystem": true,
+      "is_system": 1
+    },
+    {
+      "id": "template_system_classic_66",
+      "name": "66 Classic",
+      "description": "System subtitle template 66 classic original style",
+      "config": {
+        "subtitleStyleId": "system-subtitle-66",
+        "subtitleFontSizeScale": 100,
+        "subtitlePosition": "bottom",
+        "enableKeywordEffects": true,
+        "keywordGroupsStyles": [
+          {
+            "groupName": "行动词",
+            "styleOverride": {
+              "fontColor": "#FFFFFF",
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "fontSize": 68,
+              "fontName": "字玩哥特黑白无常 免费 超黑"
+            },
+            "effectId": "intense-flash",
+            "effectDuration": null,
+            "color": "#FFFFFF",
+            "soundEffectId": "magic-sfx",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "情感词",
+            "styleOverride": {
+              "fontColor": "#DDE3EC",
+              "outlineColor": "#000000",
+              "outlineWidth": 2,
+              "fontSize": 64,
+              "fontName": "庞门正道标题体免费版"
+            },
+            "effectId": "danmaku",
+            "effectDuration": null,
+            "color": "#DDE3EC",
+            "soundEffectId": "cash-register",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "描述词",
+            "styleOverride": {
+              "fontColor": "#DBC541",
+              "outlineColor": "#000000",
+              "outlineWidth": 7,
+              "fontSize": 88,
+              "fontName": "优设标题黑"
+            },
+            "effectId": "flying-tilt",
+            "effectDuration": null,
+            "color": "#DBC541",
+            "soundEffectId": "pop-1",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "重点词/成语词",
+            "styleOverride": {
+              "fontColor": "#980C0CEC",
+              "outlineColor": "#000000",
+              "outlineWidth": 10,
+              "fontSize": 104,
+              "fontName": "字玩哥特黑白无常 免费 超黑"
+            },
+            "effectId": "fly-in",
+            "effectDuration": null,
+            "color": "#980C0CEC",
+            "soundEffectId": "punch",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "12",
+            "styleOverride": null,
+            "effectId": null,
+            "effectDuration": null,
+            "color": null,
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          }
+        ],
+        "screenWidth": 1920,
+        "screenHeight": 1080,
+        "fontSize": 48,
+        "fontFamily": "Arial, sans-serif",
+        "subtitleStyle": {
+          "id": "custom",
+          "name": "自定义样式",
+          "description": "完全自定义的字幕样式",
+          "preview": "示例文字",
+          "fontName": "杨任东竹石体",
+          "fontSize": 48,
+          "fontColor": "#FFFFFF",
+          "outlineColor": "#F13B83",
+          "outlineWidth": 3,
+          "backgroundColor": "transparent",
+          "backgroundOpacity": 0,
+          "position": "bottom",
+          "shadowOffset": 1,
+          "shadowBlur": 4,
+          "shadowColor": "#000000"
+        },
+        "titleSubtitleConfig": {
+          "enabled": true,
+          "sourceTitle": "芒格稳赢几十年的三件事",
+          "maxCharsPerLine": 15,
+          "maxLines": 5,
+          "lineSpacingPercent": 7,
+          "topMarginPercent": 5,
+          "lines": [
+            {
+              "text": "芒格稳赢几十年的三件事",
+              "fontName": "千图厚黑体",
+              "fontSize": 90,
+              "fontColor": "#f59ed1",
+              "backgroundColor": "transparent",
+              "backgroundOpacity": 0,
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "shadowColor": "#000000",
+              "shadowOffset": 3,
+              "yOffsetPercent": 5
+            }
+          ],
+          "startTime": 0,
+          "fadeInDuration": 0,
+          "fadeOutDuration": 0
+        },
+        "previewConfig": {
+          "backgroundImage": "extra/common/cover-templates/subtitle-preview-template_system_classic_66.png",
+          "titleTexts": [
+            "把烦恼清空让快乐住进心里",
+            "保持热爱奔赴每一场新遇见"
+          ],
+          "subtitleTexts": [
+            "把烦恼清空让快乐住进心里",
+            "保持热爱奔赴每一场新遇见"
+          ]
+        }
+      },
+      "createdAt": 1768396885443,
+      "isSystem": true,
+      "is_system": 1
+    },
+    {
+      "id": "template_system_77",
+      "name": "77 Inline",
+      "description": "System subtitle template 77 inline keyword emphasis",
+      "config": {
+        "subtitleStyleId": "system-subtitle-77",
+        "subtitleFontSizeScale": 100,
+        "subtitlePosition": "bottom",
+        "enableKeywordEffects": true,
+        "keywordRenderMode": "inline-emphasis",
+        "keywordGroupsStyles": [
+          {
+            "groupName": "行动词",
+            "styleOverride": {
+              "fontColor": "#FFFF00",
+              "outlineColor": "#000000",
+              "outlineWidth": 2,
+              "fontSize": 68,
+              "fontName": "文鼎PL简中楷"
+            },
+            "effectId": "intense-flash",
+            "effectDuration": null,
+            "color": "#FFFF00",
+            "soundEffectId": "bubble",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "情感词",
+            "styleOverride": {
+              "fontName": "文鼎PL简中楷",
+              "fontSize": 24,
+              "fontColor": "#FFFF00",
+              "outlineColor": "#000000",
+              "outlineWidth": 2
+            },
+            "effectId": "danmaku",
+            "effectDuration": null,
+            "color": "#FFFF00",
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          },
+          {
+            "groupName": "描述词",
+            "styleOverride": {
+              "fontName": "文鼎PL简中楷",
+              "fontSize": 24,
+              "fontColor": "#FFFF00",
+              "outlineColor": "#000000",
+              "outlineWidth": 2
+            },
+            "effectId": "flying-tilt",
+            "effectDuration": null,
+            "color": "#FFFF00",
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          },
+          {
+            "groupName": "重点词/成语词",
+            "styleOverride": {
+              "fontColor": "#FFFF00",
+              "outlineColor": "#000000",
+              "outlineWidth": 2,
+              "fontSize": 24,
+              "fontName": "文鼎PL简中楷"
+            },
+            "effectId": "fly-in",
+            "effectDuration": null,
+            "color": "#FFFF00",
+            "soundEffectId": "ding",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "12",
+            "styleOverride": null,
+            "effectId": null,
+            "effectDuration": null,
+            "color": null,
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          }
+        ],
+        "screenWidth": 1920,
+        "screenHeight": 1080,
+        "fontSize": 48,
+        "fontFamily": "Arial, sans-serif",
+        "subtitleStyle": {
+          "id": "custom",
+          "name": "自定义样式",
+          "description": "完全自定义的字幕样式",
+          "preview": "示例文字",
+          "fontName": "文鼎PL简中楷",
+          "fontSize": 48,
+          "fontColor": "#FFFFFF",
+          "outlineColor": "#000000",
+          "outlineWidth": 2,
+          "backgroundColor": "transparent",
+          "backgroundOpacity": 0,
+          "position": "bottom",
+          "shadowOffset": 0,
+          "shadowBlur": 4,
+          "shadowColor": "#000000"
+        },
+        "titleSubtitleConfig": {
+          "enabled": true,
+          "sourceTitle": "有娃家庭马桶简直是灾难现场",
+          "maxCharsPerLine": 8,
+          "maxLines": 5,
+          "lineSpacingPercent": 6,
+          "topMarginPercent": 5,
+          "lines": [
+            {
+              "text": "有娃家庭马桶简直",
+              "fontName": "方正粗黑宋简体",
+              "fontSize": 80,
+              "fontColor": "#ffffff",
+              "backgroundColor": "transparent",
+              "backgroundOpacity": 0,
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "shadowColor": "#000000",
+              "shadowOffset": 2,
+              "yOffsetPercent": 5
+            },
+            {
+              "text": "是灾难现场",
+              "fontName": "方正粗黑宋简体",
+              "fontSize": 77,
+              "fontColor": "#0dade3",
+              "backgroundColor": "transparent",
+              "backgroundOpacity": 0,
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "shadowColor": "#000000",
+              "shadowOffset": 2,
+              "yOffsetPercent": 11
+            }
+          ],
+          "startTime": 0,
+          "fadeInDuration": 0,
+          "fadeOutDuration": 0
+        },
+        "previewConfig": {
+          "backgroundKey": "portrait",
+          "backgroundPosition": "center 26%",
+          "overlayStartColor": "rgba(0, 0, 0, 0.08)",
+          "overlayEndColor": "rgba(0, 0, 0, 0.44)",
+          "subtitleTexts": [
+            "努力活成自己[喜欢]的模样",
+            "不慌不忙静待时光的[绽放]"
+          ],
+          "backgroundImage": "extra/common/cover-templates/subtitle-preview-template_system_77.png",
+          "titleTexts": [
+            "努力活成自己喜欢的模样",
+            "不慌不忙静待时光的绽放"
+          ]
+        }
+      },
+      "createdAt": 1768396885444,
+      "isSystem": true,
+      "is_system": 1
+    },
+    {
+      "id": "template_system_classic_77",
+      "name": "77 Classic",
+      "description": "System subtitle template 77 classic original style",
+      "config": {
+        "subtitleStyleId": "system-subtitle-77",
+        "subtitleFontSizeScale": 100,
+        "subtitlePosition": "bottom",
+        "enableKeywordEffects": true,
+        "keywordGroupsStyles": [
+          {
+            "groupName": "行动词",
+            "styleOverride": {
+              "fontColor": "#FFFFFF",
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "fontSize": 68,
+              "fontName": "字玩哥特黑白无常 免费 超黑"
+            },
+            "effectId": "intense-flash",
+            "effectDuration": null,
+            "color": "#FFFFFF",
+            "soundEffectId": "magic-sfx",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "情感词",
+            "styleOverride": {
+              "fontColor": "#DDE3EC",
+              "outlineColor": "#000000",
+              "outlineWidth": 2,
+              "fontSize": 64,
+              "fontName": "庞门正道标题体免费版"
+            },
+            "effectId": "danmaku",
+            "effectDuration": null,
+            "color": "#DDE3EC",
+            "soundEffectId": "cash-register",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "描述词",
+            "styleOverride": {
+              "fontColor": "#DBC541",
+              "outlineColor": "#000000",
+              "outlineWidth": 7,
+              "fontSize": 88,
+              "fontName": "优设标题黑"
+            },
+            "effectId": "flying-tilt",
+            "effectDuration": null,
+            "color": "#DBC541",
+            "soundEffectId": "pop-1",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "重点词/成语词",
+            "styleOverride": {
+              "fontColor": "#980C0CEC",
+              "outlineColor": "#000000",
+              "outlineWidth": 10,
+              "fontSize": 104,
+              "fontName": "字玩哥特黑白无常 免费 超黑"
+            },
+            "effectId": "fly-in",
+            "effectDuration": null,
+            "color": "#980C0CEC",
+            "soundEffectId": "punch",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "12",
+            "styleOverride": null,
+            "effectId": null,
+            "effectDuration": null,
+            "color": null,
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          }
+        ],
+        "screenWidth": 1920,
+        "screenHeight": 1080,
+        "fontSize": 48,
+        "fontFamily": "Arial, sans-serif",
+        "subtitleStyle": {
+          "id": "custom",
+          "name": "自定义样式",
+          "description": "完全自定义的字幕样式",
+          "preview": "示例文字",
+          "fontName": "杨任东竹石体",
+          "fontSize": 48,
+          "fontColor": "#FFFFFF",
+          "outlineColor": "#000000",
+          "outlineWidth": 0,
+          "backgroundColor": "#000000",
+          "backgroundOpacity": 0.5,
+          "position": "bottom",
+          "shadowOffset": 0,
+          "shadowBlur": 4,
+          "shadowColor": "#000000"
+        },
+        "titleSubtitleConfig": {
+          "enabled": true,
+          "sourceTitle": "芒格稳赢几十年的三件事",
+          "maxCharsPerLine": 8,
+          "maxLines": 5,
+          "lineSpacingPercent": 7,
+          "topMarginPercent": 5,
+          "lines": [
+            {
+              "text": "芒格稳赢几十年的",
+              "fontName": "字玩哥特黑白无常 免费 超黑",
+              "fontSize": 80,
+              "fontColor": "#0a7194",
+              "backgroundColor": "transparent",
+              "backgroundOpacity": 0,
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "shadowColor": "#000000",
+              "shadowOffset": 2,
+              "yOffsetPercent": 5
+            },
+            {
+              "text": "三件事",
+              "fontName": "字玩哥特黑白无常 免费 超黑",
+              "fontSize": 77,
+              "fontColor": "#0a7194",
+              "backgroundColor": "transparent",
+              "backgroundOpacity": 0,
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "shadowColor": "#000000",
+              "shadowOffset": 2,
+              "yOffsetPercent": 12
+            }
+          ],
+          "startTime": 0,
+          "fadeInDuration": 0,
+          "fadeOutDuration": 0
+        },
+        "previewConfig": {
+          "backgroundImage": "extra/common/cover-templates/subtitle-preview-template_system_classic_77.png",
+          "titleTexts": [
+            "努力活成自己喜欢的模样",
+            "不慌不忙静待时光的绽放"
+          ],
+          "subtitleTexts": [
+            "努力活成自己喜欢的模样",
+            "不慌不忙静待时光的绽放"
+          ]
+        }
+      },
+      "createdAt": 1768396885444,
+      "isSystem": true,
+      "is_system": 1
+    },
+    {
+      "id": "template_system_88",
+      "name": "88 Inline",
+      "description": "System subtitle template 88 inline keyword emphasis",
+      "config": {
+        "subtitleStyleId": "system-subtitle-88",
+        "subtitleFontSizeScale": 90,
+        "subtitlePosition": "bottom",
+        "enableKeywordEffects": true,
+        "keywordRenderMode": "inline-emphasis",
+        "keywordGroupsStyles": [
+          {
+            "groupName": "行动词",
+            "styleOverride": {
+              "fontColor": "#21A7EE",
+              "outlineColor": "#FFFFFF",
+              "outlineWidth": 2,
+              "fontSize": 24,
+              "fontName": "庞门正道标题体免费版"
+            },
+            "effectId": "intense-flash",
+            "effectDuration": null,
+            "color": "#21A7EE",
+            "soundEffectId": "bubble",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "情感词",
+            "styleOverride": {
+              "fontColor": "#21A7EE",
+              "outlineColor": "#FFFFFF",
+              "outlineWidth": 2,
+              "fontSize": 24,
+              "fontName": "庞门正道标题体免费版"
+            },
+            "effectId": "danmaku",
+            "effectDuration": null,
+            "color": "#21A7EE",
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          },
+          {
+            "groupName": "描述词",
+            "styleOverride": {
+              "fontColor": "#21A7EE",
+              "outlineColor": "#FFFFFF",
+              "outlineWidth": 2,
+              "fontSize": 24,
+              "fontName": "庞门正道标题体免费版"
+            },
+            "effectId": "flying-tilt",
+            "effectDuration": null,
+            "color": "#21A7EE",
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          },
+          {
+            "groupName": "重点词/成语词",
+            "styleOverride": {
+              "fontColor": "#21A7EE",
+              "outlineColor": "#FFFFFF",
+              "outlineWidth": 2,
+              "fontSize": 28,
+              "fontName": "庞门正道标题体免费版"
+            },
+            "effectId": "fly-in",
+            "effectDuration": null,
+            "color": "#21A7EE",
+            "soundEffectId": "ding",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "12",
+            "styleOverride": null,
+            "effectId": null,
+            "effectDuration": null,
+            "color": null,
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          }
+        ],
+        "screenWidth": 1920,
+        "screenHeight": 1080,
+        "fontSize": 48,
+        "fontFamily": "Arial, sans-serif",
+        "subtitleStyle": {
+          "id": "custom",
+          "name": "自定义样式",
+          "description": "完全自定义的字幕样式",
+          "preview": "示例文字",
+          "fontName": "庞门正道标题体免费版",
+          "fontSize": 39,
+          "fontColor": "#000000",
+          "outlineColor": "#FFFFFF",
+          "outlineWidth": 2,
+          "backgroundColor": "transparent",
+          "backgroundOpacity": 0,
+          "position": "bottom",
+          "shadowOffset": 0,
+          "shadowBlur": 4,
+          "shadowColor": "#000000"
+        },
+        "titleSubtitleConfig": {
+          "enabled": true,
+          "sourceTitle": "有娃家庭马桶简直是灾难现场",
+          "maxCharsPerLine": 8,
+          "maxLines": 5,
+          "lineSpacingPercent": 5,
+          "topMarginPercent": 5,
+          "lines": [
+            {
+              "text": "有娃家庭马桶简直",
+              "fontName": "优设标题黑",
+              "fontSize": 80,
+              "fontColor": "#FFFFFF",
+              "backgroundColor": "transparent",
+              "backgroundOpacity": 0,
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "shadowColor": "#000000",
+              "shadowOffset": 2,
+              "yOffsetPercent": 5
+            },
+            {
+              "text": "是灾难现场",
+              "fontName": "思源黑体 Normal",
+              "fontSize": 75,
+              "fontColor": "#000000",
+              "backgroundColor": "#ffffff",
+              "backgroundOpacity": 1,
+              "outlineColor": "#000000",
+              "outlineWidth": 0,
+              "shadowColor": "#000000",
+              "shadowOffset": 2,
+              "yOffsetPercent": 10
+            }
+          ],
+          "startTime": 0,
+          "fadeInDuration": 0,
+          "fadeOutDuration": 0
+        },
+        "previewConfig": {
+          "backgroundKey": "portrait",
+          "backgroundPosition": "center 27%",
+          "overlayStartColor": "rgba(0, 0, 0, 0.12)",
+          "overlayEndColor": "rgba(0, 0, 0, 0.5)",
+          "subtitleTexts": [
+            "生活一半[烟火]一半诗意清欢",
+            "心怀[温柔]遇见所有小美好"
+          ],
+          "backgroundImage": "extra/common/cover-templates/subtitle-preview-template_system_88.png",
+          "titleTexts": [
+            "生活一半烟火一半诗意清欢",
+            "心怀温柔遇见所有小美好"
+          ]
+        }
+      },
+      "createdAt": 1768396885445,
+      "isSystem": true,
+      "is_system": 1
+    },
+    {
+      "id": "template_system_classic_88",
+      "name": "88 Classic",
+      "description": "System subtitle template 88 classic original style",
+      "config": {
+        "subtitleStyleId": "system-subtitle-88",
+        "subtitleFontSizeScale": 100,
+        "subtitlePosition": "bottom",
+        "enableKeywordEffects": true,
+        "keywordGroupsStyles": [
+          {
+            "groupName": "行动词",
+            "styleOverride": {
+              "fontColor": "#FFFFFF",
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "fontSize": 68,
+              "fontName": "字玩哥特黑白无常 免费 超黑"
+            },
+            "effectId": "intense-flash",
+            "effectDuration": null,
+            "color": "#FFFFFF",
+            "soundEffectId": "magic-sfx",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "情感词",
+            "styleOverride": {
+              "fontColor": "#DDE3EC",
+              "outlineColor": "#000000",
+              "outlineWidth": 2,
+              "fontSize": 64,
+              "fontName": "庞门正道标题体免费版"
+            },
+            "effectId": "danmaku",
+            "effectDuration": null,
+            "color": "#DDE3EC",
+            "soundEffectId": "cash-register",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "描述词",
+            "styleOverride": {
+              "fontColor": "#DBC541",
+              "outlineColor": "#000000",
+              "outlineWidth": 7,
+              "fontSize": 88,
+              "fontName": "优设标题黑"
+            },
+            "effectId": "flying-tilt",
+            "effectDuration": null,
+            "color": "#DBC541",
+            "soundEffectId": "pop-1",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "重点词/成语词",
+            "styleOverride": {
+              "fontColor": "#980C0CEC",
+              "outlineColor": "#000000",
+              "outlineWidth": 10,
+              "fontSize": 104,
+              "fontName": "字玩哥特黑白无常 免费 超黑"
+            },
+            "effectId": "fly-in",
+            "effectDuration": null,
+            "color": "#980C0CEC",
+            "soundEffectId": "punch",
+            "soundEffectConfig": {
+              "volume": 0.7,
+              "pitch": 1,
+              "fadeIn": 0,
+              "fadeOut": 50,
+              "triggerTime": "start"
+            }
+          },
+          {
+            "groupName": "12",
+            "styleOverride": null,
+            "effectId": null,
+            "effectDuration": null,
+            "color": null,
+            "soundEffectId": null,
+            "soundEffectConfig": null
+          }
+        ],
+        "screenWidth": 1920,
+        "screenHeight": 1080,
+        "fontSize": 48,
+        "fontFamily": "Arial, sans-serif",
+        "subtitleStyle": {
+          "id": "custom",
+          "name": "自定义样式",
+          "description": "完全自定义的字幕样式",
+          "preview": "示例文字",
+          "fontName": "庞门正道标题体免费版",
+          "fontSize": 48,
+          "fontColor": "#DC8A13",
+          "outlineColor": "#000000",
+          "outlineWidth": 2,
+          "backgroundColor": "transparent",
+          "backgroundOpacity": 0,
+          "position": "bottom",
+          "shadowOffset": 0,
+          "shadowBlur": 4,
+          "shadowColor": "#000000"
+        },
+        "titleSubtitleConfig": {
+          "enabled": true,
+          "sourceTitle": "芒格稳赢几十年的三件事",
+          "maxCharsPerLine": 8,
+          "maxLines": 5,
+          "lineSpacingPercent": 7,
+          "topMarginPercent": 5,
+          "lines": [
+            {
+              "text": "芒格稳赢几十年的",
+              "fontName": "喜脉体",
+              "fontSize": 80,
+              "fontColor": "#FFFFFF",
+              "backgroundColor": "transparent",
+              "backgroundOpacity": 0,
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "shadowColor": "#000000",
+              "shadowOffset": 2,
+              "yOffsetPercent": 5
+            },
+            {
+              "text": "三件事",
+              "fontName": "喜脉体",
+              "fontSize": 80,
+              "fontColor": "#be6009",
+              "backgroundColor": "transparent",
+              "backgroundOpacity": 0,
+              "outlineColor": "#000000",
+              "outlineWidth": 3,
+              "shadowColor": "#000000",
+              "shadowOffset": 2,
+              "yOffsetPercent": 12
+            }
+          ],
+          "startTime": 0,
+          "fadeInDuration": 0,
+          "fadeOutDuration": 0
+        },
+        "previewConfig": {
+          "backgroundImage": "extra/common/cover-templates/subtitle-preview-template_system_classic_88.png",
+          "titleTexts": [
+            "生活一半烟火一半诗意清欢",
+            "心怀温柔遇见所有小美好"
+          ],
+          "subtitleTexts": [
+            "生活一半烟火一半诗意清欢",
+            "心怀温柔遇见所有小美好"
+          ]
+        }
+      },
+      "createdAt": 1768396885445,
+      "isSystem": true,
+      "is_system": 1
+    }
+  ],
+  "subtitleStyles": [
+    {
+      "id": "custom",
+      "name": "自定义样式",
+      "description": null,
+      "preview": "示例文字",
+      "is_system": 1,
+      "fontName": "1.程荣光刻楷",
+      "fontSize": 48,
+      "fontColor": "#FFFFFF",
+      "outlineColor": "#000000",
+      "outlineWidth": 3,
+      "shadowOffset": 0,
+      "shadowColor": "#000000",
+      "shadowBlur": null,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0,
+      "position": "bottom",
+      "alignment": "center"
+    },
+    {
+      "id": "system-subtitle-11",
+      "name": "11",
+      "description": "Clean short-video subtitle style",
+      "preview": "示例文案",
+      "is_system": 1,
+      "fontName": "Microsoft YaHei UI Bold",
+      "fontSize": 50,
+      "fontColor": "#FFFFFF",
+      "outlineColor": "#000000",
+      "outlineWidth": 4,
+      "shadowOffset": 2,
+      "shadowColor": "#000000",
+      "shadowBlur": 4,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0,
+      "position": "bottom",
+      "alignment": null
+    },
+    {
+      "id": "system-subtitle-22",
+      "name": "22",
+      "description": "Clean short-video subtitle style",
+      "preview": "示例文案",
+      "is_system": 1,
+      "fontName": "Microsoft YaHei UI Bold",
+      "fontSize": 50,
+      "fontColor": "#FFFFFF",
+      "outlineColor": "#000000",
+      "outlineWidth": 4,
+      "shadowOffset": 2,
+      "shadowColor": "#000000",
+      "shadowBlur": 4,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0,
+      "position": "bottom",
+      "alignment": null
+    },
+    {
+      "id": "system-subtitle-33",
+      "name": "33",
+      "description": "Clean short-video subtitle style",
+      "preview": "示例文案",
+      "is_system": 1,
+      "fontName": "Microsoft YaHei UI Bold",
+      "fontSize": 50,
+      "fontColor": "#FFFFFF",
+      "outlineColor": "#000000",
+      "outlineWidth": 4,
+      "shadowOffset": 2,
+      "shadowColor": "#000000",
+      "shadowBlur": 4,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0,
+      "position": "bottom",
+      "alignment": null
+    },
+    {
+      "id": "system-subtitle-44",
+      "name": "44",
+      "description": "Clean short-video subtitle style",
+      "preview": "示例文案",
+      "is_system": 1,
+      "fontName": "Microsoft YaHei UI Bold",
+      "fontSize": 50,
+      "fontColor": "#FFFFFF",
+      "outlineColor": "#000000",
+      "outlineWidth": 4,
+      "shadowOffset": 2,
+      "shadowColor": "#000000",
+      "shadowBlur": 4,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0,
+      "position": "bottom",
+      "alignment": null
+    },
+    {
+      "id": "system-subtitle-55",
+      "name": "55",
+      "description": "Clean short-video subtitle style",
+      "preview": "示例文案",
+      "is_system": 1,
+      "fontName": "Microsoft YaHei UI Bold",
+      "fontSize": 50,
+      "fontColor": "#FFFFFF",
+      "outlineColor": "#000000",
+      "outlineWidth": 4,
+      "shadowOffset": 2,
+      "shadowColor": "#000000",
+      "shadowBlur": 4,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0,
+      "position": "bottom",
+      "alignment": null
+    },
+    {
+      "id": "system-subtitle-66",
+      "name": "66",
+      "description": "Clean short-video subtitle style",
+      "preview": "示例文案",
+      "is_system": 1,
+      "fontName": "Microsoft YaHei UI Bold",
+      "fontSize": 50,
+      "fontColor": "#FFFFFF",
+      "outlineColor": "#000000",
+      "outlineWidth": 4,
+      "shadowOffset": 2,
+      "shadowColor": "#000000",
+      "shadowBlur": 4,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0,
+      "position": "bottom",
+      "alignment": null
+    },
+    {
+      "id": "system-subtitle-77",
+      "name": "77",
+      "description": "Clean short-video subtitle style",
+      "preview": "示例文案",
+      "is_system": 1,
+      "fontName": "Microsoft YaHei UI Bold",
+      "fontSize": 50,
+      "fontColor": "#FFFFFF",
+      "outlineColor": "#000000",
+      "outlineWidth": 4,
+      "shadowOffset": 2,
+      "shadowColor": "#000000",
+      "shadowBlur": 4,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0,
+      "position": "bottom",
+      "alignment": null
+    },
+    {
+      "id": "system-subtitle-88",
+      "name": "88",
+      "description": "Clean short-video subtitle style",
+      "preview": "示例文案",
+      "is_system": 1,
+      "fontName": "Microsoft YaHei UI Bold",
+      "fontSize": 50,
+      "fontColor": "#FFFFFF",
+      "outlineColor": "#000000",
+      "outlineWidth": 4,
+      "shadowOffset": 2,
+      "shadowColor": "#000000",
+      "shadowBlur": 4,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0,
+      "position": "bottom",
+      "alignment": null
+    },
+    {
+      "id": "system-subtitle-classic-11",
+      "name": "11 Classic",
+      "description": "自定义字幕样式 - 黑底白字，精致描边",
+      "preview": "示例文字",
+      "is_system": 1,
+      "fontName": "优设标题黑",
+      "fontSize": 34,
+      "fontColor": "#35A9E2",
+      "outlineColor": "#000000",
+      "outlineWidth": 1,
+      "shadowOffset": 2,
+      "shadowColor": "#000000",
+      "shadowBlur": 4,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0.3,
+      "position": "bottom",
+      "alignment": null
+    },
+    {
+      "id": "system-subtitle-classic-22",
+      "name": "22 Classic",
+      "description": "完全自定义的字幕样式",
+      "preview": "示例文字",
+      "is_system": 1,
+      "fontName": "月星楷",
+      "fontSize": 34,
+      "fontColor": "#FFFFFF",
+      "outlineColor": "#000000",
+      "outlineWidth": 3,
+      "shadowOffset": 2,
+      "shadowColor": "#000000",
+      "shadowBlur": 4,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0,
+      "position": "bottom",
+      "alignment": null
+    },
+    {
+      "id": "system-subtitle-classic-33",
+      "name": "33 Classic",
+      "description": "完全自定义的字幕样式",
+      "preview": "示例文字",
+      "is_system": 1,
+      "fontName": "庞门正道标题体免费版",
+      "fontSize": 34,
+      "fontColor": "#FFFFFF",
+      "outlineColor": "#000000",
+      "outlineWidth": 3,
+      "shadowOffset": 2,
+      "shadowColor": "#000000",
+      "shadowBlur": 4,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0,
+      "position": "bottom",
+      "alignment": null
+    },
+    {
+      "id": "system-subtitle-classic-44",
+      "name": "44 Classic",
+      "description": "完全自定义的字幕样式",
+      "preview": "示例文字",
+      "is_system": 1,
+      "fontName": "USMCCyuanjiantecu",
+      "fontSize": 34,
+      "fontColor": "#EFE9E9",
+      "outlineColor": "#000000",
+      "outlineWidth": 3,
+      "shadowOffset": 0,
+      "shadowColor": "#000000",
+      "shadowBlur": 4,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0,
+      "position": "bottom",
+      "alignment": null
+    },
+    {
+      "id": "system-subtitle-classic-55",
+      "name": "55 Classic",
+      "description": "完全自定义的字幕样式",
+      "preview": "示例文字",
+      "is_system": 1,
+      "fontName": "Microsoft YaHei Bold",
+      "fontSize": 34,
+      "fontColor": "#FFFFFF",
+      "outlineColor": "#000000",
+      "outlineWidth": 4,
+      "shadowOffset": 2,
+      "shadowColor": "#000000",
+      "shadowBlur": 4,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0,
+      "position": "bottom",
+      "alignment": null
+    },
+    {
+      "id": "system-subtitle-classic-66",
+      "name": "66 Classic",
+      "description": "完全自定义的字幕样式",
+      "preview": "示例文字",
+      "is_system": 1,
+      "fontName": "杨任东竹石体",
+      "fontSize": 34,
+      "fontColor": "#FFFFFF",
+      "outlineColor": "#F13B83",
+      "outlineWidth": 3,
+      "shadowOffset": 1,
+      "shadowColor": "#000000",
+      "shadowBlur": 4,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0,
+      "position": "bottom",
+      "alignment": null
+    },
+    {
+      "id": "system-subtitle-classic-77",
+      "name": "77 Classic",
+      "description": "完全自定义的字幕样式",
+      "preview": "示例文字",
+      "is_system": 1,
+      "fontName": "杨任东竹石体",
+      "fontSize": 34,
+      "fontColor": "#FFFFFF",
+      "outlineColor": "#000000",
+      "outlineWidth": 0,
+      "shadowOffset": 0,
+      "shadowColor": "#000000",
+      "shadowBlur": 4,
+      "backgroundColor": "#000000",
+      "backgroundOpacity": 0.5,
+      "position": "bottom",
+      "alignment": null
+    },
+    {
+      "id": "system-subtitle-classic-88",
+      "name": "88 Classic",
+      "description": "完全自定义的字幕样式",
+      "preview": "示例文字",
+      "is_system": 1,
+      "fontName": "庞门正道标题体免费版",
+      "fontSize": 34,
+      "fontColor": "#DC8A13",
+      "outlineColor": "#000000",
+      "outlineWidth": 2,
+      "shadowOffset": 0,
+      "shadowColor": "#000000",
+      "shadowBlur": 4,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0,
+      "position": "bottom",
+      "alignment": null
+    },
+    {
+      "id": "system-subtitle-template_system_100",
+      "name": "10 Inline",
+      "description": "Clean short-video subtitle style",
+      "preview": "示例文案",
+      "is_system": 1,
+      "fontName": "千图厚黑体",
+      "fontSize": 27,
+      "fontColor": "#111111",
+      "outlineColor": "#FFFFFF",
+      "outlineWidth": 1.1,
+      "shadowOffset": 0,
+      "shadowColor": "#FFFFFF",
+      "shadowBlur": 0,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0,
+      "position": "bottom",
+      "alignment": "center"
+    },
+    {
+      "id": "system-subtitle-template_system_11",
+      "name": "11 Inline",
+      "description": "Clean short-video subtitle style",
+      "preview": "示例文案",
+      "is_system": 1,
+      "fontName": "优设标题黑",
+      "fontSize": 26,
+      "fontColor": "#FFFFFF",
+      "outlineColor": "#111111",
+      "outlineWidth": 1.1,
+      "shadowOffset": 0,
+      "shadowColor": "#111111",
+      "shadowBlur": 0,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0,
+      "position": "bottom",
+      "alignment": "center"
+    },
+    {
+      "id": "system-subtitle-template_system_22",
+      "name": "22 Inline",
+      "description": "Clean short-video subtitle style",
+      "preview": "示例文案",
+      "is_system": 1,
+      "fontName": "优设标题黑",
+      "fontSize": 26,
+      "fontColor": "#FFFFFF",
+      "outlineColor": "#111111",
+      "outlineWidth": 1.1,
+      "shadowOffset": 0,
+      "shadowColor": "#111111",
+      "shadowBlur": 0,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0,
+      "position": "bottom",
+      "alignment": "center"
+    },
+    {
+      "id": "system-subtitle-template_system_33",
+      "name": "33 Inline",
+      "description": "Clean short-video subtitle style",
+      "preview": "示例文案",
+      "is_system": 1,
+      "fontName": "字玩哥特黑白无常 免费 超黑",
+      "fontSize": 27,
+      "fontColor": "#FFFFFF",
+      "outlineColor": "#111111",
+      "outlineWidth": 1.1,
+      "shadowOffset": 0,
+      "shadowColor": "#111111",
+      "shadowBlur": 0,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0,
+      "position": "bottom",
+      "alignment": "center"
+    },
+    {
+      "id": "system-subtitle-template_system_44",
+      "name": "44 Inline",
+      "description": "Clean short-video subtitle style",
+      "preview": "示例文案",
+      "is_system": 1,
+      "fontName": "千图厚黑体",
+      "fontSize": 26,
+      "fontColor": "#101010",
+      "outlineColor": "#FFFFFF",
+      "outlineWidth": 1.1,
+      "shadowOffset": 0,
+      "shadowColor": "#FFFFFF",
+      "shadowBlur": 0,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0,
+      "position": "bottom",
+      "alignment": "center"
+    },
+    {
+      "id": "system-subtitle-template_system_55",
+      "name": "55 Inline",
+      "description": "Clean short-video subtitle style",
+      "preview": "示例文案",
+      "is_system": 1,
+      "fontName": "USMCCyuanjiantecu",
+      "fontSize": 27,
+      "fontColor": "#111111",
+      "outlineColor": "#FFFFFF",
+      "outlineWidth": 1.1,
+      "shadowOffset": 0,
+      "shadowColor": "#FFFFFF",
+      "shadowBlur": 0,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0,
+      "position": "bottom",
+      "alignment": "center"
+    },
+    {
+      "id": "system-subtitle-template_system_66",
+      "name": "66 Inline",
+      "description": "Clean short-video subtitle style",
+      "preview": "示例文案",
+      "is_system": 1,
+      "fontName": "千图厚黑体",
+      "fontSize": 27,
+      "fontColor": "#FFF8D1",
+      "outlineColor": "#111111",
+      "outlineWidth": 1.1,
+      "shadowOffset": 0,
+      "shadowColor": "#111111",
+      "shadowBlur": 0,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0,
+      "position": "bottom",
+      "alignment": "center"
+    },
+    {
+      "id": "system-subtitle-template_system_77",
+      "name": "77 Inline",
+      "description": "Clean short-video subtitle style",
+      "preview": "示例文案",
+      "is_system": 1,
+      "fontName": "字玩哥特黑白无常 免费 超黑",
+      "fontSize": 27,
+      "fontColor": "#111111",
+      "outlineColor": "#FFFFFF",
+      "outlineWidth": 1.1,
+      "shadowOffset": 0,
+      "shadowColor": "#FFFFFF",
+      "shadowBlur": 0,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0,
+      "position": "bottom",
+      "alignment": "center"
+    },
+    {
+      "id": "system-subtitle-template_system_88",
+      "name": "88 Inline",
+      "description": "Clean short-video subtitle style",
+      "preview": "示例文案",
+      "is_system": 1,
+      "fontName": "优设标题黑",
+      "fontSize": 27,
+      "fontColor": "#FFFFFF",
+      "outlineColor": "#111111",
+      "outlineWidth": 1.1,
+      "shadowOffset": 0,
+      "shadowColor": "#111111",
+      "shadowBlur": 0,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0,
+      "position": "bottom",
+      "alignment": "center"
+    },
+    {
+      "id": "system-subtitle-template_system_99",
+      "name": "09 Inline",
+      "description": "Clean short-video subtitle style",
+      "preview": "示例文案",
+      "is_system": 1,
+      "fontName": "优设标题黑",
+      "fontSize": 27,
+      "fontColor": "#FFFFFF",
+      "outlineColor": "#111111",
+      "outlineWidth": 1.1,
+      "shadowOffset": 0,
+      "shadowColor": "#111111",
+      "shadowBlur": 0,
+      "backgroundColor": "transparent",
+      "backgroundOpacity": 0,
+      "position": "bottom",
+      "alignment": "center"
+    }
+  ],
+  "coverTemplates": [
+    {
+      "id": "8f17c467-c69c-45b2-8011-94a6c3071d16",
+      "name": "斜黄白",
+      "description": "系统模板 - 斜黄白",
+      "is_system": 1,
+      "config": {
+        "backgroundEnabled": false,
+        "backgroundImagePath": null,
+        "backgroundBlurEnabled": false,
+        "backgroundBlurIntensity": 10,
+        "backgroundSize": 100,
+        "backgroundPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "personImagePath": null,
+        "personSize": 80,
+        "personPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "personRotation": 0,
+        "personBorderEnabled": false,
+        "personBorderStyle": "solid",
+        "personBorderColor": "#FFFFFF",
+        "personBorderWidth": 8,
+        "personBorderDashLength": null,
+        "personBorderGapLength": null,
+        "autoSplitText": true,
+        "titleMaxLength": 4,
+        "subtitleMaxLength": 10,
+        "titleText": "礼貌回归",
+        "titleFontFamily": "斗鱼追光体2.0",
+        "titleFontSize": 120,
+        "titleFontWeight": 700,
+        "titleColor": "#f5d400",
+        "titleStrokeColor": "#000000",
+        "titleStrokeWidth": 3,
+        "titleShadowColor": "#000000",
+        "titleShadowOffsetX": 0,
+        "titleShadowOffsetY": 0,
+        "titleShadowBlur": 0,
+        "titleShadowEnabled": false,
+        "titleShadowLayers": [],
+        "titlePosition": {
+          "x": 42.59259259259258,
+          "y": 56.909722222222214
+        },
+        "titleRotation": 338,
+        "titleDirection": "horizontal",
+        "titleCharSpacing": 24,
+        "titleLineSpacing": 144,
+        "titleMaxCharsPerLine": 10,
+        "titleBackgroundEnabled": true,
+        "titleBackgroundColor": "#f5f5f5",
+        "titleBackgroundOpacity": 25,
+        "titleBackgroundShape": "polygon",
+        "titleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "titleBackgroundPosition": {
+          "x": 44.21296296296296,
+          "y": 32.951388888888886
+        },
+        "titleBackgroundPoints": [
+          {
+            "x": 226.08024691358025,
+            "y": -79.67664930555557
+          },
+          {
+            "x": 250.7716049382716,
+            "y": 218.93446180555554
+          },
+          {
+            "x": -260.8024691358025,
+            "y": 691.1566840277777
+          },
+          {
+            "x": -290.12345679012344,
+            "y": 366.50390624999994
+          }
+        ],
+        "titleBackgroundRadius": 10,
+        "titleBackgroundRotation": 0,
+        "subtitleText": "行动亲爱的观众朋友们",
+        "subtitleFontFamily": "斗鱼追光体2.0",
+        "subtitleFontSize": 82,
+        "subtitleFontWeight": 500,
+        "subtitleColor": "#FFFFFF",
+        "subtitleStrokeColor": "#000000",
+        "subtitleStrokeWidth": 1,
+        "subtitleShadowColor": "#000000",
+        "subtitleShadowOffsetX": 0,
+        "subtitleShadowOffsetY": 0,
+        "subtitleShadowBlur": 0,
+        "subtitleShadowEnabled": false,
+        "subtitleShadowLayers": [],
+        "subtitlePosition": {
+          "x": 45.37037037037037,
+          "y": 66.5625
+        },
+        "subtitleRotation": 338,
+        "subtitleDirection": "horizontal",
+        "subtitleCharSpacing": 23,
+        "subtitleLineSpacing": 72,
+        "subtitleMaxCharsPerLine": 17,
+        "subtitleBackgroundEnabled": false,
+        "subtitleBackgroundColor": "#000000",
+        "subtitleBackgroundOpacity": 70,
+        "subtitleBackgroundShape": "rectangle",
+        "subtitleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "subtitleBackgroundPosition": {
+          "x": 50,
+          "y": 60
+        },
+        "subtitleBackgroundPoints": [],
+        "subtitleBackgroundRadius": 10,
+        "subtitleBackgroundRotation": 0,
+        "maskEnabled": false,
+        "maskImagePath": null,
+        "maskSize": 100,
+        "maskPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "maskColor": null,
+        "maskOpacity": 100,
+        "maskShape": "rectangle"
+      }
+    },
+    {
+      "id": "705fa010-5bf3-4041-b624-0fd364bea5ad",
+      "name": "大四字报",
+      "description": "系统模板 - 大四字报",
+      "is_system": 1,
+      "config": {
+        "backgroundEnabled": true,
+        "backgroundImagePath": null,
+        "backgroundBlurEnabled": false,
+        "backgroundBlurIntensity": 30,
+        "backgroundSize": 100,
+        "backgroundPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "personImagePath": null,
+        "personSize": 33.125,
+        "personPosition": {
+          "x": 22.68518518518519,
+          "y": 78.125
+        },
+        "personRotation": 0,
+        "personBorderEnabled": false,
+        "personBorderStyle": "solid",
+        "personBorderColor": "#FFFFFF",
+        "personBorderWidth": 8,
+        "personBorderDashLength": null,
+        "personBorderGapLength": null,
+        "autoSplitText": true,
+        "titleMaxLength": 4,
+        "subtitleMaxLength": 30,
+        "titleText": "礼貌回归",
+        "titleFontFamily": "USMCCyuanjiantecu",
+        "titleFontSize": 375,
+        "titleFontWeight": 400,
+        "titleColor": "#e6ca19",
+        "titleStrokeColor": "#000000",
+        "titleStrokeWidth": 0,
+        "titleShadowColor": "#000000",
+        "titleShadowOffsetX": 0,
+        "titleShadowOffsetY": 0,
+        "titleShadowBlur": 0,
+        "titleShadowEnabled": false,
+        "titleShadowLayers": [
+          {
+            "id": 1765355385133.3418,
+            "offsetX": 20,
+            "offsetY": 20,
+            "blur": 30,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          },
+          {
+            "id": 1765355385133.7036,
+            "offsetX": -20,
+            "offsetY": -20,
+            "blur": 30,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          }
+        ],
+        "titlePosition": {
+          "x": 52.54629629629629,
+          "y": 48.40277777777778
+        },
+        "titleRotation": 0,
+        "titleDirection": "horizontal",
+        "titleCharSpacing": 58,
+        "titleLineSpacing": 150,
+        "titleMaxCharsPerLine": 2,
+        "titleBackgroundEnabled": false,
+        "titleBackgroundColor": "#000000",
+        "titleBackgroundOpacity": 70,
+        "titleBackgroundShape": "polygon",
+        "titleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "titleBackgroundPosition": {
+          "x": 95.83333333333333,
+          "y": 68.88888888888889
+        },
+        "titleBackgroundPoints": [
+          {
+            "x": -330.24691358024694,
+            "y": -15.440538194444414
+          },
+          {
+            "x": 40,
+            "y": -40
+          },
+          {
+            "x": 40,
+            "y": 40
+          },
+          {
+            "x": -40,
+            "y": 40
+          },
+          {
+            "x": -114.9691358024691,
+            "y": 36.642795138888864
+          },
+          {
+            "x": -96.45061728395058,
+            "y": -3.2877604166666865
+          }
+        ],
+        "titleBackgroundRadius": 10,
+        "titleBackgroundRotation": 0,
+        "subtitleText": "行动亲爱的观众朋友们",
+        "subtitleFontFamily": "USMCCyuanjiantecu",
+        "subtitleFontSize": 122,
+        "subtitleFontWeight": 500,
+        "subtitleColor": "#e37a16",
+        "subtitleStrokeColor": "#000000",
+        "subtitleStrokeWidth": 5,
+        "subtitleShadowColor": "#ff0000",
+        "subtitleShadowOffsetX": 41,
+        "subtitleShadowOffsetY": 50,
+        "subtitleShadowBlur": 13,
+        "subtitleShadowEnabled": false,
+        "subtitleShadowLayers": [],
+        "subtitlePosition": {
+          "x": 51.15740740740741,
+          "y": 83.75
+        },
+        "subtitleRotation": 0,
+        "subtitleDirection": "horizontal",
+        "subtitleCharSpacing": 0,
+        "subtitleLineSpacing": 72,
+        "subtitleMaxCharsPerLine": 8,
+        "subtitleBackgroundEnabled": false,
+        "subtitleBackgroundColor": "#000000",
+        "subtitleBackgroundOpacity": 70,
+        "subtitleBackgroundShape": "rectangle",
+        "subtitleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "subtitleBackgroundPosition": {
+          "x": 50,
+          "y": 60
+        },
+        "subtitleBackgroundPoints": [],
+        "subtitleBackgroundRadius": 10,
+        "subtitleBackgroundRotation": 0,
+        "maskEnabled": false,
+        "maskImagePath": null,
+        "maskSize": 100,
+        "maskPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "maskColor": null,
+        "maskOpacity": 100,
+        "maskShape": "rectangle"
+      }
+    },
+    {
+      "id": "6404718a-1b1c-4148-9807-ad3c57a53e0c",
+      "name": "蓝底白字",
+      "description": "系统模板 - 蓝底白字",
+      "is_system": 1,
+      "config": {
+        "backgroundEnabled": false,
+        "backgroundImagePath": null,
+        "backgroundBlurEnabled": false,
+        "backgroundBlurIntensity": 10,
+        "backgroundSize": 100,
+        "backgroundPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "personImagePath": null,
+        "personSize": 80,
+        "personPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "personRotation": 0,
+        "personBorderEnabled": false,
+        "personBorderStyle": "solid",
+        "personBorderColor": "#FFFFFF",
+        "personBorderWidth": 8,
+        "personBorderDashLength": null,
+        "personBorderGapLength": null,
+        "autoSplitText": true,
+        "titleMaxLength": 4,
+        "subtitleMaxLength": 5,
+        "titleText": "礼貌回归",
+        "titleFontFamily": "USMCCyuanjiantecu",
+        "titleFontSize": 120,
+        "titleFontWeight": 700,
+        "titleColor": "#cbcdb1",
+        "titleStrokeColor": "#000000",
+        "titleStrokeWidth": 0,
+        "titleShadowColor": "#000000",
+        "titleShadowOffsetX": 0,
+        "titleShadowOffsetY": 0,
+        "titleShadowBlur": 0,
+        "titleShadowEnabled": false,
+        "titleShadowLayers": [
+          {
+            "id": 1765449844664.8303,
+            "offsetX": 0,
+            "offsetY": 0,
+            "blur": 8,
+            "color": "#000000",
+            "opacity": 80,
+            "enabled": true
+          },
+          {
+            "id": 1765449844664.415,
+            "offsetX": 0,
+            "offsetY": 0,
+            "blur": 16,
+            "color": "#000000",
+            "opacity": 40,
+            "enabled": true
+          }
+        ],
+        "titlePosition": {
+          "x": 50.694444444444436,
+          "y": 63.506944444444436
+        },
+        "titleRotation": 0,
+        "titleDirection": "horizontal",
+        "titleCharSpacing": 24,
+        "titleLineSpacing": 144,
+        "titleMaxCharsPerLine": 10,
+        "titleBackgroundEnabled": false,
+        "titleBackgroundColor": "#000000",
+        "titleBackgroundOpacity": 70,
+        "titleBackgroundShape": "rectangle",
+        "titleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "titleBackgroundPosition": {
+          "x": 50,
+          "y": 30
+        },
+        "titleBackgroundPoints": [],
+        "titleBackgroundRadius": 10,
+        "titleBackgroundRotation": 0,
+        "subtitleText": "行动亲爱的",
+        "subtitleFontFamily": "千图厚黑体",
+        "subtitleFontSize": 187,
+        "subtitleFontWeight": 100,
+        "subtitleColor": "#FFFFFF",
+        "subtitleStrokeColor": "#000000",
+        "subtitleStrokeWidth": 10,
+        "subtitleShadowColor": "#000000",
+        "subtitleShadowOffsetX": 0,
+        "subtitleShadowOffsetY": 0,
+        "subtitleShadowBlur": 0,
+        "subtitleShadowEnabled": false,
+        "subtitleShadowLayers": [],
+        "subtitlePosition": {
+          "x": 49.53703703703704,
+          "y": 74.20138888888889
+        },
+        "subtitleRotation": 0,
+        "subtitleDirection": "horizontal",
+        "subtitleCharSpacing": -23,
+        "subtitleLineSpacing": 72,
+        "subtitleMaxCharsPerLine": 15,
+        "subtitleBackgroundEnabled": true,
+        "subtitleBackgroundColor": "#599dd9",
+        "subtitleBackgroundOpacity": 25,
+        "subtitleBackgroundShape": "rectangle",
+        "subtitleBackgroundSize": {
+          "width": 161.0185185185185,
+          "height": 30.48611111111111
+        },
+        "subtitleBackgroundPosition": {
+          "x": 50.23148148148148,
+          "y": 67.11805555555556
+        },
+        "subtitleBackgroundPoints": [],
+        "subtitleBackgroundRadius": 10,
+        "subtitleBackgroundRotation": 0,
+        "maskEnabled": false,
+        "maskImagePath": null,
+        "maskSize": 100,
+        "maskPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "maskColor": null,
+        "maskOpacity": 100,
+        "maskShape": "rectangle"
+      }
+    },
+    {
+      "id": "485183be-6eed-4eae-b74a-8591f08b69fa",
+      "name": "黄白实描",
+      "description": "系统模板 - 黄白实描",
+      "is_system": 1,
+      "config": {
+        "backgroundEnabled": false,
+        "backgroundImagePath": null,
+        "backgroundBlurEnabled": true,
+        "backgroundBlurIntensity": 30,
+        "backgroundSize": 100,
+        "backgroundPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "personImagePath": null,
+        "personSize": 70.27777777777777,
+        "personPosition": {
+          "x": 35.87962962962963,
+          "y": 64.75694444444444
+        },
+        "personRotation": 0,
+        "personBorderEnabled": true,
+        "personBorderStyle": "solid",
+        "personBorderColor": "#FFFFFF",
+        "personBorderWidth": 32,
+        "personBorderDashLength": null,
+        "personBorderGapLength": null,
+        "autoSplitText": true,
+        "titleMaxLength": 4,
+        "subtitleMaxLength": 6,
+        "titleText": "置顶96",
+        "titleFontFamily": "1.程荣光刻楷",
+        "titleFontSize": 300,
+        "titleFontWeight": 1000,
+        "titleColor": "#ffde05",
+        "titleStrokeColor": "#000000",
+        "titleStrokeWidth": 0,
+        "titleShadowColor": "#000000",
+        "titleShadowOffsetX": 0,
+        "titleShadowOffsetY": 0,
+        "titleShadowBlur": 0,
+        "titleShadowEnabled": false,
+        "titleShadowLayers": [
+          {
+            "id": 1765435502861.9124,
+            "offsetX": -2,
+            "offsetY": -2,
+            "blur": 12,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          },
+          {
+            "id": 1765435502861.0488,
+            "offsetX": 2,
+            "offsetY": 2,
+            "blur": 16,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          },
+          {
+            "id": 1765435502861.4207,
+            "offsetX": 0,
+            "offsetY": 0,
+            "blur": 14,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          }
+        ],
+        "titlePosition": {
+          "x": 91.89814814814812,
+          "y": 66.45833333333334
+        },
+        "titleRotation": 0,
+        "titleDirection": "vertical",
+        "titleCharSpacing": -20,
+        "titleLineSpacing": 118,
+        "titleMaxCharsPerLine": 10,
+        "titleBackgroundEnabled": false,
+        "titleBackgroundColor": "#000000",
+        "titleBackgroundOpacity": 70,
+        "titleBackgroundShape": "rectangle",
+        "titleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "titleBackgroundPosition": {
+          "x": 50,
+          "y": 30
+        },
+        "titleBackgroundPoints": [],
+        "titleBackgroundRadius": 10,
+        "titleBackgroundRotation": 0,
+        "subtitleText": "4高丹草新品",
+        "subtitleFontFamily": "USMCCyuanjiantecu",
+        "subtitleFontSize": 117,
+        "subtitleFontWeight": 500,
+        "subtitleColor": "#FFFFFF",
+        "subtitleStrokeColor": "#000000",
+        "subtitleStrokeWidth": 0,
+        "subtitleShadowColor": "#000000",
+        "subtitleShadowOffsetX": 0,
+        "subtitleShadowOffsetY": 0,
+        "subtitleShadowBlur": 0,
+        "subtitleShadowEnabled": false,
+        "subtitleShadowLayers": [
+          {
+            "id": 1765435591571.2886,
+            "offsetX": -2,
+            "offsetY": -2,
+            "blur": 2,
+            "color": "#FFFFFF",
+            "opacity": 60,
+            "enabled": true
+          },
+          {
+            "id": 1765435591571.856,
+            "offsetX": 2,
+            "offsetY": 2,
+            "blur": 0,
+            "color": "#000000",
+            "opacity": 65,
+            "enabled": true
+          },
+          {
+            "id": 1765435591571.3809,
+            "offsetX": 0,
+            "offsetY": 0,
+            "blur": 4,
+            "color": "#000000",
+            "opacity": 50,
+            "enabled": true
+          }
+        ],
+        "subtitlePosition": {
+          "x": 47.45370370370371,
+          "y": 12.743055555555557
+        },
+        "subtitleRotation": 0,
+        "subtitleDirection": "horizontal",
+        "subtitleCharSpacing": 12,
+        "subtitleLineSpacing": 72,
+        "subtitleMaxCharsPerLine": 15,
+        "subtitleBackgroundEnabled": false,
+        "subtitleBackgroundColor": "#000000",
+        "subtitleBackgroundOpacity": 70,
+        "subtitleBackgroundShape": "rectangle",
+        "subtitleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "subtitleBackgroundPosition": {
+          "x": 50,
+          "y": 60
+        },
+        "subtitleBackgroundPoints": [],
+        "subtitleBackgroundRadius": 10,
+        "subtitleBackgroundRotation": 0,
+        "maskEnabled": false,
+        "maskImagePath": null,
+        "maskSize": 100,
+        "maskPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "maskColor": null,
+        "maskOpacity": 100,
+        "maskShape": "rectangle"
+      }
+    },
+    {
+      "id": "v08ezr6v3x-mkdite6i",
+      "name": "人像居中",
+      "description": "系统模板 - 人像居中",
+      "is_system": 1,
+      "config": {
+        "backgroundEnabled": false,
+        "backgroundImagePath": null,
+        "backgroundBlurEnabled": true,
+        "backgroundBlurIntensity": 30,
+        "backgroundSize": 100,
+        "backgroundPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "personImagePath": null,
+        "personSize": 54.99999999999999,
+        "personPosition": {
+          "x": 53.935185185185205,
+          "y": 34.375
+        },
+        "personRotation": 0,
+        "personBorderEnabled": true,
+        "personBorderStyle": "solid",
+        "personBorderColor": "#FFFFFF",
+        "personBorderWidth": 8,
+        "personBorderDashLength": null,
+        "personBorderGapLength": null,
+        "autoSplitText": true,
+        "titleMaxLength": 6,
+        "subtitleMaxLength": 12,
+        "titleText": "托德揭秘芒格",
+        "titleFontFamily": "墨趣古风体",
+        "titleFontSize": 110,
+        "titleFontWeight": 100,
+        "titleColor": "#ffffff",
+        "titleStrokeColor": "#000000",
+        "titleStrokeWidth": 0,
+        "titleShadowColor": "#000000",
+        "titleShadowOffsetX": 0,
+        "titleShadowOffsetY": 0,
+        "titleShadowBlur": 0,
+        "titleShadowEnabled": false,
+        "titleShadowLayers": [
+          {
+            "id": 1765435502861.9124,
+            "offsetX": -2,
+            "offsetY": -2,
+            "blur": 12,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          },
+          {
+            "id": 1765435502861.0488,
+            "offsetX": 2,
+            "offsetY": 2,
+            "blur": 16,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          },
+          {
+            "id": 1765435502861.4207,
+            "offsetX": 0,
+            "offsetY": 0,
+            "blur": 14,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          }
+        ],
+        "titlePosition": {
+          "x": 39.814814814814795,
+          "y": 69.40972222222223
+        },
+        "titleRotation": 0,
+        "titleDirection": "horizontal",
+        "titleCharSpacing": 12,
+        "titleLineSpacing": 118,
+        "titleMaxCharsPerLine": 10,
+        "titleBackgroundEnabled": false,
+        "titleBackgroundColor": "#000000",
+        "titleBackgroundOpacity": 70,
+        "titleBackgroundShape": "rectangle",
+        "titleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "titleBackgroundPosition": {
+          "x": 50,
+          "y": 30
+        },
+        "titleBackgroundPoints": [],
+        "titleBackgroundRadius": 10,
+        "titleBackgroundRotation": 0,
+        "subtitleText": "投资稳的原因",
+        "subtitleFontFamily": "庞门正道标题体免费版",
+        "subtitleFontSize": 117,
+        "subtitleFontWeight": 500,
+        "subtitleColor": "#eaf273",
+        "subtitleStrokeColor": "#000000",
+        "subtitleStrokeWidth": 0,
+        "subtitleShadowColor": "#000000",
+        "subtitleShadowOffsetX": 0,
+        "subtitleShadowOffsetY": 0,
+        "subtitleShadowBlur": 0,
+        "subtitleShadowEnabled": false,
+        "subtitleShadowLayers": [
+          {
+            "id": 1765435591571.2886,
+            "offsetX": -2,
+            "offsetY": -2,
+            "blur": 2,
+            "color": "#FFFFFF",
+            "opacity": 60,
+            "enabled": true
+          },
+          {
+            "id": 1765435591571.856,
+            "offsetX": 2,
+            "offsetY": 2,
+            "blur": 0,
+            "color": "#000000",
+            "opacity": 65,
+            "enabled": true
+          },
+          {
+            "id": 1765435591571.3809,
+            "offsetX": 0,
+            "offsetY": 0,
+            "blur": 4,
+            "color": "#000000",
+            "opacity": 50,
+            "enabled": true
+          }
+        ],
+        "subtitlePosition": {
+          "x": 58.796296296296305,
+          "y": 77.84722222222221
+        },
+        "subtitleRotation": 0,
+        "subtitleDirection": "horizontal",
+        "subtitleCharSpacing": 12,
+        "subtitleLineSpacing": 72,
+        "subtitleMaxCharsPerLine": 15,
+        "subtitleBackgroundEnabled": false,
+        "subtitleBackgroundColor": "#000000",
+        "subtitleBackgroundOpacity": 70,
+        "subtitleBackgroundShape": "rectangle",
+        "subtitleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "subtitleBackgroundPosition": {
+          "x": 50,
+          "y": 60
+        },
+        "subtitleBackgroundPoints": [],
+        "subtitleBackgroundRadius": 10,
+        "subtitleBackgroundRotation": 0,
+        "maskEnabled": false,
+        "maskImagePath": null,
+        "maskSize": 100,
+        "maskPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "maskColor": null,
+        "maskOpacity": 100,
+        "maskShape": "rectangle"
+      }
+    },
+    {
+      "id": "1xwrrcvf7a5-mkdite6i",
+      "name": "青蓝虚描",
+      "description": "系统模板 - 青蓝虚描",
+      "is_system": 1,
+      "config": {
+        "backgroundEnabled": false,
+        "backgroundImagePath": null,
+        "backgroundBlurEnabled": true,
+        "backgroundBlurIntensity": 100,
+        "backgroundSize": 100,
+        "backgroundPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "personImagePath": null,
+        "personSize": 56.73611111111111,
+        "personPosition": {
+          "x": 35.87962962962963,
+          "y": 71.52777777777777
+        },
+        "personRotation": 0,
+        "personBorderEnabled": true,
+        "personBorderStyle": "dashed",
+        "personBorderColor": "#149fc2",
+        "personBorderWidth": 14,
+        "personBorderDashLength": null,
+        "personBorderGapLength": null,
+        "autoSplitText": true,
+        "titleMaxLength": 4,
+        "subtitleMaxLength": 11,
+        "titleText": "托德揭秘",
+        "titleFontFamily": "泼墨体",
+        "titleFontSize": 115,
+        "titleFontWeight": 350,
+        "titleColor": "#149fc2",
+        "titleStrokeColor": "#000000",
+        "titleStrokeWidth": 7,
+        "titleShadowColor": "#000000",
+        "titleShadowOffsetX": 0,
+        "titleShadowOffsetY": 0,
+        "titleShadowBlur": 0,
+        "titleShadowEnabled": false,
+        "titleShadowLayers": [
+          {
+            "id": 1765435502861.9124,
+            "offsetX": -2,
+            "offsetY": -2,
+            "blur": 12,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          },
+          {
+            "id": 1765435502861.0488,
+            "offsetX": 2,
+            "offsetY": 2,
+            "blur": 16,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          },
+          {
+            "id": 1765435502861.4207,
+            "offsetX": 0,
+            "offsetY": 0,
+            "blur": 14,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          }
+        ],
+        "titlePosition": {
+          "x": 90.9722222222222,
+          "y": 34.16666666666667
+        },
+        "titleRotation": 0,
+        "titleDirection": "vertical",
+        "titleCharSpacing": 50,
+        "titleLineSpacing": 118,
+        "titleMaxCharsPerLine": 10,
+        "titleBackgroundEnabled": false,
+        "titleBackgroundColor": "#000000",
+        "titleBackgroundOpacity": 70,
+        "titleBackgroundShape": "rectangle",
+        "titleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "titleBackgroundPosition": {
+          "x": 50,
+          "y": 30
+        },
+        "titleBackgroundPoints": [],
+        "titleBackgroundRadius": 10,
+        "titleBackgroundRotation": 0,
+        "subtitleText": "芒格投资稳的原因",
+        "subtitleFontFamily": "杨任东竹石体",
+        "subtitleFontSize": 87,
+        "subtitleFontWeight": 500,
+        "subtitleColor": "#149fc2",
+        "subtitleStrokeColor": "#000000",
+        "subtitleStrokeWidth": 0,
+        "subtitleShadowColor": "#000000",
+        "subtitleShadowOffsetX": 0,
+        "subtitleShadowOffsetY": 0,
+        "subtitleShadowBlur": 0,
+        "subtitleShadowEnabled": false,
+        "subtitleShadowLayers": [
+          {
+            "id": 1768540523070.3923,
+            "offsetX": 0,
+            "offsetY": 0,
+            "blur": 2,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          },
+          {
+            "id": 1768540523070.0796,
+            "offsetX": 0,
+            "offsetY": 0,
+            "blur": 2,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          }
+        ],
+        "subtitlePosition": {
+          "x": 76.85185185185186,
+          "y": 58.40277777777778
+        },
+        "subtitleRotation": 0,
+        "subtitleDirection": "vertical",
+        "subtitleCharSpacing": 12,
+        "subtitleLineSpacing": 72,
+        "subtitleMaxCharsPerLine": 15,
+        "subtitleBackgroundEnabled": false,
+        "subtitleBackgroundColor": "#000000",
+        "subtitleBackgroundOpacity": 70,
+        "subtitleBackgroundShape": "rectangle",
+        "subtitleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "subtitleBackgroundPosition": {
+          "x": 50,
+          "y": 60
+        },
+        "subtitleBackgroundPoints": [],
+        "subtitleBackgroundRadius": 10,
+        "subtitleBackgroundRotation": 0,
+        "maskEnabled": false,
+        "maskImagePath": null,
+        "maskSize": 100,
+        "maskPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "maskColor": null,
+        "maskOpacity": 100,
+        "maskShape": "rectangle"
+      }
+    },
+    {
+      "id": "43t1uykj8zg-mkdite6i",
+      "name": "粉红虚白",
+      "description": "系统模板 - 粉红虚白",
+      "is_system": 1,
+      "config": {
+        "backgroundEnabled": false,
+        "backgroundImagePath": null,
+        "backgroundBlurEnabled": true,
+        "backgroundBlurIntensity": 50,
+        "backgroundSize": 100,
+        "backgroundPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "personImagePath": null,
+        "personSize": 81.7361111111111,
+        "personPosition": {
+          "x": 49.768518518518526,
+          "y": 60.41666666666666
+        },
+        "personRotation": 0,
+        "personBorderEnabled": true,
+        "personBorderStyle": "dashed",
+        "personBorderColor": "#ffffff",
+        "personBorderWidth": 8,
+        "personBorderDashLength": null,
+        "personBorderGapLength": null,
+        "autoSplitText": true,
+        "titleMaxLength": 4,
+        "subtitleMaxLength": 11,
+        "titleText": "长期持有",
+        "titleFontFamily": "庞门正道标题体免费版",
+        "titleFontSize": 165,
+        "titleFontWeight": 100,
+        "titleColor": "#e8c4df",
+        "titleStrokeColor": "#e147c0",
+        "titleStrokeWidth": 6,
+        "titleShadowColor": "#000000",
+        "titleShadowOffsetX": 0,
+        "titleShadowOffsetY": 0,
+        "titleShadowBlur": 0,
+        "titleShadowEnabled": false,
+        "titleShadowLayers": [],
+        "titlePosition": {
+          "x": 36.80555555555553,
+          "y": 11.944444444444452
+        },
+        "titleRotation": 0,
+        "titleDirection": "horizontal",
+        "titleCharSpacing": 11,
+        "titleLineSpacing": 118,
+        "titleMaxCharsPerLine": 10,
+        "titleBackgroundEnabled": false,
+        "titleBackgroundColor": "#000000",
+        "titleBackgroundOpacity": 70,
+        "titleBackgroundShape": "rectangle",
+        "titleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "titleBackgroundPosition": {
+          "x": 50,
+          "y": 30
+        },
+        "titleBackgroundPoints": [],
+        "titleBackgroundRadius": 10,
+        "titleBackgroundRotation": 0,
+        "subtitleText": "才是真省心又赚钱",
+        "subtitleFontFamily": "方正粗黑宋简体",
+        "subtitleFontSize": 117,
+        "subtitleFontWeight": 500,
+        "subtitleColor": "#FFFFFF",
+        "subtitleStrokeColor": "#ef62e3",
+        "subtitleStrokeWidth": 5,
+        "subtitleShadowColor": "#000000",
+        "subtitleShadowOffsetX": 0,
+        "subtitleShadowOffsetY": 0,
+        "subtitleShadowBlur": 0,
+        "subtitleShadowEnabled": false,
+        "subtitleShadowLayers": [
+          {
+            "id": 1765435591571.2886,
+            "offsetX": -2,
+            "offsetY": -2,
+            "blur": 2,
+            "color": "#FFFFFF",
+            "opacity": 60,
+            "enabled": true
+          },
+          {
+            "id": 1765435591571.856,
+            "offsetX": 2,
+            "offsetY": 2,
+            "blur": 0,
+            "color": "#000000",
+            "opacity": 65,
+            "enabled": true
+          },
+          {
+            "id": 1765435591571.3809,
+            "offsetX": 0,
+            "offsetY": 0,
+            "blur": 4,
+            "color": "#000000",
+            "opacity": 50,
+            "enabled": true
+          }
+        ],
+        "subtitlePosition": {
+          "x": 51.3888888888889,
+          "y": 23.333333333333304
+        },
+        "subtitleRotation": 0,
+        "subtitleDirection": "horizontal",
+        "subtitleCharSpacing": 12,
+        "subtitleLineSpacing": 72,
+        "subtitleMaxCharsPerLine": 15,
+        "subtitleBackgroundEnabled": false,
+        "subtitleBackgroundColor": "#000000",
+        "subtitleBackgroundOpacity": 70,
+        "subtitleBackgroundShape": "rectangle",
+        "subtitleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "subtitleBackgroundPosition": {
+          "x": 50,
+          "y": 60
+        },
+        "subtitleBackgroundPoints": [],
+        "subtitleBackgroundRadius": 10,
+        "subtitleBackgroundRotation": 0,
+        "maskEnabled": false,
+        "maskImagePath": null,
+        "maskSize": 100,
+        "maskPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "maskColor": null,
+        "maskOpacity": 100,
+        "maskShape": "rectangle"
+      }
+    },
+    {
+      "id": "sb8mm7l4bjf-mkdite6i",
+      "name": "红黄虚描",
+      "description": "系统模板 - 红黄虚描",
+      "is_system": 1,
+      "config": {
+        "backgroundEnabled": false,
+        "backgroundImagePath": null,
+        "backgroundBlurEnabled": true,
+        "backgroundBlurIntensity": 60,
+        "backgroundSize": 100,
+        "backgroundPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "personImagePath": null,
+        "personSize": 65.06944444444444,
+        "personPosition": {
+          "x": 62.73148148148148,
+          "y": 67.0138888888889
+        },
+        "personRotation": 0,
+        "personBorderEnabled": true,
+        "personBorderStyle": "dashed",
+        "personBorderColor": "#FFFFFF",
+        "personBorderWidth": 12,
+        "personBorderDashLength": null,
+        "personBorderGapLength": null,
+        "autoSplitText": true,
+        "titleMaxLength": 4,
+        "subtitleMaxLength": 10,
+        "titleText": "托德揭秘",
+        "titleFontFamily": "泼墨体",
+        "titleFontSize": 165,
+        "titleFontWeight": 100,
+        "titleColor": "#d4ec74",
+        "titleStrokeColor": "#000000",
+        "titleStrokeWidth": 0,
+        "titleShadowColor": "#000000",
+        "titleShadowOffsetX": 0,
+        "titleShadowOffsetY": 0,
+        "titleShadowBlur": 0,
+        "titleShadowEnabled": false,
+        "titleShadowLayers": [
+          {
+            "id": 1765435502861.9124,
+            "offsetX": -2,
+            "offsetY": -2,
+            "blur": 12,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          },
+          {
+            "id": 1765435502861.0488,
+            "offsetX": 2,
+            "offsetY": 2,
+            "blur": 16,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          },
+          {
+            "id": 1765435502861.4207,
+            "offsetX": 0,
+            "offsetY": 0,
+            "blur": 14,
+            "color": "#000000",
+            "opacity": 100,
+            "enabled": true
+          }
+        ],
+        "titlePosition": {
+          "x": 55.09259259259257,
+          "y": 15.59027777777779
+        },
+        "titleRotation": 0,
+        "titleDirection": "horizontal",
+        "titleCharSpacing": 19,
+        "titleLineSpacing": 118,
+        "titleMaxCharsPerLine": 9,
+        "titleBackgroundEnabled": false,
+        "titleBackgroundColor": "#000000",
+        "titleBackgroundOpacity": 70,
+        "titleBackgroundShape": "rectangle",
+        "titleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "titleBackgroundPosition": {
+          "x": 50,
+          "y": 30
+        },
+        "titleBackgroundPoints": [],
+        "titleBackgroundRadius": 10,
+        "titleBackgroundRotation": 0,
+        "subtitleText": "芒格投资稳的原因",
+        "subtitleFontFamily": "MaokenAssortedSans-Lite",
+        "subtitleFontSize": 117,
+        "subtitleFontWeight": 500,
+        "subtitleColor": "#7e1010",
+        "subtitleStrokeColor": "#ffffff",
+        "subtitleStrokeWidth": 6,
+        "subtitleShadowColor": "#000000",
+        "subtitleShadowOffsetX": 0,
+        "subtitleShadowOffsetY": 0,
+        "subtitleShadowBlur": 0,
+        "subtitleShadowEnabled": false,
+        "subtitleShadowLayers": [
+          {
+            "id": 1765435591571.2886,
+            "offsetX": -2,
+            "offsetY": -2,
+            "blur": 2,
+            "color": "#FFFFFF",
+            "opacity": 60,
+            "enabled": true
+          },
+          {
+            "id": 1765435591571.856,
+            "offsetX": 2,
+            "offsetY": 2,
+            "blur": 0,
+            "color": "#000000",
+            "opacity": 65,
+            "enabled": true
+          },
+          {
+            "id": 1765435591571.3809,
+            "offsetX": 0,
+            "offsetY": 0,
+            "blur": 4,
+            "color": "#000000",
+            "opacity": 50,
+            "enabled": true
+          }
+        ],
+        "subtitlePosition": {
+          "x": 18.98148148148148,
+          "y": 64.47916666666667
+        },
+        "subtitleRotation": 0,
+        "subtitleDirection": "vertical",
+        "subtitleCharSpacing": 12,
+        "subtitleLineSpacing": 72,
+        "subtitleMaxCharsPerLine": 15,
+        "subtitleBackgroundEnabled": false,
+        "subtitleBackgroundColor": "#000000",
+        "subtitleBackgroundOpacity": 70,
+        "subtitleBackgroundShape": "rectangle",
+        "subtitleBackgroundSize": {
+          "width": 30,
+          "height": 10
+        },
+        "subtitleBackgroundPosition": {
+          "x": 50,
+          "y": 60
+        },
+        "subtitleBackgroundPoints": [],
+        "subtitleBackgroundRadius": 10,
+        "subtitleBackgroundRotation": 0,
+        "maskEnabled": false,
+        "maskImagePath": null,
+        "maskSize": 100,
+        "maskPosition": {
+          "x": 50,
+          "y": 50
+        },
+        "maskColor": null,
+        "maskOpacity": 100,
+        "maskShape": "rectangle"
+      }
+    }
+  ],
+  "timestamp": "2026-06-06T07:31:57.180Z"
+}

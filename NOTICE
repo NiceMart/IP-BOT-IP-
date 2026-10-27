@@ -1,0 +1,19 @@
+IP Bot publication candidate
+
+This software includes code derived from AIGCPanel by ModStartLib:
+https://github.com/modstart-lib/aigcpanel
+The inherited Apache License 2.0 is retained in LICENSE.
+No replacement of the original copyright or attribution is intended.
+
+The supplied workspace contains subsequent changes to branding, desktop/admin UI,
+theme and account layout, launch/runtime resource handling, speech/browser/media
+integration, and open-source preparation/security controls. See CHANGELOG.md.
+No historical Git repository was present in the supplied workspace.
+
+Arco Design Vue icons are used under MIT:
+Copyright (c) 2021 Bytedance, Inc. and its affiliates.
+The complete MIT notice is in docs/licenses/arco-design-MIT.txt.
+
+MODNet source retains its own LICENSE in python/MODNet-master/LICENSE.
+Model weights and third-party runtime/media assets are not covered by this notice.
+Maintainer changes are published under Apache License 2.0 with maintainer authorization.

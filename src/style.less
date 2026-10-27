@@ -1,0 +1,650 @@
+/* Modified for IP Bot: publication preparation, configuration or security changes. See CHANGELOG.md. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root, body {
+    --primary-1: 232, 243, 255;
+    --primary-2: 189, 214, 247;
+    --primary-3: 147, 184, 239;
+    --primary-4: 109, 153, 231;
+    --primary-5: 72, 122, 223;
+    --primary-6: 38, 91, 215;
+    --primary-7: 24, 66, 180;
+    --primary-8: 13, 44, 146;
+    --primary-9: 5, 26, 111;
+    --primary-10: 0, 13, 77;
+    --color-primary-light-1: rgb(var(--primary-1));
+    --color-primary-light-2: rgb(var(--primary-2));
+    --color-primary-light-3: rgb(var(--primary-3));
+    --color-primary-light-4: rgb(var(--primary-4));
+
+    --window-header-height: 3.5rem;
+    --page-nav-width: 4rem;
+
+    //--color-primary: #5154E0; // 41	85	254
+    --color-primary: #265BD7;
+    // --color-primary-lighter: #6A6DFF;
+    --color-primary-lighter: lighten(#265BD7, 10%);
+    //--color-bg-page-nav: #2A3A5D;
+    --color-bg-page-nav: #FFFFFF;
+    //--color-bg-page-nav-active: #5154E0;
+    --color-bg-page-nav-active: #FFFFFF;
+    //--color-text-page-nav: #FFFFFF;
+    --color-text-page-nav: #000000;
+    //--color-text-page-nav-active: #EEEEEE;
+    --color-text-page-nav-active: #265BD7;
+    //--color-border-page-nav: #2A3A5D;
+    --color-border-page-nav: #EEEEEE;
+
+    --color-background: #F8F8F8;
+    --color-text: #111111;
+    --color-border: #E5E6EB;
+}
+
+body[data-theme="dark"] {
+
+    --primary-1: 0, 13, 77;
+    --primary-2: 5, 26, 111;
+    --primary-3: 13, 44, 146;
+    --primary-4: 24, 66, 180;
+    --primary-5: 38, 91, 215;
+    --primary-6: 72, 122, 223;
+    --primary-7: 109, 153, 231;
+    --primary-8: 147, 184, 239;
+    --primary-9: 189, 214, 247;
+    --primary-10: 232, 243, 255;
+
+    --color-background: #17171A;
+    --color-text: #f3f4f6;
+    --color-border: #484849;
+    --color-text-page-nav: #CCCCCC;
+    --color-bg-page-nav: #17171A;
+    --color-bg-page-nav-active: #2d3443;
+
+    // 全局文字颜色优化 - 提高对比度
+    color: #f3f4f6;
+
+    .text-gray-400 {
+        color: #d1d5db !important;
+    }
+
+    .text-gray-500 {
+        color: #d1d5db !important;
+    }
+
+    .text-gray-600 {
+        color: #e5e7eb !important;
+    }
+
+    .text-gray-700 {
+        color: #e5e7eb !important;
+    }
+
+    .text-gray-800 {
+        color: #f3f4f6 !important;
+    }
+
+    .text-gray-900 {
+        color: #f3f4f6 !important;
+    }
+
+    // 标题文字
+    h1, h2, h3, h4, h5, h6, .font-bold {
+        color: #f3f4f6;
+    }
+
+    // 字体相关文字
+    .font-medium {
+        color: #f3f4f6;
+    }
+
+    // 背景色 - 确保在深色主题下是深色
+    .bg-gray-50 {
+        background-color: rgba(40, 45, 55, 0.7) !important;
+    }
+
+    .bg-gray-100 {
+        background-color: rgba(50, 55, 65, 0.7) !important;
+    }
+
+    .hover\:bg-gray-100:hover {
+        background-color: rgba(59, 130, 246, 0.2) !important;
+    }
+}
+
+html {
+    background-color: transparent;
+}
+
+body {
+    background-color: var(--color-background);
+    font-size: 14px;
+    color: var(--color-text);
+}
+
+
+
+/////////// layout start ///////////
+
+.page-container {
+    height: 100%;
+    width: 100%;
+}
+
+.page-narrow-container {
+    max-width: 100rem;
+    margin: 0 auto;
+}
+
+.page-nav-item {
+    color: var(--color-text-page-nav);
+
+    &.active {
+        background: var(--color-bg-page-nav-active);
+        color: var(--color-text-page-nav-active);
+    }
+}
+
+.window-header {
+    -webkit-user-select: none;
+    transition: all 0.3s;
+    padding-left: 0;
+
+    &.osx {
+        padding-left: 70px;
+    }
+
+    &.fullscreen {
+        padding-left: 0;
+    }
+
+    .window-header-title {
+        -webkit-app-region: drag;
+
+        &.no-drag {
+            -webkit-app-region: no-drag;
+        }
+    }
+}
+
+.window-container {
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.window-body {
+    flex: 1;
+    overflow: hidden;
+}
+
+* {
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #DDDDDD;
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background: #CCCCCC;
+    }
+}
+
+body[data-theme="dark"] {
+    * {
+        &::-webkit-scrollbar-track {
+            background: #222222;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: #333333;
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+            background: #888888;
+        }
+    }
+}
+
+/////////// layout end ///////////
+
+/////////// global start ///////////
+
+.text-link {
+    color: #007bff;
+    cursor: pointer;
+}
+
+.hover\:text-primary {
+    &:hover {
+        color: var(--color-primary);
+    }
+}
+
+.bg-default {
+    background-color: var(--color-background);
+}
+
+.bg-primary {
+    background-color: var(--color-primary);
+}
+
+.text-default {
+    color: var(--color-text);
+}
+
+.text-primary {
+    color: var(--color-primary);
+}
+
+.border-default {
+    border-color: var(--color-border);
+}
+
+.debug {
+    border: 1px solid red;
+}
+
+/////////// global end ///////////
+
+
+/////////// arco start ///////////
+// tooltip 确保深色背景，不受主题变量影响
+.arco-tooltip-content {
+    background-color: rgba(0, 0, 0, 0.75) !important;
+}
+.arco-tooltip-popup-arrow {
+    background-color: rgba(0, 0, 0, 0.75) !important;
+}
+
+.arco-btn, .arco-input-wrapper, .arco-textarea-wrapper, .arco-input-tag, .arco-radio-group-button, .arco-alert {
+    border-radius: 0.5rem;
+}
+
+.arco-tabs-tab-title {
+    &:before {
+        border-radius: 0.5rem !important;
+    }
+}
+
+.arco-modal-confirm {
+    .arco-modal-header {
+        border-bottom: none;
+    }
+
+    .arco-modal-footer {
+        border-top: none;
+    }
+}
+
+.arco-select {
+    border-radius: 0.5rem;
+}
+
+.arco-slider {
+    margin-bottom: 0 !important;
+
+    .arco-slider-mark {
+        font-size: 10px !important;
+    }
+}
+
+.arco-checkbox {
+    padding-left: 0;
+}
+
+.arco-radio-button.arco-radio-checked {
+    border-radius: 0.5rem;
+}
+
+.arco-select-view-multiple {
+    border-radius: 0.5rem;
+}
+
+[data-theme="dark"] {
+    .arco-radio-group-button {
+        .arco-radio-button {
+            color: #CCC;
+        }
+    }
+
+    // 输入框样式 - 保持浅色风格与深色背景对比
+    .arco-input-wrapper {
+        background-color: #ffffff;
+        border-color: #e5e6eb;
+
+        &:hover {
+            background-color: #ffffff;
+            border-color: #c9cace;
+        }
+
+        &.arco-input-focus {
+            background-color: #ffffff;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+        }
+
+        .arco-input {
+            background-color: transparent;
+            color: #111111;
+
+            &::placeholder {
+                color: #999999;
+            }
+        }
+    }
+
+    // 文本域样式 - 保持浅色风格
+    .arco-textarea-wrapper {
+        background-color: #ffffff;
+        border-color: #e5e6eb;
+
+        &:hover {
+            background-color: #ffffff;
+            border-color: #c9cace;
+        }
+
+        &.arco-textarea-focus {
+            background-color: #ffffff;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+        }
+
+        .arco-textarea {
+            background-color: transparent;
+            color: #111111;
+
+            &::placeholder {
+                color: #999999;
+            }
+        }
+    }
+
+    // 选择框样式 - 保持浅色风格
+    .arco-select-view {
+        background-color: #ffffff;
+        border-color: #e5e6eb;
+        color: #111111;
+
+        &:hover {
+            background-color: #ffffff;
+            border-color: #c9cace;
+        }
+
+        &.arco-select-view-focus {
+            background-color: #ffffff;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+        }
+
+        .arco-select-view-input {
+            color: #111111;
+
+            &::placeholder {
+                color: #999999;
+            }
+        }
+
+        .arco-select-view-suffix {
+            color: #666666;
+        }
+    }
+
+    // 下拉菜单样式
+    .arco-select-dropdown {
+        background-color: #ffffff;
+        border-color: #e5e6eb;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+
+        .arco-select-option {
+            color: #111111;
+
+            &:hover {
+                background-color: #f5f5f5;
+            }
+
+            &.arco-select-option-selected {
+                background-color: #e5f0ff;
+                color: #265bd7;
+            }
+        }
+    }
+
+    // 按钮样式优化
+    .arco-btn-primary {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        border-color: #3b82f6;
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+
+        &:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+    }
+
+    .arco-btn-secondary {
+        background-color: rgba(60, 60, 65, 0.6);
+        border-color: #4a4a50;
+        color: #d5d5d8;
+
+        &:hover {
+            background-color: rgba(70, 70, 75, 0.8);
+            border-color: #5a5a60;
+        }
+    }
+
+    // 卡片样式
+    .arco-card {
+        background-color: rgba(30, 35, 45, 0.7);
+        border-color: rgba(59, 130, 246, 0.2);
+        color: #f3f4f6;
+
+        .arco-card-header {
+            border-color: rgba(59, 130, 246, 0.2);
+            color: #f3f4f6;
+        }
+
+        .arco-card-body {
+            color: #f3f4f6;
+        }
+    }
+
+    // 标签样式
+    .arco-tag {
+        background-color: rgba(60, 60, 65, 0.6);
+        border-color: #4a4a50;
+        color: #d5d5d8;
+    }
+
+    // 模态框样式
+    .arco-modal {
+        .arco-modal-header {
+            background-color: rgba(30, 30, 35, 0.95);
+            border-color: #3a3a40;
+        }
+
+        .arco-modal-body {
+            background-color: rgba(30, 30, 35, 0.95);
+        }
+
+        .arco-modal-footer {
+            background-color: rgba(30, 30, 35, 0.95);
+            border-color: #3a3a40;
+        }
+    }
+
+    // 设置页面样式优化（已移到前面的全局样式中）
+
+    // 统计数据样式
+    .arco-statistic {
+        .arco-statistic-title {
+            color: #d1d5db;
+        }
+
+        .arco-statistic-value {
+            color: #f3f4f6;
+        }
+    }
+
+    // Descriptions组件样式
+    .arco-descriptions {
+        background-color: transparent;
+
+        &.arco-descriptions-border {
+            .arco-descriptions-row {
+                border-color: rgba(59, 130, 246, 0.2);
+            }
+
+            .arco-descriptions-item-label,
+            .arco-descriptions-item-value {
+                border-color: rgba(59, 130, 246, 0.2);
+                background-color: rgba(30, 35, 45, 0.6);
+            }
+
+            .arco-descriptions-item-label {
+                color: #d1d5db;
+                font-weight: 500;
+            }
+
+            .arco-descriptions-item-value {
+                color: #f3f4f6;
+            }
+        }
+    }
+
+    // Code样式
+    code {
+        background-color: rgba(40, 45, 55, 0.8);
+        color: #60a5fa;
+        padding: 2px 6px;
+        border-radius: 4px;
+    }
+
+    // Alert组件样式
+    .arco-alert {
+        background-color: rgba(40, 45, 55, 0.6);
+        border-color: rgba(59, 130, 246, 0.3);
+        color: #e5e7eb;
+    }
+
+    // Spin组件样式
+    .arco-spin {
+        color: #e5e7eb;
+    }
+
+    // Empty组件样式
+    .arco-empty {
+        .arco-empty-description {
+            color: #9ca3af;
+        }
+    }
+
+    // 表单组件文字颜色
+    .arco-form-item-label {
+        color: #f3f4f6;
+    }
+
+    .arco-radio {
+        color: #f3f4f6;
+
+        .arco-radio-label {
+            color: #f3f4f6;
+        }
+    }
+
+    .arco-checkbox {
+        color: #f3f4f6;
+    }
+
+    .arco-form-item-message {
+        color: #d1d5db;
+    }
+
+    // 按钮文字颜色
+    .arco-btn-text {
+        color: #f3f4f6;
+    }
+
+    .arco-btn {
+        color: #f3f4f6;
+    }
+
+    // 分页器文字颜色
+    .arco-pagination {
+        color: #e5e7eb;
+
+        .arco-pagination-item {
+            color: #e5e7eb;
+            border-color: rgba(59, 130, 246, 0.3);
+            background-color: rgba(30, 35, 45, 0.6);
+
+            &:hover {
+                background-color: rgba(59, 130, 246, 0.2);
+                border-color: #3b82f6;
+            }
+
+            &.arco-pagination-item-active {
+                background-color: #3b82f6;
+                border-color: #3b82f6;
+                color: #ffffff;
+            }
+        }
+
+        .arco-pagination-total {
+            color: #9ca3af;
+        }
+    }
+
+    // Space组件间距内的文字
+    .arco-space {
+        color: #e5e7eb;
+    }
+}
+
+// 浅色主题 - 单选按钮组样式
+[data-theme="soft-light"] {
+    .arco-radio-group-button {
+        background-color: #f1f5f9 !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 6px !important;
+        padding: 2px;
+    }
+
+    .arco-radio-button {
+        background: transparent !important;
+        border: none !important;
+        color: #475569 !important;
+        border-radius: 4px !important;
+        transition: all 0.3s ease !important;
+
+        &::before {
+            display: none !important;
+            content: none !important;
+        }
+
+        &:hover {
+            color: #1e40af !important;
+            background: #dbeafe !important;
+        }
+    }
+
+    .arco-radio-button-checked {
+        background: #dbeafe !important;
+        color: #1e40af !important;
+        font-weight: 500 !important;
+        box-shadow: 0 1px 3px rgba(37, 99, 235, 0.15) !important;
+    }
+}
+
+/////////// arco end ///////////
+
