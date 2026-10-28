@@ -1,5 +1,5 @@
 /* Modified for IP Bot: portable startup isolation and missing-runtime guidance. */
-import { app, BrowserWindow, desktopCapturer, ipcMain, session, shell, protocol, globalShortcut, dialog } from "electron";
+import { app, BrowserWindow, desktopCapturer, ipcMain, session, shell, protocol, globalShortcut } from "electron";
 import { optimizer } from "@electron-toolkit/utils";
 import path from "node:path"
 import fs from "node:fs";
@@ -41,6 +41,25 @@ import { checkResourceBundles } from "../mapi/resourceManager";
 import { fetchElectronSystemConfig } from "../mapi/systemConfig";
 
 // 窗口状态保存路径
+// Runtime guidance belongs inside the mounted UI, so it cannot block the first paint.
+const startupMissingRuntime: string[] = (() => {
+    try {
+        const value = JSON.parse(process.env.IPBOT_MISSING_RUNTIME || '[]');
+        return Array.isArray(value) ? value.filter(v => typeof v === 'string').slice(0, 12) : [];
+    } catch { return []; }
+})();
+delete process.env.IPBOT_MISSING_RUNTIME;
+ipcMain.handle('startup:runtime-status', event => ({
+    missing: event.sender === AppRuntime.mainWindow?.webContents ? startupMissingRuntime : [],
+}));
+ipcMain.on('startup:renderer-ready', event => {
+    const window = AppRuntime.mainWindow;
+    if (window && !window.isDestroyed() && event.sender === window.webContents) {
+        window.show();
+        Log.info('Startup.rendererReady', { visible: window.isVisible() });
+    }
+});
+
 const windowStateFile = () => path.join(app.getPath("userData"), "window-state.json");
 
 // 加载窗口状态
@@ -376,7 +395,7 @@ async function createWindow() {
     // 加载保存的窗口状态
     const savedState = loadWindowState();
     const windowOptions: any = {
-        show: !hasSplashWindow,
+        show: false,
         title: AppConfig.title,
         ...(!isPackaged ? { icon } : {}),
         frame: false,
@@ -414,7 +433,7 @@ async function createWindow() {
 
     // 如果之前是最大化状态，恢复最大化
     if (savedState?.isMaximized) {
-        AppRuntime.mainWindow.maximize();
+        AppRuntime.mainWindow.once('show', () => AppRuntime.mainWindow?.maximize());
     }
 
     // 监听窗口大小和位置变化，保存状态
@@ -466,28 +485,6 @@ async function createWindow() {
 
     rendererLoadPath(AppRuntime.mainWindow, "index.html");
     DevToolsManager.register("Main", AppRuntime.mainWindow);
-
-    // Source downloads can open the workspace before optional media runtimes are installed.
-    if (process.env.IPBOT_MISSING_RUNTIME) {
-        let missing: string[] = [];
-        try { missing = JSON.parse(process.env.IPBOT_MISSING_RUNTIME); } catch {}
-        delete process.env.IPBOT_MISSING_RUNTIME;
-        if (Array.isArray(missing) && missing.length) {
-            AppRuntime.mainWindow.webContents.once('did-finish-load', () => {
-                void dialog.showMessageBox(AppRuntime.mainWindow!, {
-                    type: 'warning',
-                    title: '运行资源尚未准备完整',
-                    message: '桌面界面可以使用，部分媒体生成功能暂不可用。',
-                    detail: `缺少：${missing.join('、')}。\n\n源码包不包含完整媒体运行环境或数字人模型。请按安装教程准备资源，再重启桌面端。`,
-                    buttons: ['继续使用界面', '查看安装教程'],
-                    defaultId: 0,
-                    cancelId: 0,
-                }).then(result => {
-                    if (result.response === 1) void shell.openExternal('https://github.com/pyqdcyy123-byte/ip-bot/blob/main/docs/INSTALL.md');
-                });
-            });
-        }
-    }
 
     AppRuntime.mainWindow.webContents.on("did-finish-load", async () => {
         try {

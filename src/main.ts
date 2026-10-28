@@ -313,9 +313,12 @@ const waitForMapi = () => {
         await waitForMapi();
     }
 
+    // The first route may load asynchronously. Show the native window after its UI exists.
+    await router.isReady();
     const appInstance = app.mount("#app");
 
     appInstance.$nextTick(async () => {
+        if (isElectronEnv()) (window as any).require?.('electron')?.ipcRenderer?.send('startup:renderer-ready');
         postMessage({ payload: "removeLoading" }, "*");
         writeDevRendererSnapshot("mounted-nextTick");
         setTimeout(() => writeDevRendererSnapshot("mounted-1500ms"), 1500);

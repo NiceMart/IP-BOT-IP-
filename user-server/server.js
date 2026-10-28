@@ -1805,8 +1805,16 @@ app.get(`${API_PREFIX}/video/quota/:userId`, clientAuth, accountScope, (req, res
     })
 })
 
-app.listen(PORT, HOST, () => {
+// Queue behind schema migrations, and seed before accepting login requests.
+db.get('SELECT 1', async (schemaError) => {
+ try {
+  if(schemaError) throw schemaError;
+  const created=await require('./bootstrap-admin').bootstrapAdmin(db, HOST);
+  if(created) console.log('Created local default administrator. Change its password before network deployment.');
+  app.listen(PORT, HOST, () => {
     console.log(`\n✅ 用户管理服务器已启动`)
     console.log(`📋 管理后台: http://localhost:${PORT}${ADMIN_PATH}`)
     console.log(`📡 API 地址: http://localhost:${PORT}${API_PREFIX}\n`)
 })
+ } catch(error) { console.error('Backend initialization failed:',error.message);db.close();process.exitCode=1; }
+});

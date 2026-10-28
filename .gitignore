@@ -83,3 +83,6 @@ nul
 build/runtime-system-subtitle-templates.json
 build/resource-build-state.json
 src/lang/source-use.json
+
+# Private portable delivery environment
+runtime/

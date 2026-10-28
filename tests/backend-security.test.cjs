@@ -17,8 +17,8 @@ test('isolated backend: accounts, configuration, admin permissions and account o
   assert.equal((await call('admin/users')).status,401);
  });
  let admin,member;
- await t.test('first local account becomes admin; second account requires a generated invitation',async()=>{
-  const r=await call('register','POST',{username:'qa-admin',email:'admin@example.invalid',password:'FixtureOnly!12345',device_fingerprint:'qa-admin-device'});
+ await t.test('default local administrator can log in; another account requires an invitation',async()=>{
+  const r=await call('login','POST',{email:'15912345678',password:'123456',device_fingerprint:'qa-admin-device'});
   assert.equal(r.data.success,true,r.data.message);admin=r.data;assert.equal(admin.user.role,'admin');
   const blocked=await call('register','POST',{username:'qa-member',email:'member@example.invalid',password:'FixtureOnly!12345',device_fingerprint:'qa-member-device'});assert.equal(blocked.data.success,false);
   const card=await call('generate-test-cdkey','POST',{},admin.token);assert.equal(card.data.success,true);
@@ -26,7 +26,7 @@ test('isolated backend: accounts, configuration, admin permissions and account o
   assert.equal(memberResult.data.success,true,memberResult.data.message);member=memberResult.data;assert.equal(member.user.role,'user');
  });
  await t.test('valid login and token verification preserve the existing account flow',async()=>{
-  const login=await call('login','POST',{email:'admin@example.invalid',password:'FixtureOnly!12345',device_fingerprint:'qa-admin-device'});assert.equal(login.data.success,true,login.data.message);
+  const login=await call('login','POST',{email:'15912345678',password:'123456',device_fingerprint:'qa-admin-device'});assert.equal(login.data.success,true,login.data.message);
   const verify=await call('verify','POST',{token:login.data.token,device_fingerprint:'qa-admin-device'});assert.equal(verify.data.valid,true);admin.token=login.data.token;
  });
  await t.test('admin saves configuration; only authenticated trusted clients can read it',async()=>{

@@ -1,5 +1,5 @@
 export const WindowConfig = {
-    alwaysOpenDevTools: true,
+    alwaysOpenDevTools: false,
     minWidth: 1024,
     minHeight: 680,
     initWidth: 1600,

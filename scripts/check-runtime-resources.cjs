@@ -23,7 +23,12 @@ function checkRuntimeResources(root = path.resolve(__dirname, '..')) {
   }
   const browser = browserCandidates.find(p => fs.existsSync(p));
   add('Browser', !!browser, { path: browser && (browser.startsWith(root + path.sep) ? path.relative(root, browser) : 'installed system browser') });
-  return { ready: checks.every(c => c.pass), checks, localModelPresent: fs.existsSync(path.join(root, 'modes', 'aigcpanel-server-heygem-v2-win-x86-1.0.0', 'config.json')) };
+  const localModelPaths = [path.join(root, 'modes', 'aigcpanel-server-heygem-v2-win-x86-1.0.0')];
+  try {
+    const settings = JSON.parse(fs.readFileSync(path.join(root, 'data/storage/server.json'), 'utf8'));
+    for (const record of settings.records || []) if (record.type === 'localDir' && typeof record.localPath === 'string') localModelPaths.push(record.localPath);
+  } catch {}
+  return { ready: checks.every(c => c.pass), checks, localModelPresent: localModelPaths.some(p => fs.existsSync(path.join(p, 'config.json'))) };
 }
 function ensureRuntimeResources(root) {
   const report = checkRuntimeResources(root);

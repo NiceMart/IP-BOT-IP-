@@ -12,7 +12,8 @@ function copy(dir, rel) {
   for (const item of fs.readdirSync(dir, { withFileTypes: true })) {
     const relative = path.join(rel, item.name);
     if (item.isSymbolicLink() || ['__pycache__', '.git', 'node_modules'].includes(item.name) || relative.startsWith(path.join('electron/resources/extra/common/tray'))) continue;
-    if (rel.startsWith('modes') && ['result', 'tmp', 'flagged', '_cache', '_launcher_logs', '_temp', 'aigcpanel-queue', 'data'].includes(item.name)) continue;
+    // Only skip model-root outputs; nested data packages (e.g. torch.utils.data) are required.
+    if (/^modes[\\/][^\\/]+$/.test(rel) && ['result', 'tmp', 'flagged', '_cache', '_launcher_logs', '_temp', 'aigcpanel-queue', 'data'].includes(item.name)) continue;
     const from = path.join(dir, item.name), to = path.join(root, relative);
     if (item.isDirectory()) { fs.mkdirSync(to, { recursive: true }); copy(from, relative); }
     else if (!fs.existsSync(to)) { fs.mkdirSync(path.dirname(to), { recursive: true }); fs.copyFileSync(from, to); copied++; }

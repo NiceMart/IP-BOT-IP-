@@ -2,6 +2,7 @@
     <a-config-provider :locale="locale" :global="true">
         <router-view></router-view>
         <ResourcePreparingDialog />
+        <RuntimeResourceNotice />
     </a-config-provider>
 </template>
 
@@ -14,6 +15,7 @@ import zhCN from "@arco-design/web-vue/es/locale/lang/zh-cn";
 import enUS from "@arco-design/web-vue/es/locale/lang/en-us";
 import {doCheckForUpdate} from "./components/common/util";
 import ResourcePreparingDialog from "./components/common/ResourcePreparingDialog.vue";
+import RuntimeResourceNotice from "./components/common/RuntimeResourceNotice.vue";
 
 const locales = {
     "zh-CN": zhCN,

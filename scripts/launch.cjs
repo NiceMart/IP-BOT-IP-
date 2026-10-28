@@ -94,11 +94,14 @@ async function main() {
     }
   }
   if (mode === 'server') {
-    log('Starting backend. Default address: http://127.0.0.1:3002/admin');
+    log(`Starting backend. Admin address: http://${process.env.HOST || '127.0.0.1'}:${process.env.PORT || '3002'}${process.env.ADMIN_PATH || '/admin'}`);
     await runNpm(['start'], path.join(root, 'user-server'));
   } else {
     log('Starting the Electron desktop app. Start the backend separately if you use local account services.');
-    await runNpm(['run', 'dev:electron'], root);
+    if (process.env.IPBOT_USE_BUILT_DESKTOP !== '0') {
+      if (!fs.existsSync(path.join(root, 'dist/index.html')) || !fs.existsSync(path.join(root, 'dist-electron/main/index.js'))) await runNpm(['run', 'build'], root);
+      await runNpm(['run', 'start:desktop'], root);
+    } else await runNpm(['run', 'dev:electron'], root);
   }
 }
 
