@@ -13,7 +13,7 @@
 
 Windows / Node.js 22 下 npm ci、后台 npm ci、SQLite/Sharp Electron 探针、隔离后台回归、Vue/Electron 生产构建已验证。最终文件数量、哈希和检查结果由工作区外部的发布审查报告记录。
 
-TypeScript 类型检查仍存在继承的约 175 项诊断，涉及旧页面调用、模板类型等；本次未以关闭类型检查、排除业务目录或批量忽略掩盖问题。CI 对此明确显示非阻断检查。
+TypeScript 类型检查仍存在继承的179 项诊断（其中包含旧版 TSX 组件缺少 React/Ant Design 类型的诊断），涉及旧页面调用、模板类型等；本次未以关闭类型检查、排除业务目录或批量忽略掩盖问题。CI 对此明确显示非阻断检查。
 
 依赖安全修复应用了兼容锁文件更新。根依赖审计由 76 项降至 30 项（0 low、10 moderate、19 high、1 critical）；后台仍有 7 项（2 low、4 high、1 critical）。这些数字对应本次审计时的结果，会随公告数据库变化。Electron、electron-builder/@electron/rebuild、Vite、Sharp、后台 SQLite 安装链等剩余项需要升级或替换评估。没有执行 npm audit fix --force。不可宣称已无安全漏洞。
 

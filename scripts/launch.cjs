@@ -4,7 +4,6 @@ const path = require('node:path');
 const { spawn } = require('node:child_process');
 
 const root = path.resolve(__dirname, '..');
-require('./local-config.cjs').applyLocalEnvironment(root);
 const mode = process.argv[2];
 const checkOnly = process.env.IPBOT_LAUNCH_CHECK === '1';
 const logDir = path.join(root, 'logs');
@@ -67,8 +66,12 @@ async function main() {
   log('IP Bot source launcher');
   log(`Node.js: ${process.version}\nNode path: ${process.execPath}\nProject: ${root}\nLog: ${logFile}`);
   if (!['desktop', 'server', 'install'].includes(mode)) throw new Error('Usage: node scripts/launch.cjs desktop|server|install');
-  if (Number(process.versions.node.split('.')[0]) < 20) throw new Error('Node.js is too old. Install Node.js 22 LTS or a supported newer LTS version.');
-  if (!fs.existsSync(path.join(root, 'sensitive.config.json'))) throw new Error('sensitive.config.json is missing. Restore your local configuration before starting.');
+  if (Number(process.versions.node.split('.')[0]) !== 22) throw new Error('Use Node.js 22.x for this project. Download it from https://nodejs.org/en/download and reopen the launcher.');
+  if (!checkOnly) {
+    const initialized = require('./init-local-config.cjs').ensureLocalConfig(root);
+    if (initialized.created) log('First run: created private configuration with a random JWT secret. Existing files are never overwritten.');
+  }
+  require('./local-config.cjs').applyLocalEnvironment(root);
   if (mode === 'install') {
     await ensureDependencies('server', true); await ensureDependencies('desktop', true);
     if (!process.exitCode) log('Dependency installation completed. Start the backend, then start the desktop app.');
@@ -79,14 +82,22 @@ async function main() {
   if (mode === 'desktop') {
     log('Verifying Electron and its native database/image modules...');
     await require('./setup-desktop.cjs').ensureDesktopRuntime();
-    require('./check-runtime-resources.cjs').ensureRuntimeResources(root);
+    const report = require('./check-runtime-resources.cjs').checkRuntimeResources(root);
+    const missing = report.checks.filter(check => !check.pass).map(check => check.name);
+    if (missing.length) {
+      log('Media resources missing: ' + missing.join(', '));
+      log('Opening the desktop interface. Media generation needs separately prepared runtime resources; see docs/INSTALL.md and docs/RUNTIME.md.');
+      process.env.IPBOT_MISSING_RUNTIME = JSON.stringify(missing);
+    } else {
+      delete process.env.IPBOT_MISSING_RUNTIME;
+      log('Core media runtime checks passed.');
+    }
   }
   if (mode === 'server') {
     log('Starting backend. Default address: http://127.0.0.1:3002/admin');
     await runNpm(['start'], path.join(root, 'user-server'));
   } else {
     log('Starting the Electron desktop app. Start the backend separately if you use local account services.');
-    log('Runtime resources verified. All executable paths resolve from this project.');
     await runNpm(['run', 'dev:electron'], root);
   }
 }

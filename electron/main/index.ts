@@ -1,4 +1,5 @@
-import { app, BrowserWindow, desktopCapturer, ipcMain, session, shell, protocol, globalShortcut } from "electron";
+/* Modified for IP Bot: portable startup isolation and missing-runtime guidance. */
+import { app, BrowserWindow, desktopCapturer, ipcMain, session, shell, protocol, globalShortcut, dialog } from "electron";
 import { optimizer } from "@electron-toolkit/utils";
 import path from "node:path"
 import fs from "node:fs";
@@ -114,11 +115,6 @@ protocol.registerSchemesAsPrivileged([
 // Set application name for Windows 10+ notifications
 if (process.platform === "win32") app.setAppUserModelId(app.getName());
 
-if (!app.requestSingleInstanceLock()) {
-    app.quit();
-    process.exit(0);
-}
-
 // 🔧 便携版（绿色版）检测和配置
 // 便携版应该把数据存储在应用本地目录，而不是 AppData
 const isPortable = (() => {
@@ -228,6 +224,13 @@ if (isPortable) {
     } catch (error) {
         console.error('[Portable Mode] 设置失败:', error);
     }
+}
+
+// Scope the instance lock to this portable installation's userData directory.
+// Independently extracted copies must not exit because another installation is open.
+if (!app.requestSingleInstanceLock()) {
+    app.quit();
+    process.exit(0);
 }
 
 const hasSplashWindow = false;
@@ -463,6 +466,28 @@ async function createWindow() {
 
     rendererLoadPath(AppRuntime.mainWindow, "index.html");
     DevToolsManager.register("Main", AppRuntime.mainWindow);
+
+    // Source downloads can open the workspace before optional media runtimes are installed.
+    if (process.env.IPBOT_MISSING_RUNTIME) {
+        let missing: string[] = [];
+        try { missing = JSON.parse(process.env.IPBOT_MISSING_RUNTIME); } catch {}
+        delete process.env.IPBOT_MISSING_RUNTIME;
+        if (Array.isArray(missing) && missing.length) {
+            AppRuntime.mainWindow.webContents.once('did-finish-load', () => {
+                void dialog.showMessageBox(AppRuntime.mainWindow!, {
+                    type: 'warning',
+                    title: '运行资源尚未准备完整',
+                    message: '桌面界面可以使用，部分媒体生成功能暂不可用。',
+                    detail: `缺少：${missing.join('、')}。\n\n源码包不包含完整媒体运行环境或数字人模型。请按安装教程准备资源，再重启桌面端。`,
+                    buttons: ['继续使用界面', '查看安装教程'],
+                    defaultId: 0,
+                    cancelId: 0,
+                }).then(result => {
+                    if (result.response === 1) void shell.openExternal('https://github.com/pyqdcyy123-byte/ip-bot/blob/main/docs/INSTALL.md');
+                });
+            });
+        }
+    }
 
     AppRuntime.mainWindow.webContents.on("did-finish-load", async () => {
         try {

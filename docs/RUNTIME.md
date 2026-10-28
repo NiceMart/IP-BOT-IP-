@@ -10,7 +10,7 @@
 | electron/resources/extra/common/playwright | 对应 Playwright 的浏览器，或系统 Edge/Chrome | 可执行文件检测，具体网站仍受访问限制 |
 | modes | 可选本地数字人服务及配置 | 预检仅检测存在，GPU 推理需单独验证 |
 
-运行 npm run check:runtime。缺资源时返回退出码 2 并列出缺项，不能把这视为 npm 安装失败。桌面启动器在缺核心资源时拒绝启动，避免运行到中途才报错。
+运行 npm run check:runtime。缺资源时返回退出码 2 并列出缺项，不能把这视为 npm 安装失败。桌面启动器在缺资源时列明缺项并显示提示，仍可打开登录与工作界面；相关媒体生成需补齐资源后再使用。
 
 已有完整安装的用户可运行 node scripts/import-runtime-resources.cjs <原安装路径>。脚本从原安装复制缺失文件，保留当前文件；不会导入原安装的账户与用户媒体。--with-local-models 体积大，排除模型输出和缓存。
 

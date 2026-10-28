@@ -22,6 +22,10 @@ This is a **developer preview**, validated on Windows x64 with Node.js 22. The m
 
 **The source download does not include local avatar models or the complete media runtime. Providing an API key alone does not enable every feature.** Cloud avatar workflows still need compatible provider configuration and the media runtime used by local processing.
 
+## Windows first launch
+
+With Node.js 22 available, extract the source and run the backend batch launcher first, then the desktop launcher. First launch creates an ignored private configuration and installs missing dependencies. Existing credentials are preserved. Missing media runtimes produce guidance while the interface remains accessible; generation still requires the appropriate resources. Read startup errors above the pause prompt and inspect the ignored logs directory.
+
 ## Setup
 
 ~~~sh

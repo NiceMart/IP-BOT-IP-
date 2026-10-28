@@ -27,7 +27,7 @@ async function exportSource(target) {
   const secrets = [];
   const visit = (object) => { for (const [key, value] of Object.entries(object || {})) { if (value && typeof value === 'object') visit(value); else if (typeof value === 'string' && /key|secret|token|password/i.test(key) && value.length >= 12) secrets.push(value); } };
   if (fs.existsSync(configFile)) visit(JSON.parse(fs.readFileSync(configFile, 'utf8')));
-  for (const file of files.filter(f => /\.(?:json|ts|js|cjs|vue|md|py|yml|yaml)$/.test(f.rel))) {
+  for (const file of files.filter(f => /\.(?:json|ts|js|cjs|vue|md|py|yml|yaml|ps1|bat|sh)$/.test(f.rel))) {
     const text = fs.readFileSync(file.full, 'utf8');
     if (secrets.some(secret => text.includes(secret))) throw new Error('Local credential found in source: ' + file.rel);
   }

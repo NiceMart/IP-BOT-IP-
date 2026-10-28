@@ -16,6 +16,12 @@
 - 保留字幕模板源码配置；大体积运行资源、用户数据、真实配置与临时调查文件不入库。
 - 许可未明确的旧图标字体改用 MIT 许可的 Arco 图标，保留其版权许可；个人二维码与字体文件从发布候选目录隔离。
 
+### Startup fix — 2026-10-28
+- First launch now initializes the private configuration instead of requiring an excluded file to exist.
+- Windows launchers locate Node.js 22, preserve diagnostics and install missing dependencies automatically.
+- Missing media resources display guidance while allowing the desktop interface to open.
+- Portable instance locks now use the current installation's data directory.
+
 ### Security
 - 匿名配置接口返回空配置；云服务配置需要有效账户。
 - 管理员限定测试卡密接口；取消固定默认卡密和弱 JWT 后备秘密。

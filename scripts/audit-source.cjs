@@ -8,7 +8,7 @@ function audit(base=root){const files=sourceFiles(base),findings=[];
  const patterns=[['private-key',/-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/],['GitHub-token',/gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{50,}/],['cloud-access-key',/\bAKIA[A-Z0-9]{16}\b|\bLTAI[A-Za-z0-9]{20,}\b/]];
  let bytes=0;const hashes={};
  for(const rel of files){if(forbidden.test(rel))findings.push({file:rel,rule:'private-file'});const data=fs.readFileSync(path.join(base,rel));bytes+=data.length;hashes[rel]=crypto.createHash('sha256').update(data).digest('hex');
- if(/\.(?:[cm]?js|ts|vue|py|json|md|html|ya?ml|css|less|sh|bat|env\.example)$/.test(rel)&&data.length<5e6){const text=data.toString('utf8');for(const [rule,p]of patterns)if(p.test(text))findings.push({file:rel,rule});}
+ if(/\.(?:[cm]?js|ts|vue|py|json|md|html|ya?ml|css|less|sh|bat|ps1|env\.example)$/.test(rel)&&data.length<5e6){const text=data.toString('utf8');for(const [rule,p]of patterns)if(p.test(text))findings.push({file:rel,rule});}
  }
  for(const name of ['README.md','README.en.md','LICENSE','NOTICE','THIRD_PARTY_NOTICES.md','.env.example','package-lock.json','user-server/package-lock.json'])if(!files.includes(name))findings.push({file:name,rule:'required-file-missing'});
  return {files:files.length,bytes,findings,paths:files,sha256:hashes};}
