@@ -778,13 +778,14 @@ async function getClientAsync(mode?: string): Promise<RunningHubClient> {
     clientInstance1 = new RunningHubClient({
       apiKey,
       workflowId: workflowId1,
-      apiVersion: 'v2',
+      // 🔧 改用 v1 接口：v2 需要“发布为AI应用”(webapp)，v1 直接用工作流ID
+      apiVersion: 'v1',
       instanceType: 'default',
       nodes: mode1Nodes
     });
     cachedWorkflowId1 = workflowId1;
     cachedNodes1 = mode1NodesStr;
-    logger.info('[RunningHub] 创建v2客户端(mode1)', { workflowId: workflowId1, nodes: mode1Nodes });
+    logger.info('[RunningHub] 创建v1客户端(mode1)', { workflowId: workflowId1, nodes: mode1Nodes });
   }
   return clientInstance1;
 }

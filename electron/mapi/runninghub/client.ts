@@ -30,6 +30,8 @@ export interface RunningHubConfig {
     audioStartNode?: NodeConfigEntry;
     audioEndNode?: NodeConfigEntry;
     textNode?: NodeConfigEntry;
+    /** 🔧 扩展：额外节点参数覆盖，fieldValue 支持 {{audioDuration}} 占位符 */
+    extraNodes?: Array<{ nodeId: string; fieldName: string; fieldValue: string | number }>;
   };
 }
 
@@ -736,22 +738,39 @@ export class RunningHubClient {
 
       const videoNodeV1 = resolveNode(this.config.nodes.videoNode, 'videoNode')!;
       const audioNodeV1 = resolveNode(this.config.nodes.audioNode, 'audioNode')!;
+      const nodeInfoList = [
+        {
+          nodeId: videoNodeV1.nodeId,
+          // 🔧 使用配置里的字段名（不同工作流的视频输入字段可能是 file 或 video）
+          fieldName: videoNodeV1.fieldName || 'file',
+          fieldValue: videoFileName
+        },
+        {
+          nodeId: audioNodeV1.nodeId,
+          fieldName: audioNodeV1.fieldName || 'audio',
+          fieldValue: audioFileName
+        }
+      ];
+
       const payload = {
         apiKey: this.config.apiKey,
         workflowId: this.config.workflowId,
-        nodeInfoList: [
-          {
-            nodeId: videoNodeV1.nodeId,
-            fieldName: 'file',
-            fieldValue: videoFileName
-          },
-          {
-            nodeId: audioNodeV1.nodeId,
-            fieldName: 'audio',
-            fieldValue: audioFileName
-          }
-        ]
+        nodeInfoList
       };
+
+        // 🔧 扩展：额外节点参数覆盖（时长控制、帧率修正等），支持 {{audioDuration}} 占位符
+        const extraNodes = (this.config.nodes as any)?.extraNodes;
+        if (Array.isArray(extraNodes)) {
+          for (const extra of extraNodes) {
+            if (!extra?.nodeId || !extra?.fieldName) continue;
+            nodeInfoList.push({
+              nodeId: String(extra.nodeId),
+              fieldName: String(extra.fieldName),
+              fieldValue: String(extra.fieldValue ?? '').replace(/\{\{audioDuration\}\}/g, String(audioDuration ?? 0)),
+              description: '参数覆盖'
+            });
+          }
+        }
 
       logger.info('[RunningHub] v1 API请求payload', payload);
 
