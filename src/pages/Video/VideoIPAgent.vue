@@ -5,6 +5,7 @@ import {useRouter} from "vue-router";
 const {ipcRenderer} = window.require('electron');
 const router = useRouter();
 import {t} from "../../lang";
+import {buildChatCompletionsUrl} from "../../module/Model/provider/chat-url.cjs";
 import {Message, Modal} from "@arco-design/web-vue";
 import {
     IconSettings,
@@ -3944,11 +3945,7 @@ const rewriteAllTitles = async () => {
             apiUrl = provider.data.apiHost;
         }
         if (provider.type === 'openai') {
-            if (apiUrl.endsWith('/')) {
-                apiUrl = `${apiUrl}chat/completions`;
-            } else if (!apiUrl.endsWith('/chat/completions')) {
-                apiUrl = `${apiUrl}/v1/chat/completions`;
-            }
+            apiUrl = buildChatCompletionsUrl(apiUrl);
         }
 
         const modelConfig = {
@@ -4062,11 +4059,7 @@ const generateScriptFromIPBrain = async () => {
             apiUrl = provider.data.apiHost;
         }
         if (provider.type === 'openai') {
-            if (apiUrl.endsWith('/')) {
-                apiUrl = `${apiUrl}chat/completions`;
-            } else if (!apiUrl.endsWith('/chat/completions')) {
-                apiUrl = `${apiUrl}/v1/chat/completions`;
-            }
+            apiUrl = buildChatCompletionsUrl(apiUrl);
         }
 
         const modelConfig = {
@@ -4158,11 +4151,7 @@ const generateScriptFromVideoContent = async () => {
             apiUrl = provider.data.apiHost;
         }
         if (provider.type === 'openai') {
-            if (apiUrl.endsWith('/')) {
-                apiUrl = `${apiUrl}chat/completions`;
-            } else if (!apiUrl.endsWith('/chat/completions')) {
-                apiUrl = `${apiUrl}/v1/chat/completions`;
-            }
+            apiUrl = buildChatCompletionsUrl(apiUrl);
         }
 
         const modelConfig = {
@@ -4412,11 +4401,7 @@ const generateTitleTags = async () => {
             apiUrl = provider.data.apiHost;
         }
         if (provider.type === 'openai') {
-            if (apiUrl.endsWith('/')) {
-                apiUrl = `${apiUrl}chat/completions`;
-            } else if (!apiUrl.endsWith('/chat/completions')) {
-                apiUrl = `${apiUrl}/v1/chat/completions`;
-            }
+            apiUrl = buildChatCompletionsUrl(apiUrl);
         }
 
         const modelConfig = {
@@ -4728,11 +4713,7 @@ const generateFromCustomPrompt = async () => {
             apiUrl = provider.data.apiHost;
         }
         if (provider.type === 'openai') {
-            if (apiUrl.endsWith('/')) {
-                apiUrl = `${apiUrl}chat/completions`;
-            } else if (!apiUrl.endsWith('/chat/completions')) {
-                apiUrl = `${apiUrl}/v1/chat/completions`;
-            }
+            apiUrl = buildChatCompletionsUrl(apiUrl);
         }
 
         const promptParts: string[] = [];
@@ -4867,11 +4848,7 @@ const startVideoRewriteProcessOptimized = async () => {
             apiUrl = provider.data.apiHost;
         }
         if (provider.type === 'openai') {
-            if (apiUrl.endsWith('/')) {
-                apiUrl = `${apiUrl}chat/completions`;
-            } else if (!apiUrl.endsWith('/chat/completions')) {
-                apiUrl = `${apiUrl}/v1/chat/completions`;
-            }
+            apiUrl = buildChatCompletionsUrl(apiUrl);
         }
 
         const dashscopeProvider = modelStore.providers.find(p => p.id === 'dashscope');
