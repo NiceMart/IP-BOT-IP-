@@ -1378,6 +1378,9 @@ const loadSettingsFromLocalStorage = () => {
         const saved = localStorage.getItem(SETTINGS_KEY);
         if (saved) {
             const parsed = JSON.parse(saved);
+            // 🔧 修复：textModelKey 以文件设置（IPC加载）为准，
+            // localStorage 快照可能过期，不能用它覆盖已选的模型（否则会回退到旧的内置豆包）
+            delete parsed.textModelKey;
             // 合并保存的设置到当前设置，保留默认值
             settings.value = {
                 ...settings.value,
@@ -6648,7 +6651,11 @@ const generateAudio = async (options: { skipPolling?: boolean } = {}) => {
                     throw new Error(t("声音音色不存在"));
                 }
                 // 克隆音色使用 aliyunVoiceId，并根据存储的 targetModel 选择合成模型（兼容旧音色）
-                voiceId = prompt.content?.aliyunVoiceId || 'longyingxiao';
+                voiceId = prompt.content?.aliyunVoiceId;
+                if (!voiceId) {
+                    // 克隆未完成注册时直接报错：回退默认音色会与 targetModel 不匹配（v2 音色配 v3.5 模型触发 418）
+                    throw new Error(t("该音色尚未完成克隆注册，请重新进行声音克隆后再使用"));
+                }
                 t1Model = prompt.content?.targetModel || 'cosyvoice-v2';
                 console.log("[TTS] T1 自定义音色:", voiceId, "model:", t1Model);
             }
