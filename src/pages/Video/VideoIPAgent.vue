@@ -6,6 +6,7 @@ const {ipcRenderer} = window.require('electron');
 const router = useRouter();
 import {t} from "../../lang";
 import {buildChatCompletionsUrl} from "../../module/Model/provider/chat-url.cjs";
+import {computeRowSpan} from "../../lib/masonry-grid.cjs";
 import {Message, Modal} from "@arco-design/web-vue";
 import {
     IconSettings,
@@ -15342,6 +15343,31 @@ const onWorkspaceCommand = (event: Event) => {
 };
 onMounted(()=>window.addEventListener('ipbot:command',onWorkspaceCommand));
 onBeforeUnmount(()=>window.removeEventListener('ipbot:command',onWorkspaceCommand));
+
+// 瀑布流布局：伸缩某个面板时其它列自动上移补位，避免 grid 自动行高把同行列绑在一起
+const MASONRY_ROW_UNIT = 8;
+let masonryObserver: ResizeObserver | null = null;
+const updateMasonrySpans = () => {
+    const grid = document.querySelector('.studio-creation-grid') as HTMLElement | null;
+    if (!grid) return;
+    const gap = parseFloat(getComputedStyle(grid).rowGap) || 0;
+    for (const child of Array.from(grid.children) as HTMLElement[]) {
+        const height = child.getBoundingClientRect().height;
+        child.style.gridRowEnd = `span ${computeRowSpan(height, MASONRY_ROW_UNIT, gap)}`;
+    }
+};
+onMounted(() => {
+    const grid = document.querySelector('.studio-creation-grid') as HTMLElement | null;
+    if (!grid || typeof ResizeObserver === 'undefined') return;
+    grid.style.gridAutoRows = `${MASONRY_ROW_UNIT}px`;
+    updateMasonrySpans();
+    masonryObserver = new ResizeObserver(updateMasonrySpans);
+    for (const child of Array.from(grid.children)) masonryObserver.observe(child);
+});
+onBeforeUnmount(() => {
+    masonryObserver?.disconnect();
+    masonryObserver = null;
+});
 const handleCoverStyleUpdate = (style: any) => {
     coverStyle.value = style;
     if (coverConfig.value) coverConfig.value.coverStyle = JSON.parse(JSON.stringify(style));
