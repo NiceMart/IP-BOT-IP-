@@ -18731,12 +18731,16 @@ const handleCoverStyleUpdate = (style: any) => {
         <a-modal
             v-model:visible="showCustomPromptOptionsDialog"
             title=""
+            :closable="false"
             :footer="false"
             width="min(1120px, calc(100vw - 16px))"
             modal-class="custom-prompt-modal"
             @cancel="showCustomPromptOptionsDialog = false"
         >
             <div class="custom-prompt-dialog custom-prompt-dialog--result-only">
+                <button class="custom-prompt-modal-x" @click="showCustomPromptOptionsDialog = false" :title="$t('关闭')">
+                    <icon-close/>
+                </button>
                 <div class="custom-prompt-dialog-head">
                     <div class="custom-prompt-dialog-title">自由创作文案</div>
                 </div>
@@ -18778,19 +18782,6 @@ const handleCoverStyleUpdate = (style: any) => {
                             {{ option }}
                         </div>
                     </div>
-                </div>
-
-                <div class="custom-prompt-footer">
-                    <a-button @click="showCustomPromptOptionsDialog = false">
-                        关闭
-                    </a-button>
-                    <a-button
-                        type="primary"
-                        :disabled="selectedCustomPromptIndex === null"
-                        @click="selectedCustomPromptIndex !== null && useCustomPromptOption(customPromptOptions[selectedCustomPromptIndex])"
-                    >
-                        使用此文案
-                    </a-button>
                 </div>
             </div>
         </a-modal>
@@ -18888,6 +18879,29 @@ const handleCoverStyleUpdate = (style: any) => {
     display: none !important;
 }
 
+.custom-prompt-modal-x {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--theme-text-secondary, #94a3b8);
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.custom-prompt-modal-x:hover {
+    color: var(--theme-text-primary, #f8fafc);
+    background: rgba(100, 116, 139, 0.16);
+}
+
 .custom-prompt-modal .arco-modal-title {
     color: #e2e8f0 !important;
     font-weight: 700 !important;
@@ -18909,8 +18923,8 @@ const handleCoverStyleUpdate = (style: any) => {
     max-height: calc(100vh - 32px) !important;
     overflow: auto !important;
     padding: 20px 20px 18px !important;
-    scrollbar-width: auto;
-    scrollbar-color: #f59e0b rgba(30, 41, 59, 0.95);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(100, 116, 139, 0.45) transparent;
 }
 
 .custom-prompt-modal .arco-btn:not(.arco-btn-primary) {
@@ -19319,8 +19333,8 @@ const handleCoverStyleUpdate = (style: any) => {
 }
 
 .custom-prompt-dialog--result-only {
-    gap: 20px;
-    min-height: 580px;
+    gap: 12px;
+    min-height: 0;
 }
 
 .custom-prompt-dialog-head {
@@ -19328,7 +19342,7 @@ const handleCoverStyleUpdate = (style: any) => {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    padding: 2px 0 14px;
+    padding: 0 0 10px;
 }
 
 .custom-prompt-dialog-head::after {
@@ -19345,7 +19359,7 @@ const handleCoverStyleUpdate = (style: any) => {
     font-size: 14px;
     font-weight: 700;
     letter-spacing: 0.02em;
-    color: #f3f4f6;
+    color: var(--theme-text-primary, #f3f4f6);
 }
 
 .custom-prompt-results {
@@ -19372,12 +19386,12 @@ const handleCoverStyleUpdate = (style: any) => {
 }
 
 .custom-prompt-option-card--grid {
-    min-height: 430px;
+    min-height: 0;
 }
 
 .custom-prompt-option-content--grid {
     max-height: none;
-    min-height: 332px;
+    min-height: 0;
     padding-right: 0;
 }
 
@@ -19888,8 +19902,8 @@ const handleCoverStyleUpdate = (style: any) => {
     max-height: calc(100vh - 300px);
     overflow: auto;
     padding-right: 4px;
-    scrollbar-width: auto;
-    scrollbar-color: #f59e0b rgba(30, 41, 59, 0.95);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(100, 116, 139, 0.45) transparent;
 }
 
 .custom-prompt-option-card {
@@ -20033,8 +20047,8 @@ const handleCoverStyleUpdate = (style: any) => {
     color: #e5e7eb;
     max-height: min(180px, calc(100vh - 420px));
     overflow: auto;
-    scrollbar-width: auto;
-    scrollbar-color: #f59e0b rgba(30, 41, 59, 0.95);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(100, 116, 139, 0.45) transparent;
 }
 
 .custom-prompt-option-card.is-selected .custom-prompt-option-content {
@@ -20058,31 +20072,31 @@ const handleCoverStyleUpdate = (style: any) => {
 .custom-prompt-modal .arco-modal-body::-webkit-scrollbar,
 .custom-prompt-options::-webkit-scrollbar,
 .custom-prompt-option-content::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
 }
 
 .custom-prompt-modal .arco-modal-body::-webkit-scrollbar-track,
 .custom-prompt-options::-webkit-scrollbar-track,
 .custom-prompt-option-content::-webkit-scrollbar-track {
-    background: rgba(30, 41, 59, 0.88);
+    background: transparent;
     border-radius: 999px;
-    border: 1px solid rgba(71, 85, 105, 0.52);
 }
 
 .custom-prompt-modal .arco-modal-body::-webkit-scrollbar-thumb,
 .custom-prompt-options::-webkit-scrollbar-thumb,
 .custom-prompt-option-content::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, #f59e0b, #f97316);
+    background: rgba(100, 116, 139, 0.45);
     border-radius: 999px;
-    border: 1px solid rgba(255, 237, 213, 0.18);
-    box-shadow: 0 0 10px rgba(249, 115, 22, 0.28);
+    border: 2px solid transparent;
+    background-clip: padding-box;
 }
 
 .custom-prompt-modal .arco-modal-body::-webkit-scrollbar-thumb:hover,
 .custom-prompt-options::-webkit-scrollbar-thumb:hover,
 .custom-prompt-option-content::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, #fbbf24, #fb923c);
+    background: rgba(148, 163, 184, 0.65);
+    background-clip: padding-box;
 }
 
 @keyframes customPromptOrbit {

@@ -24,3 +24,12 @@ body .table-wrap th:last-child{background:var(--raised);z-index:2}
 body .table-wrap tr:hover td:last-child{background:var(--raised)}
 body :is(.config-section,.modal-content,.card) :is(p,small,label)[style*="color:"]{color:var(--muted)!important;font-size:13px!important}
 body .config-section :is(h3,h4){background:none!important;-webkit-text-fill-color:var(--text)!important}
+
+/* ===== 修复：弹窗内联暗色样式在浅色模式下不可读（供应商/模型编辑等） ===== */
+body :is(.modal-content,.modal) :is(input,select,textarea)[style]{background:var(--raised)!important;color:var(--text)!important;border:1px solid var(--line)!important}
+body :is(.modal-content,.modal) :is(h2,h3,h4,label,p,span,div,small,b,strong,code)[style*="color:#fff"],body :is(.modal-content,.modal) :is(h2,h3,h4,label,p,span,div,small,b,strong,code)[style*="color: #fff"],body :is(.modal-content,.modal) :is(h2,h3,h4,label,p,span,div,small,b,strong,code)[style*="color:rgba(255,255,255"],body :is(.modal-content,.modal) :is(h2,h3,h4,label,p,span,div,small,b,strong,code)[style*="color: rgba(255,255,255"]{color:var(--text)!important}
+body :is(.modal-content,.modal) :not(button):not(.btn)[style*="background:rgba(255,255,255"],body :is(.modal-content,.modal) :not(button):not(.btn)[style*="background: rgba(255,255,255"]{background:var(--raised)!important}
+body :is(.modal-content,.modal) [style*="rgba(255,255,255,0.1)"]{border-color:var(--line)!important}
+body :is(.config-section,.card) :is(input,select,textarea)[style]{background:var(--raised)!important;color:var(--text)!important;border:1px solid var(--line)!important}
+body :is(.config-section,.card) :is(h2,h3,h4,label,p,span,div,small,b,strong,code)[style*="color:#fff"],body :is(.config-section,.card) :is(h2,h3,h4,label,p,span,div,small,b,strong,code)[style*="color: #fff"],body :is(.config-section,.card) :is(h2,h3,h4,label,p,span,div,small,b,strong,code)[style*="color:rgba(255,255,255"],body :is(.config-section,.card) :is(h2,h3,h4,label,p,span,div,small,b,strong,code)[style*="color: rgba(255,255,255"]{color:var(--text)!important}
+body :is(.config-section,.card) :not(button):not(.btn)[style*="background:rgba(255,255,255"],body :is(.config-section,.card) :not(button):not(.btn)[style*="background: rgba(255,255,255"]{background:var(--raised)!important}
